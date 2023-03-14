@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   irc.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*   By: annafenzl <annafenzl@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 13:32:52 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/12 17:15:50 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/03/14 01:06:23 by annafenzl        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,6 @@
 
 #include "server.hpp"
 
-#define SERVER_PORT 4242
+#define MAXLINE 4096
 
 #endif
