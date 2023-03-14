@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*   By: annafenzl <annafenzl@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/03/14 14:41:18 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/03/14 21:57:49 by annafenzl        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,9 @@ void Server::run()
 		if (poll(_user_poll, _fd_count, -1) == -1) // -1 is waiting for ever but i can specify the timeout
 			throw PollFailedError();
 
-		unsigned int current_size = _fd_count;
+		unsigned int		current_size = _fd_count;
+		char				buff[MAXLINE];
+		int					read_bytes;
 		
 		for (int i = 0; i < current_size; i++)
 		{
@@ -60,14 +62,13 @@ void Server::run()
 						accept_user();
 					else
 					{
-						char buff[MAXLINE];
 						memset(buff, 0, MAXLINE);
-						int readBytes = recv(_user_poll[i].fd, buff, MAXLINE, 0);
-						if (readBytes == 0) // should mean the remote side did close connection
+						read_bytes = recv(_user_poll[i].fd, buff, MAXLINE, 0);
+						if (read_bytes == 0) // should mean the remote side did close connection
 							remove_from_poll(i);
 						else
-							std::cout << "file descriptor " << _user_poll[i].fd << " is ready to read!" << std::endl;
-						buff[readBytes] = '\0';
+							std::cout << "\nfile descriptor " << _user_poll[i].fd << " is ready to read!" << std::endl;
+						buff[read_bytes] = '\0';
 						printf("|%s|\n", buff);
 					}
 				}
@@ -75,7 +76,7 @@ void Server::run()
 				std::cout << e.what() << std::endl;
 			}
 		}
-		// close listening socket
+		close(_listening_socket);
 	}
 }
 
@@ -86,13 +87,15 @@ void Server::setup_socket()
 	if ( (_listening_socket = socket(PF_INET, SOCK_STREAM, 0)) == -1)
 		throw CreateSocketError();
 
+	std::cout << "binding on port: " << _listening_socket << std::endl;
+
 	memset(&_servaddr, 0, sizeof(_servaddr));
 	_servaddr.sin_family = AF_INET; //Address Family Internet
 	_servaddr.sin_port = htons(_port);
 	_servaddr.sin_addr.s_addr = inet_addr("0.0.0.0");
 
 	int enable = 1;
-	if (setsockopt(_listening_socket, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(enable)) == -1)
+	if (setsockopt(_listening_socket, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) == -1)
 		throw SetSocketOptionError();
 
 	if (bind(_listening_socket, (sockaddr*)&_servaddr, sizeof(_servaddr)) == -1)
