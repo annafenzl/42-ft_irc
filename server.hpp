@@ -6,7 +6,7 @@
 /*   By: annafenzl <annafenzl@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/14 01:08:58 by annafenzl        ###   ########.fr       */
+/*   Updated: 2023/03/14 06:44:50 by annafenzl        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,30 @@ class Server
 	class InvalidPassword: public std::exception {
 		const char * what() const throw() {
 			return "Error: Provided password is invalid.";
+		}
+	};
+
+	class SocketError: public std::exception {
+		const char * what() const throw() {
+			return "Error: Creating socket failed.";
+		}
+	};
+
+	class BindError: public std::exception {
+		const char * what() const throw() {
+			return "Error: Binding failed.";
+		}
+	};
+
+	class ListenError: public std::exception {
+		const char * what() const throw() {
+			return "Error: Listening failed.";
+		}
+	};
+
+	class AcceptError: public std::exception {
+		const char * what() const throw() {
+			return "Error: Accepting failed.";
 		}
 	};
 };
