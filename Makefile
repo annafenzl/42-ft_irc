@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: annafenzl <annafenzl@student.42.fr>        +#+  +:+       +#+         #
+#    By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/12 16:19:52 by afenzl            #+#    #+#              #
-#    Updated: 2023/03/14 01:12:37 by annafenzl        ###   ########.fr        #
+#    Updated: 2023/03/14 12:17:55 by afenzl           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CC = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 RM := rm -f
 
-SRC = main.cpp server.cpp
+SRC = main.cpp Server.cpp
 OBJ = $(SRC:.cpp=.o)
 
 all: $(NAME)
