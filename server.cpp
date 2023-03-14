@@ -6,7 +6,7 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/03/14 14:12:09 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/03/14 14:41:18 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,22 +56,19 @@ void Server::run()
 			try{
 				if (_user_poll[i].revents & POLLIN)
 				{
-					std::cout << "file descriptor " << _user_poll[i].fd << " is ready to read!" << std::endl;
 					if (_user_poll[i].fd == _listening_socket)
 						accept_user();
 					else
 					{
 						char buff[MAXLINE];
 						memset(buff, 0, MAXLINE);
-
-						while (true) {
-							int readBytes = recv(_user_poll[i].fd, buff, MAXLINE, 0);
-							if (readBytes == 0) // should mean the remote side did close connection 
-								exit(-1);
-							buff[readBytes] = '\0';
-							printf("|%s|\n", buff);
-							memset(buff, 0, MAXLINE);
-						}
+						int readBytes = recv(_user_poll[i].fd, buff, MAXLINE, 0);
+						if (readBytes == 0) // should mean the remote side did close connection
+							remove_from_poll(i);
+						else
+							std::cout << "file descriptor " << _user_poll[i].fd << " is ready to read!" << std::endl;
+						buff[readBytes] = '\0';
+						printf("|%s|\n", buff);
 					}
 				}
 			} catch (std::exception& e) {
@@ -130,23 +127,14 @@ void Server::add_to_poll(int user_fd)
 
 	++_fd_count;
 }
-	
-	// struct	sockaddr_in	clientaddr;
-	// socklen_t			addrlen;
-	// char				buff[MAXLINE];
-	// int					user_fd;
 
-	// std::cout << "RIGHT BEFORE ACCEPT" << std::endl;
-	// if ((user_fd = accept(_listening_socket, (sockaddr *)&clientaddr, &addrlen)) == -1)
-	// 	AcceptSocketError();
-	// std::cout << "user_fd is " << user_fd << " and _listening_socket " << _listening_socket << std::endl;
+void Server::remove_from_poll(int index)
+{
+	std::cout << "Removing " << _user_poll[index].fd << " from poll!" << std::endl;
+	close(_user_poll[index].fd);
+	_user_poll[index].fd = _user_poll[_fd_count-1].fd;
+	_user_poll[index].events = _user_poll[_fd_count-1].events;
 
-	// while (true) {
-	// 	int readBytes = recv(user_fd, buff, MAXLINE, 0);
-	// 	if (readBytes == 0) // should mean the remote side did close connection 
-	// 		exit(-1);
-	// 	buff[readBytes] = '\0';
-	// 	printf("|%s|\n", buff);
-	// 	memset(buff, 0, MAXLINE);
-	// }
+	--_fd_count;
+}
 
