@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: annafenzl <annafenzl@student.42.fr>        +#+  +:+       +#+        */
+/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/03/17 12:25:05 by annafenzl        ###   ########.fr       */
+/*   Updated: 2023/03/17 16:13:59 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,10 @@ void Server::setup_socket()
 	if (setsockopt(_listening_socket, SOL_SOCKET, SO_REUSEADDR, (const char*)&enable, sizeof(int)) == -1)
 		throw SetSocketOptionError();
 
+	fcntl(_listening_socket, F_SETFL, O_NONBLOCK);
+	if (_listening_socket == -1)
+		throw CreateSocketError();
+
 	if (bind(_listening_socket, (sockaddr*)&_servaddr, sizeof(_servaddr)) == -1)
 		throw BindSocketError();
 
@@ -96,8 +100,8 @@ void Server::run()
 				std::cout << e.what() << std::endl;
 			}
 		}
-		close(_listening_socket);
 	}
+	close(_listening_socket);
 }
 
 void Server::new_client()
@@ -127,13 +131,12 @@ void Server::client_request(int index)
 		if (read_bytes == 0)
 			std::cout << "user(fd) " << sender_fd << " hung up" << std::endl;
 		else
-			std::cout << "recv() error: " << strerror(errno) << std::endl;
+			throw RecieveMessageFailed();
 		remove_from_poll(index);
 	}
 	else
 	{
 		printf("recv: |%s|\n", buff);
-		
 	}
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: annafenzl <annafenzl@student.42.fr>        +#+  +:+       +#+        */
+/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/15 13:18:57 by annafenzl        ###   ########.fr       */
+/*   Updated: 2023/03/17 15:20:25 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # include <signal.h>
 # include <string>
 # include <iostream>
+# include <fcntl.h>
 
 # define MAXLINE 4096
 
@@ -105,6 +106,12 @@ class Server
 	class AcceptSocketError: public std::exception {
 		const char * what() const throw() {
 			return "Error: Accepting failed.";
+		}
+	};
+
+	class RecieveMessageFailed: public std::exception {
+		const char * what() const throw() {
+			return "Error: Recieving the message failed.";
 		}
 	};
 
