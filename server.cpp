@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.cpp                                         :+:      :+:    :+:   */
+/*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/03/17 16:13:59 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/03/17 17:33:52 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "Server.hpp"
-
 
 // -------------- Constructor ------------------
 Server::Server(char **argv)
@@ -22,7 +21,7 @@ Server::Server(char **argv)
 		throw IncorrectPortNumber();
 	_port = (int) port;
 	_password = argv[2];
-	// are there other passwords that are invalid
+	// are there other passwords that are invalid 
 	if (_password.empty())
 		throw InvalidPassword();
 }
@@ -68,7 +67,6 @@ void Server::setup_socket()
 	if (listen(_listening_socket, SOMAXCONN) == -1) // SOMAXCONN is the max number of connections allowed in the incomming queue
 		throw ListenSocketError();
 
-//	prepare user poll
 	memset(_user_poll, 0, sizeof(_user_poll));
 	_user_poll[0].fd = _listening_socket;
 	_user_poll[0].events = POLLIN;
@@ -87,7 +85,6 @@ void Server::run()
 		unsigned int		current_size = _fd_count;
 		for (unsigned int i = 0; i < current_size; i++)
 		{
-			// std::cout << _user_poll[1].fd << ", " << _user_poll[1].events << ", " << _user_poll[1].revents << std::endl;
 			try{
 				if (_user_poll[i].revents & POLLIN)
 				{
@@ -97,7 +94,7 @@ void Server::run()
 						client_request(i);
 				}
 			} catch (std::exception& e) {
-				std::cout << e.what() << std::endl;
+				std::cerr << "\033[0;31m" << e.what() << "\033[0m" << '\n';
 			}
 		}
 	}
@@ -114,7 +111,6 @@ void Server::new_client()
 		throw AcceptSocketError();
 		
 	add_to_poll(user_fd);
-	// std::cout << inet_ntoa(((struct sockaddr_in*)&clientaddr)->sin_addr) << " on socket " << user_fd << std::endl;
 }
 
 void Server::client_request(int index)
@@ -136,7 +132,8 @@ void Server::client_request(int index)
 	}
 	else
 	{
-		printf("recv: |%s|\n", buff);
+		std::cout << "from " << sender_fd << ": |" << buff << "|" << std::endl;
+		handle_command(buff, sender_fd);
 	}
 }
 
@@ -149,22 +146,19 @@ void Server::add_to_poll(int user_fd)
 	_user_poll[_fd_count].events = POLLIN;
 
 	++_fd_count;
-	std::cout << "in poll is:\n";
-	for (int i = 0; i < _fd_count; ++i)
-		std::cout << _user_poll[i].fd << ", " << _user_poll[i].events << ", " << _user_poll[i].revents << std::endl;
 }
 
 void Server::remove_from_poll(int index)
 {
-	std::cout << "Removing " << _user_poll[index].fd << " from poll!" << std::endl;
 	close(_user_poll[index].fd);
 	_user_poll[index].fd = _user_poll[_fd_count-1].fd;
 	_user_poll[index].events = POLLIN;
 	_user_poll[_fd_count - 1].fd = -1;
 	
 	--_fd_count;
-	std::cout << "in poll is:\n";
-	for (int i = 0; i < _fd_count; ++i)
-		std::cout << _user_poll[i].fd << ", " << _user_poll[i].events << ", " << _user_poll[i].revents << std::endl;
 }
 
+void Server::handle_command(char* cmd, int user_fd)
+{
+	
+}

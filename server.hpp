@@ -6,7 +6,7 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/17 15:20:25 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/03/17 17:20:02 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ class Server
 	void client_request(int index);
 	void add_to_poll(int user_fd);
 	void remove_from_poll(int user_fd);
+	void handle_command(char* cmd, int user_fd);
 
 	// -------------- Exceptions -------------------
 	class IncorrectPortNumber: public std::exception {
