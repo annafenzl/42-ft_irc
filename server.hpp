@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*   By: annafenzl <annafenzl@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/14 14:35:32 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/03/15 13:18:57 by annafenzl        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,10 @@ class Server
 
 	// -------------- Methods ----------------------
 	void run();
+	
 	void setup_socket();
-	void accept_user();
+	void new_client();
+	void client_request(int index);
 	void add_to_poll(int user_fd);
 	void remove_from_poll(int user_fd);
 
@@ -106,11 +108,18 @@ class Server
 		}
 	};
 
+	class FdPollFullError: public std::exception {
+	const char * what() const throw() {
+		return "Error: Adding User failed, too many Users connected.";
+	}
+	};
+
 	class PollFailedError: public std::exception {
 		const char * what() const throw() {
 			return "Error: The poll() function failed.";
 		}
 	};
+
 };
 
 #endif

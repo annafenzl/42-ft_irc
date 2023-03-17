@@ -1,26 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   User.hpp                                           :+:      :+:    :+:   */
+/*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: annafenzl <annafenzl@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/14 12:18:05 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/15 13:25:26 by annafenzl        ###   ########.fr       */
+/*   Created: 2023/03/15 13:31:36 by annafenzl         #+#    #+#             */
+/*   Updated: 2023/03/15 13:32:30 by annafenzl        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef USER_HPP
-# define USER_HPP
+#ifndef REQUEST_HPP
+# define REQUEST_HPP
 
-# include <iostream>
-
-class User
+class Request
 {
-	private:
-	std::string	_name;
-	std::string _nickname;
-	
 	
 };
 
