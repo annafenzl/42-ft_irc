@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.hpp                                         :+:      :+:    :+:   */
+/*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/19 16:09:24 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/03/19 17:08:23 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 
 # define MAXLINE 4096
 # define END_SEQUENCE "\r\n"
+# define SERVER_NAME ":ircfornow.com"
 
 // struct pollfd {
 //                int   fd;         /* file descriptor */
@@ -47,6 +48,7 @@ class Server
 {
 	
 	private:
+	
 	int					_port;
 	std::string			_password;
 	
@@ -73,8 +75,15 @@ class Server
 	void add_to_poll(int user_fd);
 	void remove_from_poll(int user_fd);
 	void handle_command(char* cmd, int user_fd);
+	void execute_command(Request request);
+	
 
-	void execute_command(User user, Request request);
+	// --- commands
+	void cap_command(Request request);
+	void ping_command(Request request);
+	void nick_command(Request request);
+	
+	void send_message(std::string, int fd);
 
 	// -------------- Exceptions -------------------
 	class IncorrectPortNumber: public std::exception {

@@ -6,7 +6,7 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 12:18:05 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/19 16:09:45 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/03/19 16:31:06 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ class User
 	public:
 	std::string		buff;
 
-	private:
+	private:	
 	std::string		_name;
 	std::string		_nickname;
 	std::string 	_fullname;
@@ -50,7 +50,7 @@ class User
 	// ------------- methods -----------------
 
 	void append_buff(std::string input);
-	
+
 };
 
 #endif

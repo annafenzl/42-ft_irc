@@ -6,13 +6,29 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 14:14:39 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/19 16:13:41 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/03/19 17:07:07 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../inc/Request.hpp"
 
-Request::Request(std::string input)
+// ------------- constructor -------------
+Request::Request(std::string input, User *user): _user(user)
+{
+	parse(input);
+}
+
+// ------------- getters ----------------
+
+std::string					Request::get_cmd() const		{ return _cmd; }
+
+std::vector<std::string>	Request::get_params() const		{ return _params; }
+
+User						*Request::get_user() const		{ return _user; }
+
+// ------------- methods ----------------
+
+void Request::parse(std::string input)
 {
 	std::cout << "\n\n\n-> Parsing |" << input << "| <-" << std::endl;
 	
@@ -21,7 +37,9 @@ Request::Request(std::string input)
 	// find command
 	int space_pos = input.find_first_of(" ");
 	_cmd = input.substr(0, space_pos);
-	input.erase(0, ++space_pos);
+	if (space_pos != std::string::npos)
+		++space_pos;
+	input.erase(0, space_pos);
 	// insert params
 	while (!input.empty())
 	{
@@ -44,6 +62,8 @@ Request::Request(std::string input)
 		}
 	}
 }
+
+// ------------- debug ----------------
 
 void Request::print()
 {

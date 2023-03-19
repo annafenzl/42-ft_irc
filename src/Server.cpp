@@ -6,7 +6,7 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/03/19 16:13:38 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/03/19 17:18:48 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,13 +169,66 @@ void Server::handle_command(char* cmd, int user_fd)
 		std::string part = user.buff.substr(0, end_pos);
 		user.buff.erase(0, end_pos + 2);
 		
-		Request request(part);
+		Request request(part, &user);
 		request.print();
-		execute_command(user, request);
+		execute_command(request);
 	}
 }
 
-void Server::execute_command(User user, Request Request)
+void Server::execute_command( Request request)
 {
+	std::string cmd = request.get_cmd();
 	
+	if (cmd == "CAP")
+		cap_command(request);
+	else if (cmd == "PING")
+		ping_command(request);
+	else if (cmd == "NICK")
+		nick_command(request);
+	// else if (cmd == "PASS")
+	// else if (cmd == "USER")
+	// else if (cmd == "MODE")
+}
+
+void Server::cap_command(Request request)
+{
+	std::string response;
+
+	if (request.get_params()[0] == "LS")
+	{
+		response = (SERVER_NAME " CAP * LS :End of CAP LS negotiation");
+		send_message(response, request.get_user()->get_fd());
+	}	
+}
+
+void Server::ping_command(Request request)
+{
+	std::string response(SERVER_NAME);
+
+	if (request.get_params().size() == 0)
+		response.append(" 409 " + request.get_user()->get_nickname() + " :No origin specified");
+	else
+		response.append(" PONG " SERVER_NAME);
+	
+	send_message(response, request.get_user()->get_fd());
+}
+
+void Server::nick_command(Request request)
+{
+	std::string response(SERVER_NAME);
+	
+	if (request.get_params().size() == 0)
+		response.append(" 431 " + request.get_user()->get_nickname() + " :No nickname given");
+	
+	for (std::map<int,User>::iterator it = _user_map.begin(); it != _user_map.end(); ++it)
+		if (it->second.get_nickname() == request.get_params()[0])
+			response.append(" 433 " + request.get_user()->get_nickname() + " " + request.get_params()[0] + " :Nickname is already in use");
+			
+	
+	send_message(response, request.get_user()->get_fd());
+}
+
+void Server::send_message(std::string message, int fd)
+{
+	send(fd, message.append(END_SEQUENCE).c_str(), message.size(), 0);
 }
