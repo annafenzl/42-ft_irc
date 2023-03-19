@@ -6,11 +6,11 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 14:14:39 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/19 16:05:08 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/03/19 16:13:41 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "User.hpp"
+# include "../inc/Request.hpp"
 
 Request::Request(std::string input)
 {

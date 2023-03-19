@@ -6,7 +6,7 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/19 15:59:38 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/03/19 16:09:24 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,10 @@
 # include <map>
 
 # include "User.hpp"
+# include "Request.hpp"
 
 # define MAXLINE 4096
+# define END_SEQUENCE "\r\n"
 
 // struct pollfd {
 //                int   fd;         /* file descriptor */

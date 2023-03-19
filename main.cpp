@@ -6,11 +6,11 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:06:05 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/17 17:33:46 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/03/19 16:12:33 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "Server.hpp"
+# include "inc/Server.hpp"
 
 int	main(int argc, char **argv)
 {

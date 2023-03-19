@@ -6,11 +6,11 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 13:39:50 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/19 15:27:04 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/03/19 16:13:33 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "User.hpp"
+# include "../inc/User.hpp"
 
 // --------------- constructors ---------------
 User::User():_name("*"), _nickname("*"), _fullname("*") {}
@@ -32,7 +32,7 @@ int			User::get_fd() const		{ return _fd;}
 
 // --------------- setters --------------------
 
-// void User::set_name(std::string name )		{ _name = name; }
+// void User::set_name(std::string name )			{ _name = name; }
 // void User::set_nickname(std::string nickname)	{ _nickname = nickname; }
 // void User::set_fullname(std::string fullname)	{ _fullname = fullname; }
 
