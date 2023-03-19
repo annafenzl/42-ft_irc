@@ -6,7 +6,7 @@
 #    By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/12 16:19:52 by afenzl            #+#    #+#              #
-#    Updated: 2023/03/17 17:34:34 by afenzl           ###   ########.fr        #
+#    Updated: 2023/03/19 14:14:36 by afenzl           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CC = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 RM := rm -f
 
-SRC = main.cpp Server.cpp
+SRC = main.cpp Server.cpp User.cpp Request.cpp
 OBJ = $(SRC:.cpp=.o)
 
 all: $(NAME)

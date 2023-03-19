@@ -6,7 +6,7 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/17 17:20:02 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/03/19 15:59:38 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@
 # include <string>
 # include <iostream>
 # include <fcntl.h>
+# include <map>
+
+# include "User.hpp"
 
 # define MAXLINE 4096
 
@@ -40,6 +43,7 @@
 
 class Server
 {
+	
 	private:
 	int					_port;
 	std::string			_password;
@@ -47,6 +51,7 @@ class Server
 	int					_listening_socket;
 	pollfd				_user_poll[SOMAXCONN];
 	nfds_t				_fd_count;
+	std::map<int, User> _user_map;
 
 	public:
 	// -------------- Constructor ------------------
@@ -66,6 +71,8 @@ class Server
 	void add_to_poll(int user_fd);
 	void remove_from_poll(int user_fd);
 	void handle_command(char* cmd, int user_fd);
+
+	void execute_command(User user, Request request);
 
 	// -------------- Exceptions -------------------
 	class IncorrectPortNumber: public std::exception {

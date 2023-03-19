@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Server.cpp                                         :+:      :+:    :+:   */
+/*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/03/17 17:33:52 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/03/19 16:06:10 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,10 @@ void Server::new_client()
 			
 	if ((user_fd = accept(_listening_socket, (sockaddr *)&clientaddr, &addrlen)) == -1)
 		throw AcceptSocketError();
+	
+	char	host[INET_ADDRSTRLEN];
+	inet_ntop(AF_INET, &clientaddr.sin_addr, host, INET_ADDRSTRLEN);
+	_user_map.insert(std::make_pair(user_fd, User(user_fd, host)));
 		
 	add_to_poll(user_fd);
 }
@@ -131,10 +135,7 @@ void Server::client_request(int index)
 		remove_from_poll(index);
 	}
 	else
-	{
-		std::cout << "from " << sender_fd << ": |" << buff << "|" << std::endl;
 		handle_command(buff, sender_fd);
-	}
 }
 
 void Server::add_to_poll(int user_fd)
@@ -159,6 +160,22 @@ void Server::remove_from_poll(int index)
 }
 
 void Server::handle_command(char* cmd, int user_fd)
+{
+	User	user = _user_map.find(user_fd)->second;
+
+	user.append_buff(cmd);
+	for (int end_pos = user.buff.find(END_SEQUENCE); end_pos != std::string::npos ; end_pos = user.buff.find(END_SEQUENCE))
+	{
+		std::string part = user.buff.substr(0, end_pos);
+		user.buff.erase(0, end_pos + 2);
+		
+		Request request(part);
+		request.print();
+		execute_command(user, request);
+	}
+}
+
+void Server::execute_command(User user, Request Request)
 {
 	
 }
