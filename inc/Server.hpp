@@ -6,7 +6,7 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/19 17:08:23 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/03/21 11:02:12 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # define MAXLINE 4096
 # define END_SEQUENCE "\r\n"
 # define SERVER_NAME ":ircfornow.com"
+# define FORBIDDEN_CHARS "!@#$%^&*()+={}[];,:\"\t'<>."
 
 // struct pollfd {
 //                int   fd;         /* file descriptor */
@@ -77,11 +78,16 @@ class Server
 	void handle_command(char* cmd, int user_fd);
 	void execute_command(Request request);
 	
+	void check_login_complete(User *user);
 
 	// --- commands
 	void cap_command(Request request);
 	void ping_command(Request request);
 	void nick_command(Request request);
+	void user_command(Request request);
+	void pass_command(Request request);
+	void privmsg_command(Request request);
+	void quit_command(Request request);
 	
 	void send_message(std::string, int fd);
 

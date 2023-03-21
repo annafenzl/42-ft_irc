@@ -1,0 +1,46 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   user_cmd.cpp                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/20 13:57:59 by afenzl            #+#    #+#             */
+/*   Updated: 2023/03/20 15:50:11 by afenzl           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+# include "../../inc/Server.hpp"
+
+//  do i need to check for forbiddden chars
+
+
+// Parameters: <user> <mode> <unused> <realname>
+void Server::user_command(Request request)
+{
+	std::string response;
+	User		*user = request.get_user();
+
+
+	if (user->is_pass_provided() == false)
+		response.append(SERVER_NAME " 462 " + user->get_nickname() + " :Please provide the server password with PASS first");
+
+	// ERR_ALREADYREGISTRED
+	else if (user->is_registered() == true)
+		response.append(SERVER_NAME " 462 " + user->get_nickname() + " :Unauthorized command (already registered)");
+
+	//ERR_NEEDMOREPARAMS
+	else if(request.get_params().size() < 4)
+		response.append(SERVER_NAME " 461 " + user->get_nickname() + " USER :Not enough parameters");
+
+	else
+	{
+		user->set_name(request.get_params()[0]);
+		user->set_fullname(request.get_params()[3]);	
+	}
+
+	check_login_complete(user);
+
+	if (!response.empty())
+		send_message(response, user->get_fd());
+}

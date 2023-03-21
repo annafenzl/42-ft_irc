@@ -6,7 +6,7 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 12:18:05 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/19 16:31:06 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/03/20 13:34:20 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@ class User
 	std::string		_hostmask;
 
 	int				_fd;
+
+	bool			_registered;
+	bool			_pass_provided;
 	
 	public:
 	// ------------- constructor -------------
@@ -38,14 +41,21 @@ class User
 	std::string get_nickname() const;
 	std::string get_fullname() const;
 	std::string get_hostmask() const;
+	std::string get_prefix() const;
 	
-	int			get_fd() const;
+	int get_fd() const;
+
+	bool is_registered() const;
+	bool is_pass_provided() const;
 
 	// ------------- setters -----------------
 	
-	// void set_name(std::string name);
-	// void set_nickname(std::string nickname);
-	// void set_fullname(std::string fullname);
+	void set_name(std::string name);
+	void set_nickname(std::string nickname);
+	void set_fullname(std::string fullname);
+
+	void set_registered(bool value);
+	void set_pass_provided(bool value);
 
 	// ------------- methods -----------------
 

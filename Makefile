@@ -6,17 +6,18 @@
 #    By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/12 16:19:52 by afenzl            #+#    #+#              #
-#    Updated: 2023/03/19 16:15:55 by afenzl           ###   ########.fr        #
+#    Updated: 2023/03/20 16:12:21 by afenzl           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ircserv
 
 CC = c++
-CFLAGS = -Wall -Wextra -Werror -std=c++98
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g -std=c++98
 RM := rm -f
 
-SRC = main.cpp $(addprefix src/, Server.cpp User.cpp Request.cpp) 
+SRC = main.cpp $(addprefix src/, Server.cpp User.cpp Request.cpp) \
+	$(addprefix src/cmds/, cap_cmd.cpp nick_cmd.cpp ping_cmd.cpp pass_cmd.cpp user_cmd.cpp quit_cmd.cpp privmsg_cmd.cpp)
 OBJ = $(SRC:.cpp=.o)
 
 all: $(NAME)

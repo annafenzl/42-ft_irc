@@ -6,7 +6,7 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 14:14:39 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/19 17:07:07 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/03/20 12:37:38 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,12 @@ void Request::parse(std::string input)
 	while (!input.empty())
 	{
 		input = input.substr(input.find_first_not_of(" "));
+		if (input[0] == ':')
+		{
+			input.erase(input.begin());
+			_params.push_back(input);
+			break;
+		}
 		space_pos = input.find_first_of(" ");
 		if (space_pos == std::string::npos)
 		{
@@ -52,11 +58,6 @@ void Request::parse(std::string input)
 		}
 		else
 		{
-			if (input[0] == ':')
-			{
-				_params.push_back(input);
-				break;
-			}
 			_params.push_back(input.substr(0, space_pos));
 			input.erase(0, ++space_pos);
 		}
