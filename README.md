@@ -11,3 +11,5 @@ The goal of the project is to write a IRC-Server.
 
 ## What i learned:
 + how to __sockets__ work, and how to use them
+
+
