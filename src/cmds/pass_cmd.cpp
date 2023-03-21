@@ -6,7 +6,7 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:49:01 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/20 15:53:53 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/03/21 11:09:22 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ void Server::pass_command(Request request)
 		response.append(SERVER_NAME " 462 " + user->get_nickname() + " :Unauthorized command (already registered)");
 
 	// ERR_NEEDMOREPARAMS
-	else if (request.get_params().size() == 0)
-		response.append(SERVER_NAME " 461 " + user->get_nickname() + " PASS :Not enough parameters");
+	else if (request.get_params().size() != 1)
+		response.append(SERVER_NAME " 461 " + user->get_nickname() + " PASS :Not the right amount of parameters");
 
 	// ERR_PASSWDMISMATCH 
 	else if (request.get_params()[0] != _password)

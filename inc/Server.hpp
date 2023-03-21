@@ -6,7 +6,7 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/21 11:02:12 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/03/21 12:30:43 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 
 # include "User.hpp"
 # include "Request.hpp"
+# include "Channel.hpp"
 
 # define MAXLINE 4096
 # define END_SEQUENCE "\r\n"
@@ -47,7 +48,8 @@
 
 class Server
 {
-	
+	typedef std::map<int,User>	usermap;
+
 	private:
 	
 	int					_port;
@@ -56,7 +58,7 @@ class Server
 	int					_listening_socket;
 	pollfd				_user_poll[SOMAXCONN];
 	nfds_t				_fd_count;
-	std::map<int, User> _user_map;
+	usermap				_user_map;
 
 	public:
 	// -------------- Constructor ------------------
@@ -64,21 +66,24 @@ class Server
 
 	// -------------- Getters ----------------------
 	int get_port();
-
+	
 	std::string get_password();
 
 	// -------------- Methods ----------------------
 	void run();
-	
 	void setup_socket();
+
 	void new_client();
 	void client_request(int index);
+
 	void add_to_poll(int user_fd);
 	void remove_from_poll(int user_fd);
+
 	void handle_command(char* cmd, int user_fd);
 	void execute_command(Request request);
 	
-	void check_login_complete(User *user);
+	void				check_login_complete(User *user);
+	usermap::iterator	check_for_user(std::string nickname);
 
 	// --- commands
 	void cap_command(Request request);
