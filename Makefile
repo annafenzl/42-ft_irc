@@ -6,7 +6,7 @@
 #    By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/12 16:19:52 by afenzl            #+#    #+#              #
-#    Updated: 2023/03/21 11:22:16 by afenzl           ###   ########.fr        #
+#    Updated: 2023/03/21 13:08:27 by afenzl           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g -std=c++98
 RM := rm -f
 
 SRC = main.cpp $(addprefix src/, Server.cpp User.cpp Request.cpp Channel.cpp) \
-	$(addprefix src/cmds/, cap_cmd.cpp nick_cmd.cpp ping_cmd.cpp pass_cmd.cpp user_cmd.cpp quit_cmd.cpp privmsg_cmd.cpp)
+	$(addprefix src/cmds/, cap_cmd.cpp nick_cmd.cpp ping_cmd.cpp pass_cmd.cpp user_cmd.cpp quit_cmd.cpp privmsg_cmd.cpp join_cmd.cpp)
 OBJ = $(SRC:.cpp=.o)
 
 all: $(NAME)

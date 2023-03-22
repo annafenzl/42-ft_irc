@@ -6,7 +6,7 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 13:57:59 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/20 15:50:11 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/03/22 10:34:41 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,13 @@
 
 //  do i need to check for forbiddden chars
 
+/*
+	Command: USER
+	Parameters: <user> <mode> <unused> <realname>
 
-// Parameters: <user> <mode> <unused> <realname>
+	The USER command is used at the beginning of connection to specify
+	the username, hostname and realname of a new user.
+*/
 void Server::user_command(Request request)
 {
 	std::string response;

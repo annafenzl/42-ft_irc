@@ -6,12 +6,15 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:35:58 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/21 11:53:46 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/03/22 10:36:22 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../inc/Server.hpp"
 
+/*
+	forbidden chars are "!@#$%^&*()+={}[];,:\"\t'<>." 
+*/
 bool	checkforbiddenchars(std::string password)
 {
 	for (unsigned int i = 0; i < std::string(FORBIDDEN_CHARS).size(); ++i)
@@ -26,6 +29,10 @@ bool	checkforbiddenchars(std::string password)
 	return false;
 }
 
+/*
+	if password is provided, user and nickname are present, but user is not registered
+	--> sets registered to true
+*/
 void	Server::check_login_complete(User *user)
 {
 	if (user->is_pass_provided() && user->get_nickname() != "*" && user->get_name() != "*" && user->is_registered() == false)
@@ -36,6 +43,12 @@ void	Server::check_login_complete(User *user)
 	}
 }
 
+/*
+	Command: NICK
+	Parameters: <nickname>
+	The NICK command is used to give user a nickname or change the existing
+	one.
+*/
 void	Server::nick_command(Request request)
 {
 	std::string response;

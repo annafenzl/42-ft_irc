@@ -6,12 +6,20 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:49:01 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/21 11:09:22 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/03/22 10:31:45 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/Server.hpp"
 
+/*
+	Command: PASS
+	Parameters: <password>
+	The PASS command is used to set a 'connection password'.  The
+	optional password can and MUST be set before any attempt to register
+	the connection is made.  Currently this requires that user send a
+	PASS command before sending the NICK/USER combination.
+*/
 void Server::pass_command(Request request)
 {
 	std::string response(SERVER_NAME);

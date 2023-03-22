@@ -6,7 +6,7 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 14:14:39 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/20 12:37:38 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/03/22 10:21:47 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,11 @@ User						*Request::get_user() const		{ return _user; }
 
 // ------------- methods ----------------
 
+/*
+	parses the input to:
+	- _comd (the first string until ' '(space))
+	- _params (strings divided by ' '(space), unless it's preceeded by a ':'(colon))
+*/
 void Request::parse(std::string input)
 {
 	std::cout << "\n\n\n-> Parsing |" << input << "| <-" << std::endl;
