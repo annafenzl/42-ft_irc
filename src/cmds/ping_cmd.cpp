@@ -6,12 +6,18 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:36:00 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/20 11:47:31 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/03/22 10:25:47 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../inc/Server.hpp"
 
+/*
+	Command: PING
+	Parameters: <server1> [ <server2> ]
+	The PING command is used to test the presence of an active client or
+	server at the other end of the connection.
+*/
 void Server::ping_command(Request request)
 {
 	std::string response(SERVER_NAME);

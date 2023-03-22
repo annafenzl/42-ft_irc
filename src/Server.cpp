@@ -6,7 +6,7 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/03/21 12:31:12 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/03/22 10:20:03 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void Server::new_client()
 	_user_map.insert(std::make_pair(user_fd, User(user_fd, host)));
 		
 	add_to_poll(user_fd);
-	std::cout << "hello to new client on fd " << user_fd << "!" << std::endl;
+	std::cout << "new client on fd " << user_fd << "!" << std::endl;
 }
 
 void Server::client_request(int index)
@@ -197,6 +197,8 @@ void Server::execute_command( Request request)
 		user_command(request);
 	else if (cmd == "PRIVMSG")
 		privmsg_command(request);
+	else if (cmd == "JOIN")
+		join_command(request);
 	else if (cmd == "QUIT")
 		quit_command(request);
 	// else if (cmd == "MODE")
@@ -210,6 +212,9 @@ void Server::send_message(std::string message, int fd)
 	send(fd, message.append(END_SEQUENCE).c_str(), message.size(), 0);
 }
 
+/*
+	searches for User in the map, returns a iterator to the User, if not found _user_map.end()
+*/
 std::map<int,User>::iterator Server::check_for_user(std::string nickname)
 {
 	for (std::map<int,User>::iterator it = _user_map.begin(); it != _user_map.end(); ++it)
