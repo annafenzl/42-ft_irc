@@ -8,6 +8,13 @@ The goal of the project is to write a IRC-Server.
 ◦ You must be able to authenticate, set a nickname, a username, join a channel,
 send and receive private messages using your reference client.
 
+◦ All the messages sent from one client to a channel have to be forwarded to
+every other client that joined the channel.
+
+◦ You must have operators and regular users.
+
+◦ Then, you have to implement the commands that are specific to operators.
+
 __mostly done, need to be tested, maybe need to add more error-checks__
 - PING
 - CAP
@@ -20,15 +27,23 @@ __not done yet__
 
 - OPER
 
-__don't know if needed__
-- QUIT
-- SERVICE
-- NOTICE
-- GETFILE
-- SENDFILE
-...
-
 ==> Channel Operations:
++ need to make a channel class;
++ add it to the server class, maybe as a std::map<std:string, Channel> (the key is the channel name)
++ be able to send PRIVMSG to channels
+  -- also how about naming conventions, channelnames should be prefixed by usally # or maybe &, but there is more possiblities
++ add operators (should we implement the creator operator?)
++ add channel modes
+  - a - user is flagged as away;
+  - i - marks a users as invisible;
+  - w - user receives wallops;
+  - r - restricted user connection;
+  - o - operator flag;
+  - O - local operator flag;
+  - s - marks a user for receipt of server notices.
+  - there may be more
+
++ add functions
 
 -- CHANNEL CLASS
 
@@ -43,10 +58,10 @@ __don't know if needed__
 - INVITE
 - KICK
 
-
-◦ All the messages sent from one client to a channel have to be forwarded to
-every other client that joined the channel.
-
-◦ You must have operators and regular users.
-
-◦ Then, you have to implement the commands that are specific to operators.
+__don't know if needed__
+- QUIT
+- SERVICE
+- NOTICE
+- GETFILE
+- SENDFILE
+...
