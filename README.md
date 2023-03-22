@@ -9,6 +9,8 @@ The goal of the project is to write a IRC-Server.
 
 beej'is guide for learning about sockets
 
+irc-specific guide: https://ircgod.com/
+
 And the IRC protocols are helpfull:)
 
 ## TO DO
