@@ -4,6 +4,13 @@ This is a project for [42Heilbronn](https://www.42heilbronn.de/en/curriculum/) s
 
 The goal of the project is to write a IRC-Server.
 
+## Helpfull Ressource
+[irc-ressource](https://github.com/barimehdi77/ft_irc)
+
+beej'is guide for learning about sockets
+
+And the IRC protocols are helpfull:)
+
 ## TO DO
 ◦ You must be able to authenticate, set a nickname, a username, join a channel,
 send and receive private messages using your reference client.
