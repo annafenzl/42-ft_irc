@@ -13,6 +13,9 @@ irc-specific guide: https://ircgod.com/
 
 And the IRC protocols are helpfull:)
 
+### Socket Server
+https://www.bogotobogo.com/cplusplus/sockets_server_client.php
+
 ## TO DO
 ◦ You must be able to authenticate, set a nickname, a username, join a channel,
 send and receive private messages using your reference client.
