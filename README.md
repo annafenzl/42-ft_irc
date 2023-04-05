@@ -6,7 +6,7 @@ This is a project for [42Heilbronn](https://www.42heilbronn.de/en/curriculum/) s
 
 1. beej'is guide for learning about sockets - [irc-ressource](https://github.com/barimehdi77/ft_irc)
 2. irc-specific guide - https://ircgod.com/
-3. IRC bible - https://modern.ircdocs.horse/
+3. IRC'yclopedia - https://modern.ircdocs.horse/
 4. Doc on servers and clients in C/C++ - https://www.bogotobogo.com/cplusplus/sockets_server_client.php
 
 ## TO DO
@@ -35,9 +35,6 @@ __not done yet__
 ==> Channel Operations:
 + need to make a channel class;
 + add it to the server class, maybe as a std::map<std:string, Channel> (the key is the channel name)
-+ be able to send PRIVMSG to channels
-  -- also how about naming conventions, channelnames should be prefixed by usally # or maybe &, but there is more possiblities
-+ add operators (should we implement the creator operator?)
 + add channel modes
   - a - user is flagged as away;
   - i - marks a users as invisible;
