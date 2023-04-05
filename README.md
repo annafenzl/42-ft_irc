@@ -6,13 +6,11 @@ The goal of the project is to write a IRC-Server.
 
 ## Helpful Ressource
 
-- 1. [irc-ressource](https://github.com/barimehdi77/ft_irc) - beej'is guide for learning about sockets
+1. [irc-ressource](https://github.com/barimehdi77/ft_irc) - beej'is guide for learning about sockets
+2. https://ircgod.com/ - irc-specific guide
+3. https://modern.ircdocs.horse/ - IRC bible
 
-- 2. https://ircgod.com/ - irc-specific guide
-
-- 3. https://modern.ircdocs.horse/ - IRC bible
-
-### Socket Server
+## Socket Server
 https://www.bogotobogo.com/cplusplus/sockets_server_client.php
 
 ## TO DO
@@ -56,23 +54,25 @@ __not done yet__
 
 + add functions
 
--- CHANNEL CLASS
+## Channel
 
-- JOIN
-- Part
-- MODE
-- TOPIC
-- NAMES
-- WHO
-- WHOIS
-- LIST
-- INVITE
-- KICK
+### Messages to implement
 
-__don't know if needed__
+1. JOIN
+2. Part
+3. MODE
+4. TOPIC
+5. NAMES
+6. WHO
+7. WHOIS
+8. LIST
+9. INVITE
+10. KICK
+
+## don't know if needed
+
 - QUIT
 - SERVICE
 - NOTICE
 - GETFILE
 - SENDFILE
-...
