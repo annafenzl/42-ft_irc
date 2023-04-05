@@ -12,6 +12,9 @@ The goal of the project is to write a IRC-Server.
 
 - 3. https://modern.ircdocs.horse/ - IRC bible
 
+### Socket Server
+https://www.bogotobogo.com/cplusplus/sockets_server_client.php
+
 ## TO DO
 ◦ You must be able to authenticate, set a nickname, a username, join a channel,
 send and receive private messages using your reference client.
