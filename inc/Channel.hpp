@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 11:22:48 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/21 14:04:47 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/05 17:55:24 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,22 +67,22 @@
 class Channel
 {
 	private:
-	std::string			_channelname;
-	std::string			_topic;
-	short				_modes;
-	// int					_limit;
-	
-	std::list<User>		_users;
-	// std::list<User>		_operators;
-	// std::list<User>		_banned;
-	
+		std::string			_name;
+		std::string			_topic;
+		short				_modes;
+		// int					_limit;
+		
+		std::list<User>		_users;
+		// std::list<User>		_operators;
+		// std::list<User>		_banned;
+		
 	public:
-	// ------------- constructor --------------
-	Channel();
-	Channel(std::string name, User first_user);
-	
-	// --------------- getters ----------------
-	// --------------- setters ----------------
-	// --------------- methods ----------------
-	
+		// ------------- constructor --------------
+		Channel();
+		Channel(std::string name, User first_user);
+		
+		// --------------- getters ----------------
+		// --------------- setters ----------------
+		// --------------- methods ----------------
+		
 };
