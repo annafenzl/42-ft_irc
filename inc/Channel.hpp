@@ -15,25 +15,24 @@
 
 class Channel
 {
-	typedef std::vector<User>	user_vect_t;
-	
 	private:
 		std::string			_name;
 		std::string			_topic;
-		user_vect_t			members;
-
-		// Constructors && Destructor
-		Channel( void );
-		Channel( const Channel & channel );
-		Channel &operator=( const Channel & channel );
-
+		short				_modes;
+		// int					_limit;
+		
+		std::list<User>		_users;
+		// std::list<User>		_operators;
+		// std::list<User>		_banned;
+		
 	public:
-		Channel ( std::string name, std::string topic );
-		~Channel( void );
-
-		// Getters
-		const std::string &getName( void );
-		const std::string &getTopic( void );
-
-		// Utility
+		// ------------- constructor --------------
+		Channel();
+		Channel(std::string name, User first_user);
+		
+		// --------------- getters ----------------
+		// --------------- setters ----------------
+		// --------------- methods ----------------
+		
 };
+

@@ -1,17 +1,16 @@
-# 42-ft_irc
-#### *A Internet Relay Chat Server*
+# 42-ft_irc - A Internet Relay Chat Server
+
 This is a project for [42Heilbronn](https://www.42heilbronn.de/en/curriculum/) school's curriculum.
 
 The goal of the project is to write a IRC-Server.
 
-## Helpfull Ressource
-[irc-ressource](https://github.com/barimehdi77/ft_irc)
+## Helpful Ressource
 
-beej'is guide for learning about sockets
+- 1. [irc-ressource](https://github.com/barimehdi77/ft_irc) - beej'is guide for learning about sockets
 
-irc-specific guide: https://ircgod.com/
+- 2. https://ircgod.com/ - irc-specific guide
 
-And the IRC protocols are helpfull:)
+- 3. https://modern.ircdocs.horse/ - IRC bible
 
 ### Socket Server
 https://www.bogotobogo.com/cplusplus/sockets_server_client.php
