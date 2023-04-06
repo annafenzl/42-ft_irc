@@ -6,39 +6,41 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 11:22:22 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/05 20:29:34 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/06 13:23:48 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../inc/Channel.hpp"
 
 /// ! constructors and destructor !
-Channel::Channel( const std::string & name, const User & first_client )
+Channel::Channel( const std::string & name, const User & first_member )
 {
-	// TODO: edit client nickname
+	// TODO: edit member nickname
 	_name = name;
-	_clients.insert (_clients.end (), first_client);
-	_creator = &(*_clients.begin ());
-	_operators.insert (_clients.end (), first_client);
+	_members.insert (_members.end (), first_member);
+	_members.begin()->first.set
 	_topic = "";
 }
 
 Channel::~Channel( void ) {}
 
-/// ! getters !
-const std::string &Channel::getName( void ) { return (_name ); }
-User *Channel::getCreator( void ) { return (_creator ); }
-const std::string &Channel::getTopic( void ) { return (_topic ); }
+/// ! basic getters !
+const std::string &Channel::getName( void ) const { return (_name ); }
+const std::string &Channel::getTopic( void ) const { return (_topic ); }
 
 /// ! handlers !
-int Channel::join( const User & client )
+int Channel::topic( const User & self, const std::string & topic )
 {
-	
+	return (0);
 }
 
-void Channel::topic( const std::string & topic ) { _topic = topic; }
+int Channel::join( const User & member )
+{
+	
+	return (0);
+}
 
-/// ! static !
+/// ! static and utility !
 bool	Channel::isValidClassName( const std::string & className )
 {
 	int i;
@@ -52,6 +54,18 @@ bool	Channel::isValidClassName( const std::string & className )
 			return (false);
 	return (true);
 }
+
+User *Channel::getMember( const User & user )
+{
+	std::list<User>::iterator it;
+
+	it = std::find (_members.begin (), _members.end (), user);
+	if (it != _members.end ())
+		return (&(*it));
+	return (NULL);
+}
+
+bool	Channel::isBridged( const User & user ) { return (getMember (user) != NULL); }
 
 /// ! exceptions !
 const char *Channel::InvalidChannelName::what( void ) const throw()

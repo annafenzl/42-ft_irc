@@ -6,22 +6,21 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 18:15:17 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/05 20:28:25 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/06 13:22:16 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "User.hpp"
 # include <list>
+# include <algorithm>
+typedef int t_errno;
 
 class Channel
 {
 	private:
 		std::string			_name;
 		std::string			_topic;
-		std::list<User>		_clients;
-		std::list<User>		_operators;
-		User				*_creator;
-		// TODO: modes
+		std::list<User>		_members;
 		
 		Channel( void );
 		Channel( const Channel & channel );
@@ -29,20 +28,21 @@ class Channel
 
 	public:
 		~Channel( void );
-		Channel( const std::string & name, const User & first_client );
+		Channel( const std::string & name, const User & first_member );
 
-		/// ! getters !
-		const std::string &getName( void );
-		User *getCreator( void );
-		const std::string &getTopic( void );
+		/// ! basic getters !
+		const std::string &getName( void ) const;
+		const std::string &getTopic( void ) const;
 
-		/// ! handlers !
-		int join( const User & client );
+		/// ! main !
+		t_errno topic( const User & self, const std::string & topic );
+		int join( const User & member );
 		void part( std::string name );
-		void topic( const std::string & topic );
 
-		/// ! static !
-		static bool isValidClassName( const std::string & className ); // TODO: utilize
+		/// ! static and utility !
+		static bool isValidClassName( const std::string & className );
+		User *getMember( const User & user );
+		bool isBridged( const User & user );
 
 		/// ! exceptions !
 		class InvalidChannelName: public std::exception

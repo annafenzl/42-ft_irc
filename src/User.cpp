@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 13:39:50 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/05 17:52:22 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/06 13:30:39 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,12 @@ void User::set_pass_provided(bool value)			{ _pass_provided = value; }
 void User::append_buff(std::string input)
 {
 	buff.append(input);
+}
+
+/// ! overloaded operators !
+bool operator==( const User & user, const User & user2 )
+{
+	if (user.get_nickname () == user2.get_nickname ())
+		return (true);
+	return (false);
 }
