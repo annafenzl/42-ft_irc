@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*   By: annafenzl <annafenzl@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/06 11:54:25 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/06 15:52:02 by annafenzl        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@
 # include <string>
 # include <iostream>
 # include <fcntl.h>
+# include <chrono>
+# include <ctime>
 # include <map>
 
 # include "User.hpp"
@@ -37,7 +39,8 @@
 
 # define MAXLINE 4096
 # define END_SEQUENCE "\r\n"
-# define SERVER_NAME ":ircfornow.com"
+# define SERVER_NAME ":ircserv.com"
+# define VERSION "1.0"
 # define FORBIDDEN_CHARS "!@#$%^&*()+={}[];,:\"\t'<>."
 
 // struct pollfd {
@@ -61,6 +64,8 @@ class Server
 	usermap				_user_map;
 	// channelmap				_channel_map;
 
+	std::string			_time_of_creation;
+	
 	public:
 	// -------------- Constructor ------------------
 	Server(char **argv);
@@ -93,6 +98,7 @@ class Server
 	void user_command(Request request);
 	void pass_command(Request request);
 	void privmsg_command(Request request);
+	void notice_command(Request request);
 	void join_command(Request request);
 	void quit_command(Request request);
 	
