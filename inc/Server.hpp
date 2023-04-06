@@ -6,7 +6,7 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/21 13:07:37 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/06 11:54:25 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@
 class Server
 {
 	typedef std::map<int,User>		usermap;
-	typedef std::map<int,Channel>	channelmap;
+	// typedef std::map<int,Channel>	channelmap;
 
 	private:
 	int					_port;
@@ -59,7 +59,7 @@ class Server
 	pollfd				_user_poll[SOMAXCONN];
 	nfds_t				_fd_count;
 	usermap				_user_map;
-	usermap				_channel_map;
+	// channelmap				_channel_map;
 
 	public:
 	// -------------- Constructor ------------------
@@ -74,7 +74,7 @@ class Server
 	void run();
 	void setup_socket();
 
-	void new_client();
+	void add_client();
 	void client_request(int index);
 
 	void add_to_poll(int user_fd);

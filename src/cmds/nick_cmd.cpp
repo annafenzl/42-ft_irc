@@ -6,7 +6,7 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:35:58 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/22 10:36:22 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/06 10:57:21 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	Server::nick_command(Request request)
 		response = SERVER_NAME " 432 " + user->get_nickname() + " " + request.get_params()[0] + " :Invalid character";
 	
 	// ERR_NICKNAMEINUSE 
+	// what about channelnames
 	else if (check_for_user(request.get_params()[0]) != _user_map.end())
 		response = SERVER_NAME " 433 " + user->get_nickname() + " " + request.get_params()[0] + " :Nickname is already in use";
 		

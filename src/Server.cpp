@@ -6,7 +6,7 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/03/22 10:20:03 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/06 12:04:56 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void Server::run()
 				if (_user_poll[i].revents & POLLIN)
 				{
 					if (_user_poll[i].fd == _listening_socket)
-						new_client();
+						add_client();
 					else
 						client_request(i);
 				}
@@ -101,7 +101,7 @@ void Server::run()
 	close(_listening_socket);
 }
 
-void Server::new_client()
+void Server::add_client()
 {
 	int					user_fd;
 	socklen_t			addrlen;
@@ -115,7 +115,7 @@ void Server::new_client()
 	_user_map.insert(std::make_pair(user_fd, User(user_fd, host)));
 		
 	add_to_poll(user_fd);
-	std::cout << "new client on fd " << user_fd << "!" << std::endl;
+	std::cout << "\nnew client on fd " << user_fd << "!" << std::endl;
 }
 
 void Server::client_request(int index)
