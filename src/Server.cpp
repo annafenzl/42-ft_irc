@@ -6,7 +6,7 @@
 /*   By: annafenzl <annafenzl@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/06 21:46:10 by annafenzl        ###   ########.fr       */
+/*   Updated: 2023/04/06 22:15:08 by annafenzl        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ Server::Server(char **argv)
 	if (port < 1 || port > 65535 || *check != '\0')  // portnumbers up until 1024 are reserved!!
 		throw IncorrectPortNumber();
 	_port = (int) port;
-	_password = argv[2];
-	// are there other passwords that are invalid 
+	
+	_password = argv[2]; 
 	if (_password.empty())
 		throw InvalidPassword();
 
@@ -142,10 +142,7 @@ void Server::client_request(int index)
 			_user_map.erase(sender_fd);
 		}
 		else
-		{
-			std::cerr << std::strerror(errno) << '\n';
 			throw RecieveMessageFailed();
-		}
 		remove_from_poll(index);
 	}
 	else
