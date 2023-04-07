@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/21 13:07:37 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/07 13:41:44 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,12 @@
 //                short revents;    /* returned events */ // when poll() returns, bitmap of events that occurred
 //            };
 
+class Channel;
+
 class Server
 {
-	typedef std::map<int,User>		usermap;
-	typedef std::map<int,Channel>	channelmap;
+	typedef std::map<int, User>		usermap;
+	typedef std::map<int, Channel>	channelmap;
 
 	private:
 	int					_port;

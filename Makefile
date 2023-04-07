@@ -3,17 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+         #
+#    By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/12 16:19:52 by afenzl            #+#    #+#              #
-#    Updated: 2023/03/21 13:08:27 by afenzl           ###   ########.fr        #
+#    Updated: 2023/04/07 13:42:39 by pguranda         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ircserv
 
 CC = c++
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g -std=c++98
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g -std=c++98 -MD 
 RM := rm -f
 
 SRC = main.cpp $(addprefix src/, Server.cpp User.cpp Request.cpp Channel.cpp) \

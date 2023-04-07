@@ -3,14 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 11:22:48 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/21 14:04:47 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/07 13:50:28 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+# ifndef CHANNEL_HPP
+#  define CHANNEL_HPP
 # include "User.hpp"
+# include "Request.hpp"
+# include "Server.hpp"
 # include <vector>
 # include <list>
 
@@ -38,31 +42,33 @@
 
 // The various modes available for channels are as follows:
 
-        // O - give "channel creator" status;
-        // o - give/take channel operator privilege;
-        // v - give/take the voice privilege;
+		// O - give "channel creator" status;
+		// o - give/take channel operator privilege;
+		// v - give/take the voice privilege;
 
-        // a - toggle the anonymous channel flag;
-        // i - toggle the invite-only channel flag;
-        // m - toggle the moderated channel;
-        // n - toggle the no messages to channel from clients on the
-        //     outside;
-        // q - toggle the quiet channel flag;
-        // p - toggle the private channel flag;
-        // s - toggle the secret channel flag;
-        // r - toggle the server reop channel flag;
-        // t - toggle the topic settable by channel operator only flag;
+		// a - toggle the anonymous channel flag;
+		// i - toggle the invite-only channel flag;
+		// m - toggle the moderated channel;
+		// n - toggle the no messages to channel from clients on the
+		//     outside;
+		// q - toggle the quiet channel flag;
+		// p - toggle the private channel flag;
+		// s - toggle the secret channel flag;
+		// r - toggle the server reop channel flag;
+		// t - toggle the topic settable by channel operator only flag;
 
-        // k - set/remove the channel key (password);
-        // l - set/remove the user limit to channel;
+		// k - set/remove the channel key (password);
+		// l - set/remove the user limit to channel;
 
-        // b - set/remove ban mask to keep users out;
-        // e - set/remove an exception mask to override a ban mask;
-        // I - set/remove an invitation mask to automatically override
-        //     the invite-only flag;
+		// b - set/remove ban mask to keep users out;
+		// e - set/remove an exception mask to override a ban mask;
+		// I - set/remove an invitation mask to automatically override
+		//     the invite-only flag;
 		//    Unless mentioned otherwise below, all these modes can be manipulated
 		//    by "channel operators" by using the MODE command defined in "IRC
 		//    Client Protocol" [IRC-CLIENT].
+
+class Server;
 
 class Channel
 {
@@ -78,11 +84,19 @@ class Channel
 	
 	public:
 	// ------------- constructor --------------
-	Channel();
+	Channel(Request &request);
+	~Channel();
+	
+	std::string     get_name();
+	std::list<User> get_users();
+	void	add_user(User *user);
+	void	remove_user(User *user);
 	Channel(std::string name, User first_user);
 	
 	// --------------- getters ----------------
 	// --------------- setters ----------------
 	// --------------- methods ----------------
-	
 };
+
+#endif
+	

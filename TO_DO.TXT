@@ -18,7 +18,7 @@ send and receive private messages using your reference client.
 ----------
 - QUIT
 - SERVICE
-- NOTICE
+- NOTICE -- must 
 - GETFILE
 - SENDFILE
 ...

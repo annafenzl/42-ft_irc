@@ -3,13 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 16:08:06 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/19 16:45:44 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/07 13:48:05 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+# ifndef REQUEST_HPP
+# define REQUEST_HPP
 # include <vector>
 # include <string>
 # include <iostream>
@@ -39,3 +41,5 @@ class Request
 	private:
 	void parse(std::string(input));
 };
+
+# endif
