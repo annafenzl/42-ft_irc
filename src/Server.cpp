@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/07 13:18:53 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/07 18:25:31 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,6 +197,10 @@ void Server::execute_command( Request request)
 		user_command(request);
 	else if (cmd == "PRIVMSG")
 		privmsg_command(request);
+	else if (cmd == "NOTICE")
+		notice_command(request);
+	else if (cmd == "OPER")
+		oper_command(request);
 	else if (cmd == "JOIN")
 		join_command(request);
 	else if (cmd == "QUIT")

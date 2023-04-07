@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   User.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 13:39:50 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/20 13:42:03 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/07 18:22:44 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../inc/User.hpp"
 
 // --------------- constructors ---------------
-User::User():_name("*"), _nickname("*"), _fullname("*"), _registered(false), _pass_provided(false) {}
+User::User():_name("*"), _nickname("*"), _fullname("*"), _registered(false), _pass_provided(false), _operator_status(false) {}
 
 User::User(int fd, char *hostmask)
-	:_name("*"), _nickname("*"), _fullname("*"), _hostmask(hostmask), _fd(fd), _registered(false), _pass_provided(false) {}
+	:_name("*"), _nickname("*"), _fullname("*"), _hostmask(hostmask), _fd(fd), _registered(false), _pass_provided(false), _operator_status(false) {}
 
 // --------------- getters --------------------
 
@@ -36,6 +36,8 @@ bool User::is_registered() const		{ return _registered;}
 
 bool User::is_pass_provided() const		{ return _pass_provided;}
 
+bool User::is_operator() const			{ return _operator_status;}
+
 // --------------- setters --------------------
 
 void User::set_name(std::string name )				{ _name = name; }
@@ -47,6 +49,8 @@ void User::set_fullname(std::string fullname)		{ _fullname = fullname; }
 void User::set_registered(bool value)				{ _registered = value; }
 
 void User::set_pass_provided(bool value)			{ _pass_provided = value; }
+
+void User::set_operator(bool value)			{ _operator_status = value; }
 
 // --------------- methods -------------------
 

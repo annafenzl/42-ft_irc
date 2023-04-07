@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 11:22:48 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/07 13:50:28 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/07 14:04:42 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,28 @@
 # include <vector>
 # include <list>
 
-// FOR PRIVILIGED MEMBERS
-//         INVITE  - Invite a client to an invite-only channel (mode +i)
-//         KICK    - Eject a client from the channel
-//         MODE    - Change the channel's mode, as well as
-//                   members' privileges
-//         PRIVMSG - Sending messages to the channel (mode +n, +m, +v)
-//         TOPIC   - Change the channel topic in a mode +t channel
+// class Channel
+// {
+// 	private:
+// 		std::string			_name;
+// 		std::string			_topic;
+// 		short				_modes;
+// 		// int					_limit;
+		
+// 		std::list<User>		_users;
+// 		// std::list<User>		_operators;
+// 		// std::list<User>		_banned;
+		
+// 	public:
+// 		// ------------- constructor --------------
+// 		Channel();
+// 		Channel(std::string name, User first_user);
+		
+// 		// --------------- getters ----------------
+// 		// --------------- setters ----------------
+// 		// --------------- methods ----------------
+		
+// };
 
 // /Channel operators are identified by the '@' symbol next to their
 //    nickname whenever it is associated with a channel (i.e., replies to

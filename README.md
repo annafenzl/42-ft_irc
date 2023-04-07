@@ -1,15 +1,13 @@
-# 42-ft_irc
-#### *A Internet Relay Chat Server*
-This is a project for [42Heilbronn](https://www.42heilbronn.de/en/curriculum/) school's curriculum.
+# 42-ft_irc - A Internet Relay Chat Server
 
-The goal of the project is to write a IRC-Server.
+This is a project for [42Heilbronn](https://www.42heilbronn.de/en/curriculum/) school's curriculum. The goal of the project is to write a IRC-Server.
 
-## Helpfull Ressource
-[irc-ressource](https://github.com/barimehdi77/ft_irc)
+## Helpful Ressource
 
-beej'is guide for learning about sockets
-
-And the IRC protocols are helpfull:)
+1. beej'is guide for learning about sockets - [irc-ressource](https://github.com/barimehdi77/ft_irc)
+2. irc-specific guide - https://ircgod.com/
+3. IRC bible - https://modern.ircdocs.horse/
+4. Doc on servers and clients in C/C++ - https://www.bogotobogo.com/cplusplus/sockets_server_client.php
 
 ## TO DO
 ◦ You must be able to authenticate, set a nickname, a username, join a channel,
@@ -52,23 +50,23 @@ __not done yet__
 
 + add functions
 
--- CHANNEL CLASS
+## Channel Messages to implement:
 
-- JOIN
-- Part
-- MODE
-- TOPIC
-- NAMES
-- WHO
-- WHOIS
-- LIST
-- INVITE
-- KICK
+1. JOIN
+2. Part
+3. MODE
+4. TOPIC
+5. NAMES
+6. WHO
+7. WHOIS
+8. LIST
+9. INVITE
+10. KICK
 
-__don't know if needed__
+## 'Don't know if needed
+
 - QUIT
 - SERVICE
 - NOTICE
 - GETFILE
 - SENDFILE
-...

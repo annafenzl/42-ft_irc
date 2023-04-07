@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 12:18:05 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/21 12:33:45 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/07 18:22:21 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ class User
 
 	bool			_registered;
 	bool			_pass_provided;
+
+	bool			_operator_status;
 	
 	public:
 	// ------------- constructor -------------
@@ -47,6 +49,7 @@ class User
 
 	bool is_registered() const;
 	bool is_pass_provided() const;
+	bool is_operator() const;
 
 	// ------------- setters -----------------
 	
@@ -56,6 +59,7 @@ class User
 
 	void set_registered(bool value);
 	void set_pass_provided(bool value);
+	void set_operator(bool value);
 
 	// ------------- methods -----------------
 
