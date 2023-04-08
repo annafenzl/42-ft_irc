@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:35:58 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/07 17:14:11 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/08 10:51:25 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	Server::check_login_complete(User *user)
 	if (user->is_pass_provided() && user->get_nickname() != "*" && user->get_name() != "*" && user->is_registered() == false)
 	{
 		// RPL_WELCOME
-		send_message(SERVER_NAME " 001 " + user->get_nickname() + " :Welcome to the Internet Relay Network " + user->get_nickname() + "!" + user->get_name() + "@" + user->get_hostmask(), user->get_fd());
+		send_message(SERVER_NAME " 001 " + user->get_nickname() + " :Welcome to the Internet Relay Network " + user->get_nickname() + "!" + user->get_name() + "@" + user->get_hostmask() + "\r\n", user->get_fd());
 		user->set_registered(true);
 	}
 }

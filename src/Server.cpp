@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/07 18:25:31 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/08 11:57:25 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,6 +205,8 @@ void Server::execute_command( Request request)
 		join_command(request);
 	else if (cmd == "QUIT")
 		quit_command(request);
+	else if (cmd == "KILL")
+		kill_command(request);
 	// else if (cmd == "MODE")
 	else
 		send_message(SERVER_NAME " 421 " + request.get_user()->get_nickname() + " " + cmd + " :Unknown command", request.get_user()->get_fd());

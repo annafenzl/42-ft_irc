@@ -6,12 +6,12 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 18:13:39 by pguranda          #+#    #+#             */
-/*   Updated: 2023/04/07 18:27:36 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/08 11:16:53 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../inc/Server.hpp"
-#include <algorithm>
+# include <algorithm>
 
 // ...
 
@@ -46,5 +46,3 @@ void Server::oper_command(Request request)
 		send_message(SERVER_NAME " 464 " + user->get_nickname() + " :Invalid username or password", user->get_fd());
 	}
 }
-
-// ...

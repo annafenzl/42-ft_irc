@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/07 18:27:30 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/08 11:53:01 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 # include "User.hpp"
 # include "Request.hpp"
 # include "Channel.hpp"
+# include "Errors.hpp"
 
 # define MAXLINE 4096
 # define END_SEQUENCE "\r\n"
@@ -99,6 +100,7 @@ class Server
 	void quit_command(Request request);
 	void notice_command(Request request);
 	void oper_command(Request request);
+	void kill_command(Request request);
 	
 	void send_message(std::string, int fd);
 
