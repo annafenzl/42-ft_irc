@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 16:12:24 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/07 18:04:34 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/08 16:16:12 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 # include <sstream>
 # include <set>
+#include <ctime>
+# include <time.h>
 
 /*
 	takes target string and splits it at ','
@@ -51,14 +53,14 @@ std::set<std::string>	split_targets(std::string targets, std::string &duplicate)
 		if targets a duplicate
 
 	   Numeric Replies:
-         ERR_NORECIPIENT - 1
+		 ERR_NORECIPIENT - 1
 		 ERR_NOTEXTTOSEND - 1
-        ERR_CANNOTSENDTOCHAN - 0 -- too much
+		ERR_CANNOTSENDTOCHAN - 0 -- too much
 		ERR_NOTOPLEVEL - NA
-        ERR_WILDTOPLEVEL - NA
+		ERR_WILDTOPLEVEL - NA
 		ERR_TOOMANYTARGETS - 1
-        ERR_NOSUCHNICK - 1
-        RPL_AWAY - 0
+		ERR_NOSUCHNICK - 1
+		RPL_AWAY - 0
 */
 void	Server::privmsg_command(Request request)
 {
@@ -109,7 +111,18 @@ void	Server::privmsg_command(Request request)
 			}
 		}
 	}
+	Bot time_bot(-1, "bot");
+	if (request.get_params()[1] == "SHOWTIME")
+	{
+		std::cout << "TIME IS: " << std::endl;
+		time_t now = time(0);
+		char *time_str;
+		time_str = ctime(&now);
 
+		std::string time_message = user->get_nickname() + ", the current time is: " + std::string(time_str);
+		send_message(time_bot.get_prefix() + " PRIVMSG " + user->get_nickname() + " :" + time_message, user->get_fd());
+		return;
+	}
 	// ERR_NOTOPLEVEL	
 		// 413   "<mask> :No toplevel domain specified"
 	// ERR_WILDTOPLEVEL

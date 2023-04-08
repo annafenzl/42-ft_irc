@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 16:05:10 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/07 14:06:49 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/08 15:53:22 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void Server::quit_command(Request request)
 		{
 			std::cout << "USER " << user->get_nickname() << " hung up on " << user->get_fd() << std::endl;
 			remove_from_poll(i);
+			break ; // make sense to stop once the user is out - added by pguranda
 		}
 	}
 	_user_map.erase(user->get_fd());

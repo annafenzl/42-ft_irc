@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/08 13:50:30 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/08 16:07:14 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@
 # include "User.hpp"
 # include "Request.hpp"
 # include "Channel.hpp"
-# include "Errors.hpp"
+
+# include "Bot.hpp"
 
 # define MAXLINE 4096
 # define END_SEQUENCE "\r\n"
