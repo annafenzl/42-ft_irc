@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 12:18:05 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/06 13:42:23 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/08 19:52:33 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,23 @@ class User
 
 		void append_buff(std::string input);
 
-	/// ! channel modes  !
-	std::string modes;
+		/////////////////////////////////////////////////
+		/// ! copy constructor !
+		/////////////////////////////////////////////////
+		User( const User & user );
+
+		/////////////////////////////////////////////////
+		/// ! role attr meant for usage in each channel !
+		/////////////////////////////////////////////////
+		void	setRole( const std::string & role );
+		const std::string & getRole( void ) const;
+	
+	private:
+		std::string _role;
 };
 
+/////////////////////////////////////////////////
 /// ! overloaded operators !
+/////////////////////////////////////////////////
 bool operator==( const User & user, const User & user2 );
 #endif

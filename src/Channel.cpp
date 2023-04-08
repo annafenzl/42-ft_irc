@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 11:22:22 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/06 13:23:48 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/08 20:10:22 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,22 @@
 /// ! constructors and destructor !
 Channel::Channel( const std::string & name, const User & first_member )
 {
-	// TODO: edit member nickname
 	_name = name;
-	_members.insert (_members.end (), first_member);
-	_members.begin()->first.set
-	_topic = "";
+	join (first_member);
+}
+
+Channel::Channel( const Channel & channel ):
+	_name(channel.getName ()), _topic(channel.getTopic ()),
+	_modes(channel.getModes ())
+{
+	std::list<User>::const_iterator it;
+	
+	it = channel.getMembers ().begin ();
+	while (it != channel.getMembers ().end ())
+	{
+		join (*it);
+		it++;
+	}
 }
 
 Channel::~Channel( void ) {}
@@ -27,6 +38,8 @@ Channel::~Channel( void ) {}
 /// ! basic getters !
 const std::string &Channel::getName( void ) const { return (_name ); }
 const std::string &Channel::getTopic( void ) const { return (_topic ); }
+const std::string &Channel::getModes( void ) const { return (_modes); }
+const std::list<User> &Channel::getMembers( void ) const { return (_members); }
 
 /// ! handlers !
 int Channel::topic( const User & self, const std::string & topic )
@@ -36,21 +49,31 @@ int Channel::topic( const User & self, const std::string & topic )
 
 int Channel::join( const User & member )
 {
-	
+	// TODO: check modes
+	_members.insert (_members.end (), member);
+	if (_members.size () == 1)
+		_members.begin ()->setRole ("cr");
 	return (0);
 }
 
 /// ! static and utility !
-bool	Channel::isValidClassName( const std::string & className )
+bool Channel::isChannelCommand( const std::string & command )
+{
+	if (command == "JOIN")
+		return (true);
+	return (false);
+}
+
+bool	Channel::isValidChannelName( const std::string & name )
 {
 	int i;
 
-	if (className[0] != '#' && className[0] != '&')
+	if (name[0] != '#' && name[0] != '&')
 		return (false);
 	i = -1;
-	while (className[++i])
-		if (className[i] == ' ' || className[i] == ','
-			|| className[i] == 7) // control G/ BELL
+	while (name[++i])
+		if (name[i] == ' ' || name[i] == ','
+			|| name[i] == 7) // control G/ BELL
 			return (false);
 	return (true);
 }
