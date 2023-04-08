@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/08 11:57:25 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/08 15:18:20 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ void Server::client_request(int index)
 	int					read_bytes;
 	int					sender_fd = _user_poll[index].fd;
 	
-	memset(buff, 0, MAXLINE);
+	memset(buff, 0, MAXLINE); 
 	read_bytes = recv(sender_fd, buff, MAXLINE, 0);
 
 	std::cout << std::endl;
@@ -208,6 +208,8 @@ void Server::execute_command( Request request)
 	else if (cmd == "KILL")
 		kill_command(request);
 	// else if (cmd == "MODE")
+	else if (cmd == "GLOBOPS")
+		globops_command(request);
 	else
 		send_message(SERVER_NAME " 421 " + request.get_user()->get_nickname() + " " + cmd + " :Unknown command", request.get_user()->get_fd());
 }

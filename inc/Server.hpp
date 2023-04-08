@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/08 11:53:01 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/08 13:50:30 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ class Server
 	void notice_command(Request request);
 	void oper_command(Request request);
 	void kill_command(Request request);
+	void globops_command(Request request);
 	
 	void send_message(std::string, int fd);
 
