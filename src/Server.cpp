@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: annafenzl <annafenzl@student.42.fr>        +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/06 21:46:10 by annafenzl        ###   ########.fr       */
+/*   Updated: 2023/04/09 20:25:47 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,7 @@ void Server::handle_command(char* cmd, int user_fd)
 void Server::execute_command( Request request)
 {
 	std::string cmd = request.get_cmd();
-	
+
 	if (cmd == "CAP")
 		cap_command(request);
 	else if (cmd == "PING")
@@ -205,10 +205,10 @@ void Server::execute_command( Request request)
 		user_command(request);
 	else if (cmd == "PRIVMSG")
 		privmsg_command(request);
-	else if (cmd == "JOIN")
-		join_command(request);
 	else if (cmd == "QUIT")
 		quit_command(request);
+	else if (Channel::isChannelCommand (cmd))
+		channel_manager (request);
 	// else if (cmd == "MODE")
 	else
 		send_message(SERVER_NAME " 421 " + request.get_user()->get_nickname() + " " + cmd + " :Unknown command", request.get_user()->get_fd());

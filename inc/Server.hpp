@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: annafenzl <annafenzl@student.42.fr>        +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/06 15:52:02 by annafenzl        ###   ########.fr       */
+/*   Updated: 2023/04/09 20:04:01 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVER_HPP
 # define SERVER_HPP
-
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -32,37 +31,33 @@
 # include <chrono>
 # include <ctime>
 # include <map>
-
+# include <sstream>
+# include <utility>
+# include "exit.hpp"
 # include "User.hpp"
 # include "Request.hpp"
 # include "Channel.hpp"
-
 # define MAXLINE 4096
 # define END_SEQUENCE "\r\n"
 # define SERVER_NAME ":ircserv.com"
 # define VERSION "1.0"
 # define FORBIDDEN_CHARS "!@#$%^&*()+={}[];,:\"\t'<>."
 
-// struct pollfd {
-//                int   fd;         /* file descriptor */
-//                short events;     /* requested events */ // bitmap of events we're interested in
-//                short revents;    /* returned events */ // when poll() returns, bitmap of events that occurred
-//            };
-
 class Server
 {
-	typedef std::map<int,User>		usermap;
-	// typedef std::map<int,Channel>	channelmap;
+	typedef std::map<int, User>		usermap;
+	typedef std::map<std::string, Channel>	channelmap;
 
 	private:
-	int					_port;
-	std::string			_password;
-	
-	int					_listening_socket;
-	pollfd				_user_poll[SOMAXCONN];
-	nfds_t				_fd_count;
-	usermap				_user_map;
-	// channelmap				_channel_map;
+		int					_port;
+		std::string			_password;
+		
+		int					_listening_socket;
+		pollfd				_user_poll[SOMAXCONN];
+		nfds_t				_fd_count;
+		usermap				_user_map;
+		channelmap				_channels;
+
 
 	std::string			_time_of_creation;
 	
@@ -131,40 +126,26 @@ class Server
 
 	class BindSocketError: public std::exception {
 		const char * what() const throw() {
-			return "Error: Binding failed.";
+			return "Error: Adding User failed, too many Users connected.";
 		}
-	};
+		};
 
-	class ListenSocketError: public std::exception {
-		const char * what() const throw() {
-			return "Error: Listening failed.";
-		}
-	};
+		class PollFailedError: public std::exception {
+			const char * what() const throw() {
+				return "Error: The poll() function failed.";
+			}
+		};
 
-	class AcceptSocketError: public std::exception {
-		const char * what() const throw() {
-			return "Error: Accepting failed.";
-		}
-	};
-
-	class RecieveMessageFailed: public std::exception {
-		const char * what() const throw() {
-			return "Error: Recieving the message failed.";
-		}
-	};
-
-	class FdPollFullError: public std::exception {
-	const char * what() const throw() {
-		return "Error: Adding User failed, too many Users connected.";
-	}
-	};
-
-	class PollFailedError: public std::exception {
-		const char * what() const throw() {
-			return "Error: The poll() function failed.";
-		}
-	};
-
+		////////////////////////////////////////////////////////////
+		/// Server manager class to handle commands related to channels
+		/// Handles JOIN.
+		////////////////////////////////////////////////////////////
+		t_exit channel_manager( Request req );
+		
+		///////////////////////////////////////////////////////////////
+		/// send error (string) message to IRC client with an error code
+		/// defined in errco.h
+		///////////////////////////////////////////////////////////////
+		t_exit send_message(Request req, t_exit err, std::string info);
 };
-
 #endif
