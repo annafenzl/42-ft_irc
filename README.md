@@ -54,19 +54,14 @@ __not done yet__
 
 ## Channel Messages to implement:
 
-- JOIN - TODO: password implementation
+- JOIN
 
 - NAMES
 
 - LIST
 - TOPIC
-- WHO
-- WHOIS
 
-- MODE
 - PART
-- INVITE
-- KICK
 
 ## 'Don't know if needed
 
