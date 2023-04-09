@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 15:22:07 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/07 17:12:07 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/09 11:45:52 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,10 @@ void	Server::notice_command(Request request)
 
 	// Do not process the command if the user is not registered
 	if (!user->is_registered())
-		return;
-
+	{
+		send_message(SERVER_NAME " 462 " + user->get_nickname() + " :Unauthorized command (not yet registered)", user->get_fd());
+		return ;
+	}
 	// Do not process the command if no recipient or text is provided
 	if (request.get_params().size() < 2)
 		return;

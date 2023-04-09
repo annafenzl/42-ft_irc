@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 16:12:24 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/08 16:16:12 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/09 11:15:37 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void	Server::privmsg_command(Request request)
 	
 		// ERR_TOOMANYTARGETS
 		// Returned to a client which is attempting to send a
-		//   PRIVMSG/NOTICE using the user@host destination format
+		//   PRIVMSG/NOTICE using the user@host desti nation format
 		//   and for a user@host which has several occurrences.
 		if (duplicate.empty() == false)
 			response = SERVER_NAME " 407 " + user->get_nickname() + " " + duplicate + " :Duplicate recipients. No message delivered";
@@ -111,6 +111,7 @@ void	Server::privmsg_command(Request request)
 			}
 		}
 	}
+	//BOT handling of commands sent with PRIVMSG
 	Bot time_bot(-1, "bot");
 	if (request.get_params()[1] == "SHOWTIME")
 	{

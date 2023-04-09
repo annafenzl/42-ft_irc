@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 11:18:44 by pguranda          #+#    #+#             */
-/*   Updated: 2023/04/08 13:51:21 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/09 11:46:05 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,11 @@ void Server::kill_command(Request request)
 	std::string		reason = request.get_params()[1];
 	User			*user = request.get_user();
 	
+	if (!user->is_registered())
+	{
+		send_message(SERVER_NAME " 462 " + user->get_nickname() + " :Unauthorized command (not yet registered)", user->get_fd());
+		return ;
+	}
 	if ((check_for_user(user_to_kill)) != _user_map.end())
 	{
 		dead_user = check_for_user(user_to_kill)->second;

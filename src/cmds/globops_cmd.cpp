@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 11:18:48 by pguranda          #+#    #+#             */
-/*   Updated: 2023/04/08 14:57:26 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/09 11:48:41 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ void Server::globops_command(Request request)
 	
 	if (!user->is_registered())
 	{
-		response = SERVER_NAME " 451 " + user->get_nickname() + " :You have not registered";
+		send_message(SERVER_NAME " 462 " + user->get_nickname() + " :Unauthorized command (not yet registered)", user->get_fd());
+		return ;
 	}
 	if (!user->is_operator())
 	{
