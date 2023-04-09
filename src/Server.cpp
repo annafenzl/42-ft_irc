@@ -15,15 +15,20 @@
 // -------------- Constructor ------------------
 Server::Server(char **argv)
 {
-	// PORTS WITH 878whatever are still valid!!!!
-	long	port = strtol(argv[1], NULL, 0);
-	if (port < 1 || port > 65535)  // portnumbers up until 1024 are reserved!!
+	char	*check;
+	long	port = strtol(argv[1], &check, 0);
+	if (port < 1 || port > 65535 || *check != '\0')  // portnumbers up until 1024 are reserved!!
 		throw IncorrectPortNumber();
 	_port = (int) port;
 	_password = argv[2];
 	// are there other passwords that are invalid 
 	if (_password.empty())
 		throw InvalidPassword();
+
+	// safe time of creation
+	std::time_t current_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+	_time_of_creation = std::ctime(&current_time);
+	_time_of_creation.pop_back();
 }
 
 // -------------- Getters ----------------------
@@ -89,7 +94,7 @@ void Server::run()
 				if (_user_poll[i].revents & POLLIN)
 				{
 					if (_user_poll[i].fd == _listening_socket)
-						new_client();
+						add_client();
 					else
 						client_request(i);
 				}
@@ -101,7 +106,7 @@ void Server::run()
 	close(_listening_socket);
 }
 
-void Server::new_client()
+void Server::add_client()
 {
 	int					user_fd;
 	socklen_t			addrlen;
@@ -115,7 +120,7 @@ void Server::new_client()
 	_user_map.insert(std::make_pair(user_fd, User(user_fd, host)));
 		
 	add_to_poll(user_fd);
-	std::cout << "new client on fd " << user_fd << "!" << std::endl;
+	std::cout << "\nnew client on fd " << user_fd << "!" << std::endl;
 }
 
 void Server::client_request(int index)
@@ -137,7 +142,10 @@ void Server::client_request(int index)
 			_user_map.erase(sender_fd);
 		}
 		else
+		{
+			std::cerr << std::strerror(errno) << '\n';
 			throw RecieveMessageFailed();
+		}
 		remove_from_poll(index);
 	}
 	else
@@ -170,7 +178,7 @@ void Server::handle_command(char* cmd, int user_fd)
 	User	*user = &_user_map.find(user_fd)->second;
 
 	user->append_buff(cmd);
-	for (int end_pos = user->buff.find(END_SEQUENCE); end_pos != std::string::npos ; end_pos = user->buff.find(END_SEQUENCE))
+	for (int end_pos = user->buff.find(END_SEQUENCE); end_pos != std::string::npos; end_pos = user->buff.find(END_SEQUENCE))
 	{
 		std::string part = user->buff.substr(0, end_pos);
 		user->buff.erase(0, end_pos + 2);

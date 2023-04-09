@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 14:14:39 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/09 20:27:16 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/06 11:06:23 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ void Request::parse(std::string input)
 		if (input[0] == ':')
 		{
 			input.erase(input.begin());
-			_params.push_back(input);
+			if (!input.empty())
+				_params.push_back(input);
 			break;
 		}
 		space_pos = input.find_first_of(" ");

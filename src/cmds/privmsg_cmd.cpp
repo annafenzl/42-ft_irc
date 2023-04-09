@@ -6,7 +6,7 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 16:12:24 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/24 14:18:01 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/06 11:21:49 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 # include <set>
 
 /*
-	function takes target string and splits it at ','
+	takes target string and splits it at ','
+	edits passed &duplicate string, if the target it already in the set
 */
 std::set<std::string>	split_targets(std::string targets, std::string &duplicate)
 {
@@ -26,7 +27,6 @@ std::set<std::string>	split_targets(std::string targets, std::string &duplicate)
 
 	while (getline(line, s, ','))
 	{
-		// if s is already in the set
 		if (false == splitted_targets.insert(s).second)
 		{
 			duplicate = s;
@@ -45,8 +45,9 @@ std::set<std::string>	split_targets(std::string targets, std::string &duplicate)
 	send messages to channels. <msgtarget> is usually the nickname of
 	the recipient of the message, or a channel name.
 
-	sending to multiple targets:
-		if one target is invalid, id doesn't send the message to anybody
+	not sending to multiple targets:
+		if one target is invalid
+		if targets a duplicate
 */
 void	Server::privmsg_command(Request request)
 {
@@ -71,22 +72,24 @@ void	Server::privmsg_command(Request request)
 		std::set<std::string>	targets = split_targets(request.get_params()[0], duplicate);
 	
 		// ERR_TOOMANYTARGETS
+		// Returned to a client which is attempting to send a
+		//   PRIVMSG/NOTICE using the user@host destination format
+		//   and for a user@host which has several occurrences.
 		if (duplicate.empty() == false)
 			response = SERVER_NAME " 407 " + user->get_nickname() + " " + duplicate + " :Duplicate recipients. No message delivered";
-		
 		else
 		{
 			for (std::set<std::string>::iterator it = targets.begin(); it != targets.end(); ++it)
 			{
-				// ERR_NOSUCHNICK
 				// ERR_CANNOTSENDTOCHAN
+				
+				// ERR_NOSUCHNICK
 				if ((recipient = check_for_user(*it)) == _user_map.end())
 				{
 					response = SERVER_NAME " 401 " + user->get_nickname()+ " " + *it + " :No such nick/channel";
 					break;
 				}
 			}
-
 			if (response.empty())
 			{
 				for (std::set<std::string>::iterator it = targets.begin(); it != targets.end(); ++it)
