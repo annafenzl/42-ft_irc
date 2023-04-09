@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 13:07:12 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/09 20:33:41 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/09 23:46:21 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_exit Server::channel_manager( Request req )
 	std::string 					channelNames;
 	std::string 					channelName;
 	channelmap::iterator			it;
-	std::list<User>::const_iterator	userIt;
+	std::list<User *>::const_iterator	userIt;
 	std::string						info;
 
 	if ((req.get_cmd () == "JOIN"
@@ -63,12 +63,12 @@ t_exit Server::channel_manager( Request req )
 
 			if (req.get_cmd () == "JOIN")
 			{
-				if (it->second.getMember (*req.get_user ()) != NULL)
+				if (it->second.getMember (req.get_user ()) != NULL)
 				{
 					send_message (req, EXIT_ERR_ALREADY_MEMBER, channelName);
 					continue ;
 				}
-				it->second.join (*req.get_user ());
+				it->second.join (req.get_user ());
 				send_message (req, EXIT_CHANNEL_JOINED, channelName);
 			}
 			
@@ -81,7 +81,7 @@ t_exit Server::channel_manager( Request req )
 				{
 					if (userIt != it->second.getMembers ().begin ())
 						info += ",";
-					info += userIt->get_nickname ();	
+					info += (*userIt)->get_nickname ();	
 					userIt++;
 				}
 				send_message (req, EXIT_INFO_ONLY, info);
@@ -92,5 +92,5 @@ t_exit Server::channel_manager( Request req )
 	{
 		
 	}
-	return (EXIT_DEFAULT); // TODO: update
+	return (EXIT_DEFAULT);
 }
