@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   nick_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*   By: annafenzl <annafenzl@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:35:58 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/22 10:36:22 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/06 22:10:41 by annafenzl        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,29 @@ bool	checkforbiddenchars(std::string password)
 /*
 	if password is provided, user and nickname are present, but user is not registered
 	--> sets registered to true
+
+	Upon successful completion of the registration process,
+	the server MUST send, in this order,
+	the RPL_WELCOME (001), RPL_YOURHOST (002), RPL_CREATED (003), RPL_MYINFO (004), RPL_ISUPPORT (005) 
 */
 void	Server::check_login_complete(User *user)
 {
-	if (user->is_pass_provided() && user->get_nickname() != "*" && user->get_name() != "*" && user->is_registered() == false)
+	int			fd = user->get_fd();
+	std::string	nickname = user->get_nickname();
+	
+	if (user->is_pass_provided() && nickname != "*" && user->get_name() != "*" && user->is_registered() == false)
 	{
 		// RPL_WELCOME
-		send_message(SERVER_NAME " 001 " + user->get_nickname() + " :Welcome to the Internet Relay Network " + user->get_nickname() + "!" + user->get_name() + "@" + user->get_hostmask(), user->get_fd());
+		send_message(SERVER_NAME " 001 " + nickname + " :Welcome to the Internet Relay Network " + nickname + "!" + user->get_name() + "@" + user->get_hostmask(), fd);
+		// RPL_YOURHOST
+		send_message(SERVER_NAME " 002 " + nickname + " :Your host is " SERVER_NAME " running version " VERSION, fd);
+		// RPL_CREATED
+		send_message(SERVER_NAME " 003 " + nickname + " :This server was created " + _time_of_creation, fd);
+		// RPL_MYINFO
+		send_message(SERVER_NAME " 004 " + nickname + " irc.example.com " VERSION " olws obtkmlvsn", fd );
+		// RPL_ISUPPORT
+		send_message(SERVER_NAME " 005 " + nickname + " RFC2812 PREFIX=(ov)@+ CHANTYPES=#&+ CHANMODES=b,k,l,imnpst CHANNELLEN=50 MAXLIST=beI:100 MODES=4 NETWORK=MyIRCNet CHARSET=ascii NICKLEN=30 TOPICLEN=307 KICKLEN=307 AWAYLEN=307 USERMODES=4", fd );
+		
 		user->set_registered(true);
 	}
 }
@@ -66,6 +82,7 @@ void	Server::nick_command(Request request)
 		response = SERVER_NAME " 432 " + user->get_nickname() + " " + request.get_params()[0] + " :Invalid character";
 	
 	// ERR_NICKNAMEINUSE 
+	// what about channelnames
 	else if (check_for_user(request.get_params()[0]) != _user_map.end())
 		response = SERVER_NAME " 433 " + user->get_nickname() + " " + request.get_params()[0] + " :Nickname is already in use";
 		

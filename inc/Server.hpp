@@ -28,6 +28,8 @@
 # include <string>
 # include <iostream>
 # include <fcntl.h>
+# include <chrono>
+# include <ctime>
 # include <map>
 # include <sstream>
 # include <utility>
@@ -37,7 +39,8 @@
 # include "Channel.hpp"
 # define MAXLINE 4096
 # define END_SEQUENCE "\r\n"
-# define SERVER_NAME ":ircfornow.com"
+# define SERVER_NAME ":ircserv.com"
+# define VERSION "1.0"
 # define FORBIDDEN_CHARS "!@#$%^&*()+={}[];,:\"\t'<>."
 
 class Server
@@ -55,91 +58,73 @@ class Server
 		usermap				_user_map;
 		channelmap				_channels;
 
+
+	std::string			_time_of_creation;
+	
 	public:
-		// -------------- Constructor ------------------
-		Server(char **argv);
+	// -------------- Constructor ------------------
+	Server(char **argv);
 
-		// -------------- Getters ----------------------
-		int get_port();
-		
-		std::string get_password();
+	// -------------- Getters ----------------------
+	int get_port();
+	
+	std::string get_password();
 
-		// -------------- Methods ----------------------
-		void run();
-		void setup_socket();
+	// -------------- Methods ----------------------
+	void run();
+	void setup_socket();
 
-		void new_client();
-		void client_request(int index);
+	void add_client();
+	void client_request(int index);
 
-		void add_to_poll(int user_fd);
-		void remove_from_poll(int user_fd);
+	void add_to_poll(int user_fd);
+	void remove_from_poll(int user_fd);
 
-		void handle_command(char* cmd, int user_fd);
-		void execute_command(Request request);
-		
-		void				check_login_complete(User *user);
-		usermap::iterator	check_for_user(std::string nickname);
+	void handle_command(char* cmd, int user_fd);
+	void execute_command(Request request);
+	
+	void				check_login_complete(User *user);
+	usermap::iterator	check_for_user(std::string nickname);
 
-		// --- commands
-		void cap_command(Request request);
-		void ping_command(Request request);
-		void nick_command(Request request);
-		void user_command(Request request);
-		void pass_command(Request request);
-		void privmsg_command(Request request);
-		void quit_command(Request request);
-		void send_message(std::string, int fd);
+	// --- commands
+	void cap_command(Request request);
+	void ping_command(Request request);
+	void nick_command(Request request);
+	void user_command(Request request);
+	void pass_command(Request request);
+	void privmsg_command(Request request);
+	void notice_command(Request request);
+	void join_command(Request request);
+	void quit_command(Request request);
+	
+	void send_message(std::string, int fd);
 
-		// -------------- Exceptions -------------------
-		class IncorrectPortNumber: public std::exception {
-			const char * what() const throw() {
-				return "Error: Provided portnumber is incorrect.";
-			}
-		};
+	// -------------- Exceptions -------------------
+	class IncorrectPortNumber: public std::exception {
+		const char * what() const throw() {
+			return "Error: Provided portnumber is incorrect.";
+		}
+	};
 
-		class InvalidPassword: public std::exception {
-			const char * what() const throw() {
-				return "Error: Provided password is invalid.";
-			}
-		};
+	class InvalidPassword: public std::exception {
+		const char * what() const throw() {
+			return "Error: Provided password is invalid.";
+		}
+	};
 
-		class CreateSocketError: public std::exception {
-			const char * what() const throw() {
-				return "Error: Creating socket failed.";
-			}
-		};
+	class CreateSocketError: public std::exception {
+		const char * what() const throw() {
+			return "Error: Creating socket failed.";
+		}
+	};
 
-		class SetSocketOptionError: public std::exception {
-			const char * what() const throw() {
-				return "Error: Setting socket options failed.";
-			}
-		};
+	class SetSocketOptionError: public std::exception {
+		const char * what() const throw() {
+			return "Error: Setting socket options failed.";
+		}
+	};
 
-		class BindSocketError: public std::exception {
-			const char * what() const throw() {
-				return "Error: Binding failed.";
-			}
-		};
-
-		class ListenSocketError: public std::exception {
-			const char * what() const throw() {
-				return "Error: Listening failed.";
-			}
-		};
-
-		class AcceptSocketError: public std::exception {
-			const char * what() const throw() {
-				return "Error: Accepting failed.";
-			}
-		};
-
-		class RecieveMessageFailed: public std::exception {
-			const char * what() const throw() {
-				return "Error: Receiving the message failed.";
-			}
-		};
-
-		class FdPollFullError: public std::exception {
+	class BindSocketError: public std::exception {
 		const char * what() const throw() {
 			return "Error: Adding User failed, too many Users connected.";
 		}
