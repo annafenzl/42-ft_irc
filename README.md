@@ -29,10 +29,10 @@ __mostly done, need to be tested, maybe need to add more error-checks__
 - USER
 - PRIVMSG
 - OPER (admin, 42)
-- KILL (only operators)
+- KILL (only operators, to add channels)
 - GLOBOPS (only operators, messages all operators)
 - NOTICE 
-- QUIT
+- QUIT (giver Server ERROR)
 - DDC (file transfer, handled by default)
 - BOT (showing current time)
 
