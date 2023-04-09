@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/09 20:25:47 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/10 00:05:25 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,3 +234,6 @@ std::map<int,User>::iterator Server::check_for_user(std::string nickname)
 		}
 	return _user_map.end();
 }
+
+const Server::channelmap &Server::getChannels( void ) 
+	const { return (_channels); }

@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 12:18:05 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/08 19:52:33 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/10 00:35:20 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define USER_HPP
 
 # include <iostream>
+
+class Channel;
 
 class User
 {
@@ -30,10 +32,13 @@ class User
 
 		bool			_registered;
 		bool			_pass_provided;
+
+		Channel			*_channel;
 		
 	public:
 		// ------------- constructor -------------
 		User();
+		User( const User & user );
 		User(int fd, char *hostmask);
 
 		// ------------- getters -----------------
@@ -42,6 +47,7 @@ class User
 		std::string get_fullname() const;
 		std::string get_hostmask() const;
 		std::string get_prefix() const;
+		Channel * get_channel() const;
 		
 		int get_fd() const;
 
@@ -56,28 +62,12 @@ class User
 
 		void set_registered(bool value);
 		void set_pass_provided(bool value);
+		void set_channel(Channel *channel);
 
 		// ------------- methods -----------------
 
 		void append_buff(std::string input);
-
-		/////////////////////////////////////////////////
-		/// ! copy constructor !
-		/////////////////////////////////////////////////
-		User( const User & user );
-
-		/////////////////////////////////////////////////
-		/// ! role attr meant for usage in each channel !
-		/////////////////////////////////////////////////
-		void	setRole( const std::string & role );
-		const std::string & getRole( void ) const;
-	
-	private:
-		std::string _role;
 };
 
-/////////////////////////////////////////////////
-/// ! overloaded operators !
-/////////////////////////////////////////////////
 bool operator==( const User & user, const User & user2 );
 #endif

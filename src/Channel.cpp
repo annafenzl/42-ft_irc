@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 11:22:22 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/09 23:42:46 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/10 01:39:27 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,26 +61,22 @@ const std::string &Channel::getName( void ) const { return (_name ); }
 const std::string &Channel::getTopic( void ) const { return (_topic ); }
 const std::string &Channel::getModes( void ) const { return (_modes); }
 const std::list<User *> &Channel::getMembers( void ) const { return (_members); }
+std::list<User *> &Channel::getMembers( int ) { return (_members); }
 
 /// ! handlers !
-int Channel::topic( const User & self, const std::string & topic )
-{
-	return (0);
-}
+void Channel::setTopic( const std::string & topic ) { _topic = topic; }
 
-int Channel::join( User * member )
+void Channel::join( User * member )
 {
-	// TODO: check modes
 	_members.insert (_members.end (), member);
-	if (_members.size () == 1)
-		(*_members.begin ())->setRole ("cr");
-	return (0);
 }
 
 /// ! static and utility !
 bool Channel::isChannelCommand( const std::string & command )
 {
-	if (command == "JOIN" || command == "NAMES")
+	if (command == "JOIN" || command == "NAMES"
+		|| command == "LIST" || command == "TOPIC"
+		|| command == "PART")
 		return (true);
 	return (false);
 }

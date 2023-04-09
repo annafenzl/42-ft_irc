@@ -19,7 +19,7 @@ RM := rm -f
 
 SRC = main.cpp $(addprefix src/, Server.cpp User.cpp Request.cpp Channel.cpp) \
 	$(addprefix src/cmds/, cap_cmd.cpp nick_cmd.cpp ping_cmd.cpp pass_cmd.cpp \
-		user_cmd.cpp quit_cmd.cpp privmsg_cmd.cpp notice_cmd.cpp join_cmd.cpp \
+		user_cmd.cpp quit_cmd.cpp privmsg_cmd.cpp notice_cmd.cpp  \
     channel_manager.cpp send_message.cpp)
 
 OBJ = $(SRC:.cpp=.o)

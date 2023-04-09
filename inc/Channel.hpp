@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 18:15:17 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/09 23:47:57 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/10 01:39:41 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,11 @@ class Channel
 		const std::string &getTopic( void ) const;
 		const std::string &getModes( void ) const;
 		const std::list<User *> &getMembers( void ) const;
+		std::list<User *> &getMembers( int );
 
 		/// ! main !
-		int topic( const User & self, const std::string & topic );
-		int join( User * member );
+		void setTopic( const std::string & topic );
+		void join( User * member );
 		void part( std::string name );
 
 		/// ! static and utility !
