@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/08 19:43:13 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/09 20:04:01 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # include <map>
 # include <sstream>
 # include <utility>
-# include "errco.hpp"
+# include "exit.hpp"
 # include "User.hpp"
 # include "Request.hpp"
 # include "Channel.hpp"
@@ -155,12 +155,12 @@ class Server
 		/// Server manager class to handle commands related to channels
 		/// Handles JOIN.
 		////////////////////////////////////////////////////////////
-		t_errco channel_manager( Request request );
+		t_exit channel_manager( Request req );
 		
 		///////////////////////////////////////////////////////////////
 		/// send error (string) message to IRC client with an error code
 		/// defined in errco.h
 		///////////////////////////////////////////////////////////////
-		t_errco send_message(Request req, t_errco err);
+		t_exit send_message(Request req, t_exit err, std::string info);
 };
 #endif

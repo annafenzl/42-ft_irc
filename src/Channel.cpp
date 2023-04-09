@@ -6,17 +6,38 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 11:22:22 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/08 20:10:22 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/09 20:09:11 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../inc/Channel.hpp"
 
 /// ! constructors and destructor !
-Channel::Channel( const std::string & name, const User & first_member )
+Channel::Channel( void )
+	: _name("*"), _topic("*"), _modes("*")
+{}
+
+Channel::Channel( const std::string & name )
+	: _name(name), _topic("*"), _modes("*")
+{}
+
+Channel &Channel::operator=( const Channel & channel )
 {
-	_name = name;
-	join (first_member);
+	std::list<User>::const_iterator it;
+
+	if (this == & channel)
+		return (*this);
+	_name = channel.getName ();
+	_topic = channel.getTopic ();
+	_modes = channel.getModes ();
+	_members = std::list<User>();
+	it = channel.getMembers ().begin ();
+	while (it != channel.getMembers ().end ())
+	{
+		join (*it);
+		it++;
+	}
+	return (*this);
 }
 
 Channel::Channel( const Channel & channel ):
@@ -59,7 +80,7 @@ int Channel::join( const User & member )
 /// ! static and utility !
 bool Channel::isChannelCommand( const std::string & command )
 {
-	if (command == "JOIN")
+	if (command == "JOIN" || command == "NAMES")
 		return (true);
 	return (false);
 }
@@ -87,8 +108,6 @@ User *Channel::getMember( const User & user )
 		return (&(*it));
 	return (NULL);
 }
-
-bool	Channel::isBridged( const User & user ) { return (getMember (user) != NULL); }
 
 /// ! exceptions !
 const char *Channel::InvalidChannelName::what( void ) const throw()

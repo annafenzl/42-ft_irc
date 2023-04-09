@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 14:14:39 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/22 10:21:47 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/09 20:27:16 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,23 @@ void Request::parse(std::string input)
 	input = input.substr(input.find_first_not_of(" "));
 	// find command
 	int space_pos = input.find_first_of(" ");
+
+	
+	
 	_cmd = input.substr(0, space_pos);
+	
+	////////////////////////////////////////////////////////////
+	/// assert that the command is always in uppercase
+	////////////////////////////////////////////////////////////
+	size_t i;
+	i = 0;
+	while (i < _cmd.size ())
+	{
+		if (std::islower (_cmd[i]))
+			_cmd[i] = std::toupper (_cmd[i]);
+		i++;
+	}
+	
 	if (space_pos != std::string::npos)
 		++space_pos;
 	input.erase(0, space_pos);
