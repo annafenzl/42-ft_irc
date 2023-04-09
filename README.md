@@ -54,7 +54,7 @@ __not done yet__
 
 ## Channel Messages to implement:
 
-- JOIN - TODO: password implementation
+- JOIN - TODO: passwords
 
 - NAMES
 
