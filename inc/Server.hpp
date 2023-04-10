@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/09 20:04:01 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/10 00:03:45 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,22 +130,39 @@ class Server
 		}
 		};
 
-		class PollFailedError: public std::exception {
-			const char * what() const throw() {
-				return "Error: The poll() function failed.";
-			}
-		};
+		class ListenSocketError: public std::exception {
+		const char * what() const throw() {
+			return "Error: Listening failed.";
+		}
+	};
 
-		////////////////////////////////////////////////////////////
-		/// Server manager class to handle commands related to channels
-		/// Handles JOIN.
-		////////////////////////////////////////////////////////////
+	class AcceptSocketError: public std::exception {
+		const char * what() const throw() {
+			return "Error: Accepting failed.";
+		}
+	};
+
+	class RecieveMessageFailed: public std::exception {
+		const char * what() const throw() {
+			return "Error: Recieving the message failed.";
+		}
+	};
+
+	class FdPollFullError: public std::exception {
+	const char * what() const throw() {
+		return "Error: Adding User failed, too many Users connected.";
+	}
+	};
+
+	class PollFailedError: public std::exception {
+		const char * what() const throw() {
+			return "Error: The poll() function failed.";
+		}
+	};
+
 		t_exit channel_manager( Request req );
-		
-		///////////////////////////////////////////////////////////////
-		/// send error (string) message to IRC client with an error code
-		/// defined in errco.h
-		///////////////////////////////////////////////////////////////
 		t_exit send_message(Request req, t_exit err, std::string info);
+		const channelmap &getChannels( void ) const;
+		
 };
 #endif

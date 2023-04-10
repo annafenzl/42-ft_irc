@@ -3,11 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 18:15:17 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/09 17:05:03 by katchogl         ###   ########.fr       */
-
+/*   Updated: 2023/04/10 01:39:41 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +28,7 @@ class Channel
 	private:
 		std::string			_name;
 		std::string			_topic;
-		std::list<User>		_members;
+		std::list<User *>	_members;
 		std::string			_modes;
 		
 		/// ! constructors, copy assignment operator, destructor !
@@ -44,17 +43,18 @@ class Channel
 		const std::string &getName( void ) const;
 		const std::string &getTopic( void ) const;
 		const std::string &getModes( void ) const;
-		const std::list<User> &getMembers( void ) const;
+		const std::list<User *> &getMembers( void ) const;
+		std::list<User *> &getMembers( int );
 
 		/// ! main !
-		int topic( const User & self, const std::string & topic );
-		int join( const User & member );
+		void setTopic( const std::string & topic );
+		void join( User * member );
 		void part( std::string name );
 
 		/// ! static and utility !
 		static bool isChannelCommand( const std::string & command );
 		static bool isValidChannelName( const std::string & name );
-		User *getMember( const User & user );
+		User *getMember( User *user );
 
 		/// ! exceptions !
 		class InvalidChannelName: public std::exception

@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 14:24:24 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/09 20:16:55 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/10 01:52:42 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,22 +28,25 @@ t_exit Server::send_message(Request req, t_exit err, std::string info)
 			mes.append ("joined channel: " + info + ": success");
 			break;
 		case EXIT_ERR_NEEDMOREPARAMS:
-			mes.append ("need more parameers");
+			mes.append ("need more parameters");
 			break;
 		case EXIT_ERR_TOOMANYCHANNELS:
 			mes.append ("Too many channels");
 			break;
-		case EXIT_ERR_ALREADY_MEMBER:
-			mes.append ("already member: " + info);
+		case EXIT_ERR_ALREADY_JOINED:
+			mes.append ("already joined channel: " + info);
 			break;
 		case EXIT_ERR_INVALID_CHANNEL_NAME:
 			mes.append ("invalid channel name");
 			break;
 		case EXIT_ERR_NOSUCHCHANNEL:
-			mes.append ("no such channel");
+			mes.append ("no such channel: " + info);
 			break;
 		case EXIT_INFO_ONLY:
 			mes.append (info);
+			break;
+		case EXIT_LEFT_CHANNEL:
+			mes.append ("you left: " + info);
 			break;
 		default:
 			mes.append ("error code not found");

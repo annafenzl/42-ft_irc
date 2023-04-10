@@ -52,17 +52,6 @@ __not done yet__
   - there may be more
 + add functions
 
-## Channel Messages to implement:
-
-- JOIN
-
-- NAMES
-
-- LIST
-- TOPIC
-
-- PART
-
 ## 'Don't know if needed
 
 - SERVICE
