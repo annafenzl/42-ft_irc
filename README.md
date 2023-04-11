@@ -70,3 +70,5 @@ __not done yet__
 - NOTICE
 - GETFILE
 - SENDFILE
+
+<!--what to do in case of ctrl C -->

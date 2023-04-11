@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 16:05:10 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/08 15:53:22 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/11 09:31:31 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void Server::quit_command(Request request)
 	
 
 	// server acknowledges that by sending ERROR message
-	send_message(SERVER_NAME " Error :" + reason, user->get_fd());
+	send_message(SERVER_NAME " QUIT: " + user->get_nickname() + " " + reason, user->get_fd());
 
 	// disconnect him
 	for (unsigned int i = 0; i < _fd_count; ++i)
@@ -46,7 +46,6 @@ void Server::quit_command(Request request)
 		{
 			std::cout << "USER " << user->get_nickname() << " hung up on " << user->get_fd() << std::endl;
 			remove_from_poll(i);
-			break ; // make sense to stop once the user is out - added by pguranda
 		}
 	}
 	_user_map.erase(user->get_fd());

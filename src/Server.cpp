@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/08 15:33:04 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/11 09:31:44 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ Server::Server(char **argv)
 	if (port < 1 || port > 65535)  // portnumbers up until 1024 are reserved!!
 		throw IncorrectPortNumber();
 	_port = (int) port;
-	_password = argv[2];
-	// are there other passwords that are invalid 
+	
+	_password = argv[2]; 
 	if (_password.empty())
 		throw InvalidPassword();
 }
