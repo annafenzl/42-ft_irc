@@ -5,113 +5,63 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/21 11:22:48 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/07 14:04:42 by pguranda         ###   ########.fr       */
+/*   Created: Invalid Date        by              +#+  #+#    #+#             */
+/*   Updated: 2023/04/11 10:21:21 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef CHANNEL_HPP
-#  define CHANNEL_HPP
+
+////////////////////////////////////////////////////////////
+/// Class model representing an IRC channel
+/// , featuring all its attributes such as a name, a topic
+/// and handling its commands such as JOIN, TOPIC.
+////////////////////////////////////////////////////////////
+
+#ifndef CHANNEL_HPP
+# define CHANNEL_HPP
 # include "User.hpp"
-# include "Request.hpp"
-# include "Server.hpp"
-# include <vector>
+# include "exit.hpp"
 # include <list>
-
-// class Channel
-// {
-// 	private:
-// 		std::string			_name;
-// 		std::string			_topic;
-// 		short				_modes;
-// 		// int					_limit;
-		
-// 		std::list<User>		_users;
-// 		// std::list<User>		_operators;
-// 		// std::list<User>		_banned;
-		
-// 	public:
-// 		// ------------- constructor --------------
-// 		Channel();
-// 		Channel(std::string name, User first_user);
-		
-// 		// --------------- getters ----------------
-// 		// --------------- setters ----------------
-// 		// --------------- methods ----------------
-		
-// };
-
-// /Channel operators are identified by the '@' symbol next to their
-//    nickname whenever it is associated with a channel (i.e., replies to
-//    the NAMES, WHO and WHOIS commands).
-
-// Since channels starting with the character '+' as prefix do not
-//    support channel modes, no member can therefore have the status of
-//    channel operator.
-
-// STANDART CHANNELS '#' or "&"
-// These channels are created implicitly when the first user joins it,
-//    and cease to exist when the last user leaves it.  While the channel
-//    exists, any client can reference the channel using the name of the
-//    channel.
-
-// The various modes available for channels are as follows:
-
-		// O - give "channel creator" status;
-		// o - give/take channel operator privilege;
-		// v - give/take the voice privilege;
-
-		// a - toggle the anonymous channel flag;
-		// i - toggle the invite-only channel flag;
-		// m - toggle the moderated channel;
-		// n - toggle the no messages to channel from clients on the
-		//     outside;
-		// q - toggle the quiet channel flag;
-		// p - toggle the private channel flag;
-		// s - toggle the secret channel flag;
-		// r - toggle the server reop channel flag;
-		// t - toggle the topic settable by channel operator only flag;
-
-		// k - set/remove the channel key (password);
-		// l - set/remove the user limit to channel;
-
-		// b - set/remove ban mask to keep users out;
-		// e - set/remove an exception mask to override a ban mask;
-		// I - set/remove an invitation mask to automatically override
-		//     the invite-only flag;
-		//    Unless mentioned otherwise below, all these modes can be manipulated
-		//    by "channel operators" by using the MODE command defined in "IRC
-		//    Client Protocol" [IRC-CLIENT].
-
-class Server;
+# include <algorithm>
 
 class Channel
 {
 	private:
-	std::string			_channelname;
-	std::string			_topic;
-	short				_modes;
-	// int					_limit;
-	
-	std::list<User>		_users;
-	// std::list<User>		_operators;
-	// std::list<User>		_banned;
-	
+		std::string			_name;
+		std::string			_topic;
+		std::list<User *>	_members;
+		std::string			_modes;
+		
+		/// ! constructors, copy assignment operator, destructor !
 	public:
-	// ------------- constructor --------------
-	Channel(Request &request);
-	~Channel();
-	
-	std::string     get_name();
-	std::list<User> get_users();
-	void	add_user(User *user);
-	void	remove_user(User *user);
-	Channel(std::string name, User first_user);
-	
-	// --------------- getters ----------------
-	// --------------- setters ----------------
-	// --------------- methods ----------------
-};
+		Channel( void );
+		Channel( const Channel & channel );
+		Channel( const std::string & name );
+		Channel &operator=( const Channel & channel );
+		~Channel( void );
+		
+		/// ! basic getters !
+		const std::string &getName( void ) const;
+		const std::string &getTopic( void ) const;
+		const std::string &getModes( void ) const;
+		const std::list<User *> &getMembers( void ) const;
+		std::list<User *> &getMembers( int );
 
+		/// ! main !
+		void setTopic( const std::string & topic );
+		void join( User * member );
+		void part( std::string name );
+
+		/// ! static and utility !
+		static bool isChannelCommand( const std::string & command );
+		static bool isValidChannelName( const std::string & name );
+		User *getMember( User *user );
+
+		/// ! exceptions !
+		class InvalidChannelName: public std::exception
+		{
+			public:
+				const char	*what( void ) const throw();
+		};
+};
 #endif
-	

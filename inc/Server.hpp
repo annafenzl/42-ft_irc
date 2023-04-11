@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/08 16:07:14 by pguranda         ###   ########.fr       */
+/*   Created: Invalid Date        by              +#+  #+#    #+#             */
+/*   Updated: 2023/04/11 10:31:13 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #ifndef SERVER_HPP
 # define SERVER_HPP
-
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -30,40 +30,34 @@
 # include <iostream>
 # include <fcntl.h>
 # include <map>
-
+# include <sstream>
+# include <utility>
+# include "exit.hpp"
 # include "User.hpp"
 # include "Request.hpp"
 # include "Channel.hpp"
 
 # include "Bot.hpp"
-
 # define MAXLINE 4096
 # define END_SEQUENCE "\r\n"
 # define SERVER_NAME ":ircfornow.com"
 # define FORBIDDEN_CHARS "!@#$%^&*()+={}[];,:\"\t'<>."
 
-// struct pollfd {
-//                int   fd;         /* file descriptor */
-//                short events;     /* requested events */ // bitmap of events we're interested in
-//                short revents;    /* returned events */ // when poll() returns, bitmap of events that occurred
-//            };
-
-class Channel;
-
 class Server
 {
 	typedef std::map<int, User>		usermap;
-	typedef std::map<int, Channel>	channelmap;
+	typedef std::map<std::string, Channel>	channelmap;
 
 	private:
-	int					_port;
-	std::string			_password;
-	
-	int					_listening_socket;
-	pollfd				_user_poll[SOMAXCONN];
-	nfds_t				_fd_count;
-	usermap				_user_map;
-	usermap				_channel_map;
+		int					_port;
+		std::string			_password;
+		
+		int					_listening_socket;
+		pollfd				_user_poll[SOMAXCONN];
+		nfds_t				_fd_count;
+		usermap				_user_map;
+		channelmap				_channels;
+
 
 	public:
 	// -------------- Constructor ------------------
@@ -97,7 +91,7 @@ class Server
 	void user_command(Request request);
 	void pass_command(Request request);
 	void privmsg_command(Request request);
-	void join_command(Request request);
+	// void join_command(Request request);
 	void quit_command(Request request);
 	void notice_command(Request request);
 	void oper_command(Request request);
@@ -133,11 +127,11 @@ class Server
 
 	class BindSocketError: public std::exception {
 		const char * what() const throw() {
-			return "Error: Binding failed.";
+			return "Error: Adding User failed, too many Users connected.";
 		}
-	};
+		};
 
-	class ListenSocketError: public std::exception {
+		class ListenSocketError: public std::exception {
 		const char * what() const throw() {
 			return "Error: Listening failed.";
 		}
@@ -167,6 +161,9 @@ class Server
 		}
 	};
 
+		t_exit channel_manager( Request req );
+		t_exit send_message(Request req, t_exit err, std::string info);
+		const channelmap &getChannels( void ) const;
+		
 };
-
 #endif

@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:06:05 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/19 16:12:33 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/08 12:50:04 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+# include "inc/User.hpp"
 # include "inc/Server.hpp"
 
 int	main(int argc, char **argv)

@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/11 09:31:44 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/11 10:31:26 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,7 +184,7 @@ void Server::handle_command(char* cmd, int user_fd)
 void Server::execute_command( Request request)
 {
 	std::string cmd = request.get_cmd();
-	
+
 	if (cmd == "CAP")
 		cap_command(request);
 	else if (cmd == "PING")
@@ -201,12 +201,16 @@ void Server::execute_command( Request request)
 		notice_command(request);
 	else if (cmd == "OPER")
 		oper_command(request);
-	else if (cmd == "JOIN")
-		join_command(request);
+	// else if (cmd == "JOIN")
+	// 	join_command(request);
 	else if (cmd == "QUIT")
 		quit_command(request);
 	else if (cmd == "KILL")
 		kill_command(request);
+	else if (cmd == "QUIT")
+		quit_command(request);
+	else if (Channel::isChannelCommand (cmd))
+		channel_manager (request);
 	// else if (cmd == "MODE")
 	else if (cmd == "GLOBOPS")
 		globops_command(request);
@@ -234,3 +238,6 @@ std::map<int,User>::iterator Server::check_for_user(std::string nickname)
 		}
 	return _user_map.end();
 }
+
+const Server::channelmap &Server::getChannels( void ) 
+	const { return (_channels); }

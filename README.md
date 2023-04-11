@@ -6,8 +6,9 @@ This is a project for [42Heilbronn](https://www.42heilbronn.de/en/curriculum/) s
 
 1. beej'is guide for learning about sockets - [irc-ressource](https://github.com/barimehdi77/ft_irc)
 2. irc-specific guide - https://ircgod.com/
-3. IRC bible - https://modern.ircdocs.horse/
+3. IRC bible - https://modern.ircdocs.horse/ (also here, https://datatracker.ietf.org/doc/html/rfc2812 https://datatracker.ietf.org/doc/html/rfc1459)
 4. Doc on servers and clients in C/C++ - https://www.bogotobogo.com/cplusplus/sockets_server_client.php
+5. Reference client: http://www.kvirc.net/?id=releases&platform=macosx&version=5.0.0&lang=en
 
 ## TO DO
 ◦ You must be able to authenticate, set a nickname, a username, join a channel,
@@ -27,17 +28,19 @@ __mostly done, need to be tested, maybe need to add more error-checks__
 - NICK
 - USER
 - PRIVMSG
+- OPER (admin, 42)
+- KILL (only operators, to add channels)
+- GLOBOPS (only operators, messages all operators)
+- NOTICE 
+- QUIT (giver Server ERROR)
+- DDC (file transfer, handled by default)
+- BOT (showing current time)
 
 __not done yet__
-
-- OPER
 
 ==> Channel Operations:
 + need to make a channel class;
 + add it to the server class, maybe as a std::map<std:string, Channel> (the key is the channel name)
-+ be able to send PRIVMSG to channels
-  -- also how about naming conventions, channelnames should be prefixed by usally # or maybe &, but there is more possiblities
-+ add operators (should we implement the creator operator?)
 + add channel modes
   - a - user is flagged as away;
   - i - marks a users as invisible;
@@ -47,28 +50,16 @@ __not done yet__
   - O - local operator flag;
   - s - marks a user for receipt of server notices.
   - there may be more
-
 + add functions
-
-## Channel Messages to implement:
-
-1. JOIN
-2. Part
-3. MODE
-4. TOPIC
-5. NAMES
-6. WHO
-7. WHOIS
-8. LIST
-9. INVITE
-10. KICK
 
 ## 'Don't know if needed
 
-- QUIT
 - SERVICE
+<<<<<<< HEAD
 - NOTICE
 - GETFILE
 - SENDFILE
 
 <!--what to do in case of ctrl C -->
+=======
+>>>>>>> origin/katchogl

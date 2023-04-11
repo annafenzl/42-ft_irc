@@ -6,47 +6,107 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 11:22:22 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/07 17:41:15 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/11 10:24:05 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../inc/Channel.hpp"
 
-Channel::Channel(Request &request)
+/// ! constructors and destructor !
+Channel::Channel( void )
+	: _name("*"), _topic("*"), _modes("*")
+{}
+
+Channel::Channel( const std::string & name )
+	: _name(name), _topic("*"), _modes("*")
+{}
+
+Channel &Channel::operator=( const Channel & channel )
 {
-	_channelname = request.get_params()[0];
-	_users.push_back(*request.get_user());
+	std::list<User *>::const_iterator it;
+
+	if (this == & channel)
+		return (*this);
+	_name = channel.getName ();
+	_topic = channel.getTopic ();
+	_modes = channel.getModes ();
+	_members = std::list<User *>();
+	it = channel.getMembers ().begin ();
+	while (it != channel.getMembers ().end ())
+	{
+		join (*it);
+		it++;
+	}
+	return (*this);
 }
 
-Channel::~Channel()
+Channel::Channel( const Channel & channel ):
+	_name(channel.getName ()), _topic(channel.getTopic ()),
+	_modes(channel.getModes ())
 {
+	std::list<User *>::const_iterator it;
+	
+	it = channel.getMembers ().begin ();
+	while (it != channel.getMembers ().end ())
+	{
+		join (*it);
+		it++;
+	}
 }
 
-std::string	Channel::get_name()
+Channel::~Channel( void ) {}
+
+/// ! basic getters !
+const std::string &Channel::getName( void ) const { return (_name ); }
+const std::string &Channel::getTopic( void ) const { return (_topic ); }
+const std::string &Channel::getModes( void ) const { return (_modes); }
+const std::list<User *> &Channel::getMembers( void ) const { return (_members); }
+std::list<User *> &Channel::getMembers( int ) { return (_members); }
+
+/// ! handlers !
+void Channel::setTopic( const std::string & topic ) { _topic = topic; }
+
+void Channel::join( User * member )
 {
-	return _channelname;
+	_members.insert (_members.end (), member);
 }
 
-std::list<User>	Channel::get_users()
+/// ! static and utility !
+bool Channel::isChannelCommand( const std::string & command )
 {
-	return _users;
+	if (command == "JOIN" || command == "NAMES"
+		|| command == "LIST" || command == "TOPIC"
+		|| command == "PART")
+		return (true);
+	return (false);
 }
 
-void	Channel::add_user(User *user)
+bool	Channel::isValidChannelName( const std::string & name )
 {
-	// _users.push_back(user);
+	int i;
+
+	if (name[0] != '#' && name[0] != '&')
+		return (false);
+	i = -1;
+	while (name[++i])
+		if (name[i] == ' ' || name[i] == ','
+			|| name[i] == 7) // control G/ BELL
+			return (false);
+	return (true);
 }
 
-void	Channel::remove_user(User *user)
+User *Channel::getMember( User *user )
 {
-	// std::vector<User*>::iterator it = _users.begin();
-	// while (it != _users.end())
-	// {
-	// 	if (*it == user)
-	// 	{
-	// 		_users.erase(it);
-	// 		return ;
-	// 	}
-	// 	it++;
-	// }
+	std::list<User *>::iterator it;
+
+	it = std::find (_members.begin (), _members.end (), user);
+	if (it != _members.end ())
+		return (*it);
+	return (NULL);
+}
+
+/// ! exceptions !
+const char *Channel::InvalidChannelName::what( void ) const throw()
+{
+	return ("invalid class name");
 }

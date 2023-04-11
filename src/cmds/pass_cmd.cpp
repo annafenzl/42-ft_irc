@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:49:01 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/09 11:58:25 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/11 10:24:48 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void Server::pass_command(Request request)
 	else if (request.get_params()[0] != _password)
 	{
 		response.append(SERVER_NAME " 464 " + user->get_nickname() + " :Password incorrect");
+
 		user->set_pass_provided(false);
 	}
 	else
@@ -44,6 +45,5 @@ void Server::pass_command(Request request)
 		user->set_pass_provided(true);
 		return;
 	}
-	
 	send_message(response, user->get_fd());
 }
