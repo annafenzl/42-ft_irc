@@ -55,3 +55,14 @@ __not done yet__
 ## 'Don't know if needed
 
 - SERVICE
+
+
+## channel
++ add open new window on Channel/JOIN, close window on Channel/PART
++ split channel_manager
++ add not yet registered execption handling /JOIN /PART
+
+1 - /WHO if in channel or not /MODE
+2 - password
+3 - NAMES segfault
+4 - invalid channel name

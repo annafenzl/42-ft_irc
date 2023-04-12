@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/10 00:03:45 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/12 02:42:56 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ class Server
 
 	// -------------- Getters ----------------------
 	int get_port();
+	const channelmap &getChannels( void ) const;
 	
 	std::string get_password();
 
@@ -94,10 +95,15 @@ class Server
 	void pass_command(Request request);
 	void privmsg_command(Request request);
 	void notice_command(Request request);
-	void join_command(Request request);
 	void quit_command(Request request);
+	void join_names_command (Request request);
+	void list_command (Request request);
+	void topic_command (Request request);
+	void part_command (Request request);
+	void who_command (Request request);
 	
 	void send_message(std::string, int fd);
+	void send_message(Request req, t_exit err, std::string info);
 
 	// -------------- Exceptions -------------------
 	class IncorrectPortNumber: public std::exception {
@@ -159,10 +165,5 @@ class Server
 			return "Error: The poll() function failed.";
 		}
 	};
-
-		t_exit channel_manager( Request req );
-		t_exit send_message(Request req, t_exit err, std::string info);
-		const channelmap &getChannels( void ) const;
-		
 };
 #endif

@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 11:22:22 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/10 01:39:27 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/11 12:17:10 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,16 +69,6 @@ void Channel::setTopic( const std::string & topic ) { _topic = topic; }
 void Channel::join( User * member )
 {
 	_members.insert (_members.end (), member);
-}
-
-/// ! static and utility !
-bool Channel::isChannelCommand( const std::string & command )
-{
-	if (command == "JOIN" || command == "NAMES"
-		|| command == "LIST" || command == "TOPIC"
-		|| command == "PART")
-		return (true);
-	return (false);
 }
 
 bool	Channel::isValidChannelName( const std::string & name )
