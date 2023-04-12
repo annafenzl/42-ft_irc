@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid Date        by              +#+  #+#    #+#             */
-/*   Updated: 2023/04/11 13:38:13 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/12 11:06:00 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ class User
 		bool			_registered;
 		bool			_pass_provided;
 
-	bool			_operator_status;
+		bool			_operator_status;
 
 		Channel			*_channel;
 		

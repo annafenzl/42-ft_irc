@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid Date        by              +#+  #+#    #+#             */
-/*   Updated: 2023/04/11 10:31:13 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/12 13:26:43 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,10 @@
 # define END_SEQUENCE "\r\n"
 # define SERVER_NAME ":ircfornow.com"
 # define FORBIDDEN_CHARS "!@#$%^&*()+={}[];,:\"\t'<>."
+
+//OPER Credentials
+# define OPER_PASS "42"
+# define OPER_LOG "admin"
 
 class Server
 {

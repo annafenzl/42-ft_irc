@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 13:57:59 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/09 12:46:47 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/12 13:05:45 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void Server::user_command(Request request)
 {
 	std::string response;
 	User		*user = request.get_user();
-
 
 	if (user->is_pass_provided() == false)
 		response.append(SERVER_NAME " 462 " + user->get_nickname() + " :Please provide the server password with PASS first");

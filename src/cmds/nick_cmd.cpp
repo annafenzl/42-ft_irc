@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:35:58 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/11 13:45:31 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/12 12:54:29 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 /*
 	forbidden chars are "!@#$%^&*()+={}[];,:\"\t'<>." 
 */
-bool	checkforbiddenchars(std::string password)
+bool	checkforbiddenchars(std::string &nickname)
 {
 	for (unsigned int i = 0; i < std::string(FORBIDDEN_CHARS).size(); ++i)
 	{
-		if (password.find(FORBIDDEN_CHARS[i]) != std::string::npos)
+		if (nickname.find(FORBIDDEN_CHARS[i]) != std::string::npos)
 		{
-			std::cout << "password is |" << password << std::endl;
+			std::cout << "nicknam is |" << nickname << std::endl;
 			std::cout << "forbidden char is " << FORBIDDEN_CHARS[i] << std::endl;
 			return true;
 		}
@@ -49,13 +49,14 @@ void	Server::check_login_complete(User *user)
 	The NICK command is used to give user a nickname or change the existing
 	one.
 */
+
 void	Server::nick_command(Request request)
 {
 	std::string response;
 	User		*user = request.get_user();
 	
 	if (user->is_pass_provided() == false)
-		response = SERVER_NAME " 462 " + user->get_nickname() + " :Please provide the server password with PASS first";
+		response = SERVER_NAME " 464 " + user->get_nickname() + " :Please provide the server password with PASS first";
 	
 	// ERR_NONICKNAMEGIVEN
 	else if (request.get_params().size() != 1)

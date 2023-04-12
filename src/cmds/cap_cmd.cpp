@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cap_cmd.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:35:55 by afenzl            #+#    #+#             */
-/*   Updated: 2023/03/22 10:28:34 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/12 14:27:18 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void Server::cap_command(Request request)
 	// CAP LS [version] to discover the available capabilities on the server.
 	if (request.get_params()[0] == "LS")
 	{
-		response = (SERVER_NAME " CAP * LS :End of CAP LS negotiation");
+		response = (SERVER_NAME + " CAP * LS :End of CAP LS negotiation");
 		send_message(response, request.get_user()->get_fd());
 	}
 	

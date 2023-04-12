@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 16:12:24 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/11 16:47:08 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/11 16:54:08 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,11 +95,7 @@ void	Server::privmsg_command(Request request)
 			for (std::set<std::string>::iterator it = targets.begin(); it != targets.end(); ++it)
 			{
 				// ERR_CANNOTSENDTOCHAN
-				if (request.get_params()[1][0] == '#')
-				{
-					std::string channelName = request.get_params()[1];
-
-				}
+				
 				// ERR_NOSUCHNICK
 				if ((recipient = check_for_user(*it)) == _user_map.end())
 				{
@@ -110,37 +106,9 @@ void	Server::privmsg_command(Request request)
 			if (response.empty())
 			{
 				//PRIVMSG to channel
-				//Check if channel exists
-				//Check if user is in channel
-				//Send message to all users in channel except the sender
+				//Chen
 				if (request.get_params()[0][0] == '#')
 				{
-					//Check if channel exists
-					if (getChannels().find(request.get_params()[0]) == getChannels().end())
-					{
-						response = SERVER_NAME " 403 " + user->get_nickname() + " " + request.get_params()[0] + " :No such channel";
-						send_message(response, user->get_fd());
-						return;
-					}
-					// {
-					// 	response = SERVER_NAME " 403 " + user->get_nickname() + " " + request.get_params()[0] + " :No such channel";
-					// 	send_message(response, user->get_fd());
-					// 	return;
-					// }
-					// //Check if user is in channel
-					// if (check_for_channel(request.get_params()[0])->second->check_for_user(user->get_nickname()) == check_for_channel(request.get_params()[0])->second->get_user_map().end())
-					// {
-					// 	response = SERVER_NAME " 404 " + user->get_nickname() + " " + request.get_params()[0] + " :Cannot send to channel";
-					// 	send_message(response, user->get_fd());
-					// 	return;
-					// }
-					// //Send message to all users in channel except the sender
-					// for (usermap::iterator it = check_for_channel(request.get_params()[0])->second->get_user_map().begin(); it != check_for_channel(request.get_params()[0])->second->get_user_map().end(); ++it)
-					// {
-					// 	if (it->second->get_nickname() != user->get_nickname())
-					// 		send_message(user->get_prefix() + " PRIVMSG " + request.get_params()[0] + " :" + request.get_params()[1], it->second->get_fd());
-					// }
-					return;
 					
 				}
 				//PRIVMSG to user
