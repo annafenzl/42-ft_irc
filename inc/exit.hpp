@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 14:25:33 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/12 05:00:48 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/12 17:37:57 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ typedef enum e_exit
 	EXIT_ERR_ALREADYREGISTERED = 462,
 	/// ! USER !
 	EXIT_ERR_NOSUCHNICK = 401,
-	/// RPL
+	/// ! RPL !
 	EXIT_RPL_NAMREPLY = 353,
 	EXIT_RPL_ENDOFNAMES = 366,
 	

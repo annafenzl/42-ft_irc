@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 11:22:22 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/11 12:17:10 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/12 21:00:04 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ Channel &Channel::operator=( const Channel & channel )
 	it = channel.getMembers ().begin ();
 	while (it != channel.getMembers ().end ())
 	{
-		join (*it);
+		insert (*it);
 		it++;
 	}
 	return (*this);
@@ -49,7 +49,7 @@ Channel::Channel( const Channel & channel ):
 	it = channel.getMembers ().begin ();
 	while (it != channel.getMembers ().end ())
 	{
-		join (*it);
+		insert (*it);
 		it++;
 	}
 }
@@ -66,9 +66,10 @@ std::list<User *> &Channel::getMembers( int ) { return (_members); }
 /// ! handlers !
 void Channel::setTopic( const std::string & topic ) { _topic = topic; }
 
-void Channel::join( User * member )
+void Channel::insert( User * user )
 {
-	_members.insert (_members.end (), member);
+	if (getMember (user) == NULL)
+		_members.insert (_members.end (), user);
 }
 
 bool	Channel::isValidChannelName( const std::string & name )

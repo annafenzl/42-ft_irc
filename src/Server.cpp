@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/12 05:06:20 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/12 20:40:54 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -316,9 +316,13 @@ void Server::send_message(Request req, t_exit err, std::string info)
 		case EXIT_ERR_NOSUCHNICK:
 			mes.append ("no such nickname");
 			break ;
+		case EXIT_ERR_NOTONCHANNEL:
+			mes.append ("not on channel");
+			break ;
 		default:
-			mes.append ("error code not found");
+		    std::ostringstream stream2;
+			stream2 << static_cast<int>(err);
+			mes.append ("error code not found: " + stream2.str ());
 	}
-	
 	send_message (mes, req.get_user ()->get_fd ());
 }

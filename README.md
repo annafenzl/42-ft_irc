@@ -58,11 +58,31 @@ __not done yet__
 
 
 ## channel
-+ add open new window on Channel/JOIN, close window on Channel/PART
-+ split channel_manager
-+ add not yet registered execption handling /JOIN /PART
++ improved /LIST, opens /LIST window, supports args
+, /PART segfault (can now part from multple channels consecutively), remove Channel if empty
 
-1 - /WHO if in channel or not /MODE
-2 - password
-3 - NAMES segfault
-4 - invalid channel name
+... close list
+... response codes /LIST /JOIN, /NAME
+
+
+- /MODE
+- password
+
+<!-- ODE :Unknown command>
+
+-> Parsing |PART #channel2 :No boundaries on the net!| <-
+--------- after parsing ----------
+CMD: |PART|
+PARAMS: <#channel2> <No boundaries on the net!> 
+----------------------------------
+RESPONSE IS <:sdasd!sda@:ircserv.com PART #channel2>
+
+
+
+
+-> Parsing |PART #channel1 :No boundaries on the net!| <-
+--------- after parsing ----------
+CMD: |PART|
+PARAMS: <#channel1> <No boundaries on the net!> 
+----------------------------------
+RESPONSE IS <:ircserv.com 442 sdasd :not on channel> -->

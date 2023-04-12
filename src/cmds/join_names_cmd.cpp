@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:21:43 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/12 02:53:33 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/12 19:11:33 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void Server::join_names_command( Request request )
 			request.get_user ()->set_channel (&it->second);
 			if (it->second.getMember (request.get_user ()) == NULL)
 			{
-				it->second.join (request.get_user ());
+				it->second.insert (request.get_user ());
 				send_message (request, EXIT_CHANNEL_JOINED, channelName);
 			}
 			else

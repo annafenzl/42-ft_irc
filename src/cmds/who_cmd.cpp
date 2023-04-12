@@ -6,27 +6,32 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 02:40:53 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/12 05:01:10 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/12 17:35:22 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../inc/Server.hpp"
 
+/** /WHO when no args is provided: display all connected allUsers to the server;
+ * 	/WHO when an argument (#username) is provided;
+ * 	/WHO when an argument (#channel) is provided;
+**/
+
 void Server::who_command( Request request )
 {
 	std::string					info;
-	std::vector<User *>			users;
+	std::vector<User *>			allUsers;
 	channelmap::iterator		channelIt;
 	usermap::iterator			userIt;
 	std::list<User *>::const_iterator			channelUserIt;
-	std::vector<User *>::const_iterator		usersIt;
+	std::vector<User *>::const_iterator		allUsersIt;
 
 	if (request.get_params ().size () < 1)
 	{
 		userIt = _user_map.begin ();
 		while (userIt != _user_map.end ())
 		{
-			users.insert (users.end (), &userIt->second);
+			allUsers.insert (allUsers.end (), &userIt->second);
 			userIt++;
 		}
 	}
@@ -42,7 +47,7 @@ void Server::who_command( Request request )
 		channelUserIt = channelIt->second.getMembers ().begin ();
 		while (channelUserIt != channelIt->second.getMembers ().end ())
 		{
-			users.insert (users.end (), *channelUserIt);
+			allUsers.insert (allUsers.end (), *channelUserIt);
 			channelUserIt++;
 		}
 	}
@@ -56,13 +61,19 @@ void Server::who_command( Request request )
 			return ;
 		}
 	}
-	usersIt = users.begin ();
-	while (usersIt != users.end ())
+	allUsersIt = allUsers.begin ();
+	while (allUsersIt != allUsers.end ())
 	{
-		info = (*usersIt)->get_nickname ();
+		info = (*allUsersIt)->get_nickname () 
+			+ " " + (*allUsersIt)->get_name ()
+			+ " " + (*allUsersIt)->get_hostmask ()
+			+ SERVER_NAME
+			+ " " + (*allUsersIt)->get_fullname ();
 		send_message (request, EXIT_RPL_WHOREPLY, info);
-		usersIt++;
+		allUsersIt++;
 	}
 	send_message (request, EXIT_RPL_ENDOFWHO, "");
 	return ;
 }
+
+

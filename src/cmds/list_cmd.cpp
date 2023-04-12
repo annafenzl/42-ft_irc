@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:22:55 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/11 18:39:36 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/12 18:15:23 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,24 @@ void Server::list_command( Request request )
 	std::string							info;
 	Server::channelmap::const_iterator	channelIt;
 
+	send_message (request, EXIT_RPL_LISTSTART, "");
 	channelIt = _channels.begin ();
 	while (channelIt != _channels.end ())
 	{
 		std::ostringstream					stream;
 
-		stream << channelIt->second.getMembers ().size ();
-		info = channelIt->first + " : " + stream.str () + " member";
-		if (channelIt->second.getMembers ().size () != 1)
-			info += "s";
-		channelIt++;
-		send_message (request, EXIT_INFO_ONLY, info);
+		if (request.get_params ().size () < 1 
+			|| std::find (request.get_params ().begin (),
+				request.get_params ().end (), channelIt->first)
+				!= request.get_params ().end ())
+		{
+			stream << channelIt->second.getMembers ().size ();
+			info = channelIt->first + " : " + stream.str () + " member";
+			if (channelIt->second.getMembers ().size () != 1)
+				info += "s";
+			info += " " + channelIt->second.getTopic () ;
+			channelIt++;
+			send_message (request, EXIT_RPL_LIST, info);
+		}
 	}
 }
