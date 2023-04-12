@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid Date        by              +#+  #+#    #+#             */
-/*   Updated: 2023/04/12 13:26:43 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/12 15:27:49 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ class Server
 		pollfd				_user_poll[SOMAXCONN];
 		nfds_t				_fd_count;
 		usermap				_user_map;
-		channelmap				_channels;
+		channelmap			_channels;
 
 
 	public:

@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 11:18:44 by pguranda          #+#    #+#             */
-/*   Updated: 2023/04/09 11:46:05 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/12 16:58:07 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,16 @@ void Server::kill_command(Request request)
 		send_message(response, user->get_fd());
 		return ;
 	}
+	if (dead_user.get_channel())
+	{
+		if (dead_user.get_channel () == NULL)
+			return ;
+		std::list<User *>::const_iterator userIt = std::find (dead_user.get_channel ()->getMembers (0).begin (), 
+			dead_user.get_channel ()->getMembers (0).end (),
+			&dead_user);
+		dead_user.get_channel ()->getMembers (0).erase (userIt);
+		dead_user.set_channel (NULL);
+	}
 	send_message( user_to_kill + " killed by " + user->get_nickname() + " (" + reason + ")", dead_user.get_fd());
 	for (unsigned int i = 0; i < _fd_count; ++i)
 	{
@@ -64,6 +74,9 @@ void Server::kill_command(Request request)
 			break;
 		}
 	}
+	//Removing the dead_user from the channels, where he is in
+// Removing the dead_user from the channels, where he is in
+
+		
 	_user_map.erase(dead_user.get_fd());
-	//Need to add a way to remove the user from the channel
 }

@@ -1,16 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   User.hpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid Date        by              +#+  #+#    #+#             */
-/*   Updated: 2023/04/12 11:06:00 by pguranda         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-
 
 #ifndef USER_HPP
 # define USER_HPP
@@ -57,7 +44,7 @@ class User
 
 		bool is_registered() const;
 		bool is_pass_provided() const;
-	bool is_operator() const;
+		bool is_operator() const;
 
 		// ------------- setters -----------------
 		
