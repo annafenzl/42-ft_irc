@@ -58,12 +58,8 @@ __not done yet__
 
 
 ## channel
-+ improved /LIST, opens /LIST window, supports args
-, /PART segfault (can now part from multple channels consecutively), remove Channel if empty
-
-... close list
+... close /LIST and upgrade
 ... response codes /LIST /JOIN, /NAME
-
 
 - /MODE
 - password
