@@ -56,14 +56,6 @@ __not done yet__
 
 - SERVICE
 
-
-## channel
-... close /LIST and upgrade
-... response codes /LIST /JOIN, /NAME
-
-- /MODE
-- password
-
 <!-- ODE :Unknown command>
 
 -> Parsing |PART #channel2 :No boundaries on the net!| <-
