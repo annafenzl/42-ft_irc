@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 15:22:07 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/09 11:45:52 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/14 18:28:28 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,22 @@ void	Server::notice_command(Request request)
 	if (duplicate.empty() == false)
 		return;
 
+	// Send the message to all recipients
+
 	for (std::set<std::string>::iterator it = targets.begin(); it != targets.end(); ++it)
 	{
+		// Check if the recipient is a user
+		if (it->front() == '#')
+		{
+			// if (getChannels().find(*it) )
+			
+		}
 		if ((recipient = check_for_user(*it)) == _user_map.end())
 			continue;
-
 		send_message(user->get_prefix() + " NOTICE " + *it + " :" + request.get_params()[1], recipient->first);
+		//Check if
+		
 	}
+	//Send the message to all recipients in the channel
+
 }
