@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 14:14:39 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/06 11:06:23 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/14 15:08:25 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ std::string					Request::get_cmd() const		{ return _cmd; }
 std::vector<std::string>	Request::get_params() const		{ return _params; }
 
 User						*Request::get_user() const		{ return _user; }
+
+void						Request::set_user(User *user)	{ _user = user; }
 
 // ------------- methods ----------------
 

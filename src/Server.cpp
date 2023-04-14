@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/11 10:31:26 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/14 15:36:47 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,6 +185,13 @@ void Server::execute_command( Request request)
 {
 	std::string cmd = request.get_cmd();
 
+	if ((cmd == "JOIN" || cmd == "PART")
+		&& !request.get_user ()->is_registered ())
+	{
+		send_message (request, EXIT_ERR_NOTREGISTERED, "");
+		return ;
+	}
+		
 	if (cmd == "CAP")
 		cap_command(request);
 	else if (cmd == "PING")
@@ -201,17 +208,22 @@ void Server::execute_command( Request request)
 		notice_command(request);
 	else if (cmd == "OPER")
 		oper_command(request);
-	// else if (cmd == "JOIN")
-	// 	join_command(request);
 	else if (cmd == "QUIT")
 		quit_command(request);
 	else if (cmd == "KILL")
 		kill_command(request);
 	else if (cmd == "QUIT")
 		quit_command(request);
-	else if (Channel::isChannelCommand (cmd))
-		channel_manager (request);
-	// else if (cmd == "MODE")
+	else if (cmd == "JOIN" || cmd == "NAMES")
+		join_names_command (request);
+	else if (cmd == "LIST")
+		list_command (request);
+	else if (cmd == "TOPIC")
+		topic_command (request);
+	else if (cmd == "PART")
+		part_command (request);
+	else if (cmd == "WHO")
+		who_command (request);
 	else if (cmd == "GLOBOPS")
 		globops_command(request);
 	else
@@ -241,3 +253,77 @@ std::map<int,User>::iterator Server::check_for_user(std::string nickname)
 
 const Server::channelmap &Server::getChannels( void ) 
 	const { return (_channels); }
+
+void Server::send_message(Request req, t_exit err, std::string info)
+{
+	std::string mes;
+    std::ostringstream stream;
+
+	stream << static_cast<int>(err);
+	mes.append (SERVER_NAME).append (" " + stream.str ()
+		+ " " + req.get_user ()->get_nickname () + " :");
+
+	switch (err)
+	{
+		case EXIT_CHANNEL_JOINED:
+			send_message (":" + req.get_user ()->get_nickname () + "!" 
+				+ req.get_user ()->get_name () + "@" + SERVER_NAME + " JOIN "
+				+ info, req.get_user ()->get_fd ());
+			return ;
+		case EXIT_ERR_NEEDMOREPARAMS:
+			mes.append ("need more parameters");
+			break;
+		case EXIT_ERR_TOOMANYCHANNELS:
+			mes.append ("Too many channels");
+			break;
+		case EXIT_ERR_ALREADY_JOINED:
+			mes.append ("already joined: " + info);
+			break;
+		case EXIT_ERR_INVALID_CHANNEL_NAME:
+			mes.append ("invalid channel name");
+			break;
+		case EXIT_ERR_NOSUCHCHANNEL:
+			mes.append ("no such channel: " + info);
+			break;
+		case EXIT_RPL_ENDOFWHO:
+			mes.append ("end of /WHO");
+			break ;
+		case EXIT_RPL_ENDOFNAMES:
+			mes.append ("end of /NAMES");
+			break ;
+		case EXIT_RPL_LISTSTART:
+			mes.append ("start of /LIST");
+			break ;
+		case EXIT_RPL_LISTEND:
+			mes.append ("end of /LIST");
+			break ;
+		case EXIT_INFO_ONLY:
+		case EXIT_RPL_WHOREPLY:
+		case EXIT_RPL_LIST:
+		case EXIT_RPL_NAMREPLY:
+			mes.append (info);
+			break;
+		case EXIT_LEFT_CHANNEL:
+			send_message (":" + req.get_user ()->get_nickname () + "!" 
+				+ req.get_user ()->get_name () + "@" + SERVER_NAME + " PART "
+				+ info, req.get_user ()->get_fd ());
+			return ;
+		case EXIT_ERR_NOTREGISTERED:
+			mes.append ("You are not yet registered");
+			break ;
+		case EXIT_ERR_ALREADYREGISTERED:
+			mes.append ("You are already registered");
+			break ;
+		case EXIT_ERR_NOSUCHNICK:
+			mes.append ("no such nickname");
+			break ;
+		case EXIT_ERR_NOTONCHANNEL:
+			mes.append ("not on channel");
+			break ;
+		default:
+		    std::ostringstream stream2;
+			stream2 << static_cast<int>(err);
+			mes.append ("error code not found: " + stream2.str ());
+	}
+	send_message (mes, req.get_user ()->get_fd ());
+}

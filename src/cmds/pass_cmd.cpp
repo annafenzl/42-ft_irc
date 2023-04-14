@@ -37,7 +37,6 @@ void Server::pass_command(Request request)
 	else if (request.get_params()[0] != _password)
 	{
 		response.append(SERVER_NAME " 464 " + user->get_nickname() + " :Password incorrect");
-
 		user->set_pass_provided(false);
 	}
 	else

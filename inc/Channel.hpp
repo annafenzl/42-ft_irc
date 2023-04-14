@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid Date        by              +#+  #+#    #+#             */
-/*   Updated: 2023/04/11 10:21:21 by pguranda         ###   ########.fr       */
+/*   Created: 2023/03/22 18:15:17 by katchogl          #+#    #+#             */
+/*   Updated: 2023/04/14 14:36:17 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,22 +40,20 @@ class Channel
 		Channel &operator=( const Channel & channel );
 		~Channel( void );
 		
-		/// ! basic getters !
+		/// ! getters !
 		const std::string &getName( void ) const;
 		const std::string &getTopic( void ) const;
 		const std::string &getModes( void ) const;
 		const std::list<User *> &getMembers( void ) const;
 		std::list<User *> &getMembers( int );
-
-		/// ! main !
-		void setTopic( const std::string & topic );
-		void join( User * member );
-		void part( std::string name );
-
-		/// ! static and utility !
-		static bool isChannelCommand( const std::string & command );
-		static bool isValidChannelName( const std::string & name );
 		User *getMember( User *user );
+
+		/// ! setters !
+		void setTopic( const std::string & topic );
+		void insert( User * user );
+
+		/// ! utility !
+		static bool isValidChannelName( const std::string & name );
 
 		/// ! exceptions !
 		class InvalidChannelName: public std::exception

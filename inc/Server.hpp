@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid Date        by              +#+  #+#    #+#             */
-/*   Updated: 2023/04/12 15:27:49 by pguranda         ###   ########.fr       */
+/*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
+/*   Updated: 2023/04/14 14:46:32 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ class Server
 
 	// -------------- Getters ----------------------
 	int get_port();
+	const channelmap &getChannels( void ) const;
 	
 	std::string get_password();
 
@@ -98,11 +99,18 @@ class Server
 	// void join_command(Request request);
 	void quit_command(Request request);
 	void notice_command(Request request);
+	void join_names_command(Request request);
 	void oper_command(Request request);
 	void kill_command(Request request);
+	void topic_command(Request request);
+	void list_command(Request request);
+	void part_command(Request request);
+	void who_command(Request request);
 	void globops_command(Request request);
+	// void quit_command(Request request);
 	
 	void send_message(std::string, int fd);
+	void send_message(Request req, t_exit err, std::string info);
 
 	// -------------- Exceptions -------------------
 	class IncorrectPortNumber: public std::exception {
@@ -164,10 +172,5 @@ class Server
 			return "Error: The poll() function failed.";
 		}
 	};
-
-		t_exit channel_manager( Request req );
-		t_exit send_message(Request req, t_exit err, std::string info);
-		const channelmap &getChannels( void ) const;
-		
 };
 #endif
