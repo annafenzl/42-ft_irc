@@ -38,4 +38,8 @@ fclean: clean
 
 re: fclean all
 
+run :
+	@make
+	./$(NAME) 6668 123
+
 .PHONY: all clean fclean re
