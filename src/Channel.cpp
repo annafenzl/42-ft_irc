@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 11:22:22 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/16 14:01:36 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/16 14:15:09 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ bool	Channel::isValidChannelName( const std::string & name )
 {
 	int i;
 
-	if (name[0] != '#' && name[0] != '&')
+	if (name.empty () || (name[0] != '#' && name[0] != '&'))
 		return (false);
 	i = -1;
 	while (name[++i])

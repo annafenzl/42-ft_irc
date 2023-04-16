@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:22:55 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/12 18:15:23 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/16 16:24:58 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,10 @@ void Server::list_command( Request request )
 				!= request.get_params ().end ())
 		{
 			stream << channelIt->second.getMembers ().size ();
-			info = channelIt->first + " : " + stream.str () + " member";
-			if (channelIt->second.getMembers ().size () != 1)
-				info += "s";
-			info += " " + channelIt->second.getTopic () ;
+			info = channelIt->first + " " + stream.str () + " " + channelIt->second.getTopic () ;
 			channelIt++;
 			send_message (request, EXIT_RPL_LIST, info);
 		}
 	}
+	send_message (request, EXIT_RPL_LISTEND, "");
 }

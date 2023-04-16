@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:21:43 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/16 14:00:08 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/16 16:03:13 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,6 @@ void Server::join_names_command( Request request )
 		else
 			channelNames = "";
 	
-		std::cout << "loop: " + channelName << std::endl;
-		
 		pos2 = passwords.find (",");
 		password = passwords.substr (0, pos2);
 		
@@ -122,7 +120,7 @@ void Server::join_names_command( Request request )
 		
 		else if (request.get_cmd () == "NAMES")
 		{
-			info = ":NAMES " + channelName + ": ",
+			info = "NAMES " + channelName + ": ",
 				request.get_user ()->get_fd ();
 			userIt = it->second.getMembers ().begin ();
 			while (userIt != it->second.getMembers ().end ())
@@ -132,7 +130,8 @@ void Server::join_names_command( Request request )
 				info += (*userIt)->get_nickname ();	
 				userIt++;
 			}
-			send_message (request, EXIT_INFO_ONLY, info);
+			send_message (request, EXIT_RPL_NAMREPLY, info);
+			send_message (request, EXIT_RPL_ENDOFNAMES, channelName);
 		}
 	}
 }
