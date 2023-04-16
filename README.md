@@ -55,3 +55,22 @@ __not done yet__
 ## 'Don't know if needed
 
 - SERVICE
+
+<!-- ODE :Unknown command>
+
+-> Parsing |PART #channel2 :No boundaries on the net!| <-
+--------- after parsing ----------
+CMD: |PART|
+PARAMS: <#channel2> <No boundaries on the net!> 
+----------------------------------
+RESPONSE IS <:sdasd!sda@:ircserv.com PART #channel2>
+
+
+
+
+-> Parsing |PART #channel1 :No boundaries on the net!| <-
+--------- after parsing ----------
+CMD: |PART|
+PARAMS: <#channel1> <No boundaries on the net!> 
+----------------------------------
+RESPONSE IS <:ircserv.com 442 sdasd :not on channel> -->
