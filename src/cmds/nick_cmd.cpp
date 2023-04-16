@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   nick_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:35:58 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/12 12:54:29 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/16 14:15:53 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,21 @@ bool	checkforbiddenchars(std::string &nickname)
 */
 void	Server::check_login_complete(User *user)
 {
-	if (user->is_pass_provided() && user->get_nickname() != "*" && user->get_name() != "*" && user->is_registered() == false)
+	std::string	nickname = user->get_nickname();
+	int			fd = user->get_fd();
+
+	if (user->is_pass_provided() && nickname != "*" && user->get_name() != "*" && user->is_registered() == false)
 	{
 		// RPL_WELCOME
-		send_message(SERVER_NAME " 001 " + user->get_nickname() + " :Welcome to the Internet Relay Network " + user->get_nickname() + "!" + user->get_name() + "@" + user->get_hostmask(), user->get_fd());
+		send_message(SERVER_NAME " 001 " + nickname + " :Welcome to the Internet Relay Network " + nickname + "!" + user->get_name() + "@" + user->get_hostmask(), fd);
+		// RPL_YOURHOST
+		send_message(SERVER_NAME " 002 " + nickname + " :Your host is " SERVER_NAME " running version " VERSION, fd);
+		// RPL_CREATED
+		send_message(SERVER_NAME " 003 " + nickname + " :This server was created " + _time_of_creation, fd);
+		// RPL_MYINFO
+		send_message(SERVER_NAME " 004 " + nickname + " irc.example.com " VERSION " olws obtkmlvsn", fd );
+		// RPL_ISUPPORT
+		// send_message(SERVER_NAME " 005 " + nickname + " RFC2812 PREFIX=(ov)@+ CHANTYPES=#&+ CHANMODES=b,k,l,imnpst CHANNELLEN=50 MAXLIST=beI:100 MODES=4 NETWORK=MyIRCNet CHARSET=ascii NICKLEN=30 TOPICLEN=307 KICKLEN=307 AWAYLEN=307 USERMODES=4", fd );
 		user->set_registered(true);
 	}
 }
@@ -52,7 +63,7 @@ void	Server::check_login_complete(User *user)
 
 void	Server::nick_command(Request request)
 {
-	std::string response;
+	std::string	response;
 	User		*user = request.get_user();
 	
 	if (user->is_pass_provided() == false)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/14 15:36:47 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/16 14:21:36 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,23 @@
 // -------------- Constructor ------------------
 Server::Server(char **argv)
 {
-	// PORTS WITH 878whatever are still valid!!!!
-	long	port = strtol(argv[1], NULL, 0);
-	if (port < 1 || port > 65535)  // portnumbers up until 1024 are reserved!!
+	// parse port
+	char	*end;
+	long	port = strtol(argv[1], &end, 0);
+	if (port < 1 || port > 65535 || end[0] != '\0')
 		throw IncorrectPortNumber();
 	_port = (int) port;
 	
+	// parse password
 	_password = argv[2]; 
 	if (_password.empty())
 		throw InvalidPassword();
+
+	// set time of creation
+	time_t now = time(0);
+	char *time_str;
+	_time_of_creation = std::string(ctime(&now));
+	_time_of_creation.pop_back();
 }
 
 // -------------- Getters ----------------------

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/14 14:46:32 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/16 14:19:44 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 # include <map>
 # include <sstream>
 # include <utility>
+# include <ctime>
 # include "exit.hpp"
 # include "User.hpp"
 # include "Request.hpp"
@@ -42,6 +43,7 @@
 # define END_SEQUENCE "\r\n"
 # define SERVER_NAME ":ircfornow.com"
 # define FORBIDDEN_CHARS "!@#$%^&*()+={}[];,:\"\t'<>."
+# define VERSION "1.0"
 
 //OPER Credentials
 # define OPER_PASS "42"
@@ -55,6 +57,7 @@ class Server
 	private:
 		int					_port;
 		std::string			_password;
+		std::string			_time_of_creation;
 		
 		int					_listening_socket;
 		pollfd				_user_poll[SOMAXCONN];
