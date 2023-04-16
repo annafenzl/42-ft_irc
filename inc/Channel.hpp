@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 18:15:17 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/12 19:09:44 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/16 12:58:03 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class Channel
 {
 	private:
 		std::string			_name;
+		std::string			_password;
 		std::string			_topic;
 		std::list<User *>	_members;
 		std::string			_modes;
@@ -35,12 +36,13 @@ class Channel
 	public:
 		Channel( void );
 		Channel( const Channel & channel );
-		Channel( const std::string & name );
+		Channel( const std::string & name, const std::string & password );
 		Channel &operator=( const Channel & channel );
 		~Channel( void );
 		
 		/// ! getters !
 		const std::string &getName( void ) const;
+		const std::string &getPassword( void ) const;
 		const std::string &getTopic( void ) const;
 		const std::string &getModes( void ) const;
 		const std::list<User *> &getMembers( void ) const;

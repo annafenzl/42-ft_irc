@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/12 20:40:54 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/16 13:06:19 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -318,6 +318,12 @@ void Server::send_message(Request req, t_exit err, std::string info)
 			break ;
 		case EXIT_ERR_NOTONCHANNEL:
 			mes.append ("not on channel");
+			break ;
+		case EXIT_ERR_BANNEDFROMCHAN:
+			mes.append ("permission denied. Have you provided the password?");
+			break ;
+		case EXIT_ERR_BADCHANNELKEY:
+			mes.append ("incorrect password");
 			break ;
 		default:
 		    std::ostringstream stream2;

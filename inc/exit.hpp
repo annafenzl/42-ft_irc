@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 14:25:33 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/12 17:37:57 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/16 13:06:49 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,15 @@ typedef enum e_exit
 	EXIT_ERR_NEEDMOREPARAMS = 461,
 	EXIT_ERR_NOSUCHCHANNEL = 403,
 	EXIT_ERR_TOOMANYCHANNELS = 405,
-	EXIT_ERR_BADCHANNELKEY = 475,
-	EXIT_ERR_BANNEDFROMCHAN = 474,
 	EXIT_ERR_CHANNELISFULL = 471,
 	EXIT_ERR_INVITEONLYCHAN = 473,
 	EXIT_ERR_BADCHANMASK = 476,
 	EXIT_RPL_TOPIC = 332,
 	EXIT_RPL_TOPICWHOTIME = 333,
 	EXIT_ERR_NOTONCHANNEL = 442,
+	/// ! PASSWORD/KEY !
+	EXIT_ERR_BADCHANNELKEY = 475,
+	EXIT_ERR_BANNEDFROMCHAN = 474,
 	/// ! custom !
 	EXIT_ERR_ALREADY_JOINED = 1000,
 	EXIT_ERR_INVALID_CHANNEL_NAME = 1001,
@@ -46,6 +47,6 @@ typedef enum e_exit
 
 	EXIT_RPL_LISTSTART = 321,
 	EXIT_RPL_LIST = 322,
-	EXIT_RPL_LISTEND = 323
+	EXIT_RPL_LISTEND = 323,
 }	t_exit;
 #endif

@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 11:22:22 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/12 21:00:04 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/16 14:01:36 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,15 @@
 
 /// ! constructors and destructor !
 Channel::Channel( void )
-	: _name("*"), _topic("*"), _modes("*")
+	: _name("*"), _topic("*"), _modes("*"), _password("*")
 {}
 
-Channel::Channel( const std::string & name )
-	: _name(name), _topic("*"), _modes("*")
-{}
+Channel::Channel( const std::string & name, const std::string & password )
+	: _name(name), _topic("*"), _modes("*"), _password(password)
+{
+	std::cout << "\033[0;32m[INFO] new channel: " + _name 
+		+  ", with password: '" + _password + "' created\033[0m" << std::endl;
+}
 
 Channel &Channel::operator=( const Channel & channel )
 {
@@ -28,6 +31,7 @@ Channel &Channel::operator=( const Channel & channel )
 	if (this == & channel)
 		return (*this);
 	_name = channel.getName ();
+	_password = channel.getPassword ();
 	_topic = channel.getTopic ();
 	_modes = channel.getModes ();
 	_members = std::list<User *>();
@@ -42,7 +46,7 @@ Channel &Channel::operator=( const Channel & channel )
 
 Channel::Channel( const Channel & channel ):
 	_name(channel.getName ()), _topic(channel.getTopic ()),
-	_modes(channel.getModes ())
+	_modes(channel.getModes ()), _password(channel.getPassword ())
 {
 	std::list<User *>::const_iterator it;
 	
@@ -58,6 +62,7 @@ Channel::~Channel( void ) {}
 
 /// ! basic getters !
 const std::string &Channel::getName( void ) const { return (_name ); }
+const std::string &Channel::getPassword( void ) const { return (_password ); }
 const std::string &Channel::getTopic( void ) const { return (_topic ); }
 const std::string &Channel::getModes( void ) const { return (_modes); }
 const std::list<User *> &Channel::getMembers( void ) const { return (_members); }

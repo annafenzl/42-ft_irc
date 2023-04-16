@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:24:20 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/12 21:33:04 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/16 12:15:07 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ void Server::part_command( Request request )
 	// check if user is on channel to part from
 	if (request.get_params ()[0] != request.get_user()->get_channel ()->getName ())
 	{
-		std::cout << "\033[0;31mUser is not in channel " + request.get_params ()[0]
-			+ " but in channel " + request.get_user()->get_channel ()->getName () 
+		std::cout << "\033[0;31mUser is not in channel: " + request.get_params ()[0]
+			+ " but in channel: " + request.get_user()->get_channel ()->getName () 
 			+ "\033[0m" << std::endl;
 		send_message (request, EXIT_ERR_NOTONCHANNEL, request.get_params ()[0]
 			+ " vs " + request.get_user()->get_channel ()->getName ());
@@ -78,6 +78,6 @@ void Server::part_command( Request request )
 		request.get_user ()->set_channel (&channelItFound->second);
 	}
 	else
-		std::cout << "\033[0;36muser is not in any channel\033[0m" << std::endl;
+		std::cout << "\033[0;36muser is now not in any channel\033[0m" << std::endl;
 	send_message (request, EXIT_LEFT_CHANNEL, request.get_params ()[0]);
 }
