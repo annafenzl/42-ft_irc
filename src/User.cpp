@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 13:39:50 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/14 15:07:53 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/16 15:28:26 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ std::string User::get_prefix() const	{ return ":" + _nickname + "!" + _name + "@
 
 int User::get_fd() const				{ return _fd;}
 
-Channel *User::get_channel() const				{ return _channel; }
+Channel *User::get_channel() const		{ return _channel; }
 
 bool User::is_registered() const		{ return _registered;}
 

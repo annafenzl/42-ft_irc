@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg_cmd.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 16:12:24 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/11 16:54:08 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/16 15:36:28 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,12 +92,16 @@ void	Server::privmsg_command(Request request)
 			response = SERVER_NAME " 407 " + user->get_nickname() + " " + duplicate + " :Duplicate recipients. No message delivered";
 		else
 		{
-			for (std::set<std::string>::iterator it = targets.begin(); it != targets.end(); ++it)
+			std::set<std::string>::const_iterator it;
+			for (it = targets.begin(); it != targets.end(); ++it)
 			{
 				// ERR_CANNOTSENDTOCHAN
-				
+				std::cout << "available channels: "<< std::endl;
+				for (channelmap::iterator it = _channels.begin(); it != _channels.end(); ++it)
+					std::cout << it->first << ", ";
+				std::cout << std::endl;
 				// ERR_NOSUCHNICK
-				if ((recipient = check_for_user(*it)) == _user_map.end())
+				if (check_for_user(*it) == _user_map.end() && _channels.find(*it) == _channels.end())
 				{
 					response = SERVER_NAME " 401 " + user->get_nickname()+ " " + *it + " :No such nick/channel";
 					break;
@@ -105,17 +109,21 @@ void	Server::privmsg_command(Request request)
 			}
 			if (response.empty())
 			{
-				//PRIVMSG to channel
-				//Chen
-				if (request.get_params()[0][0] == '#')
+				for (it = targets.begin(); it != targets.end(); ++it)
 				{
-					
-				}
-				//PRIVMSG to user
-				else
-				{
-					for (std::set<std::string>::iterator it = targets.begin(); it != targets.end(); ++it)
-						send_message(user->get_prefix() + " PRIVMSG " + *it + " :" + request.get_params()[1], check_for_user(*it)->first);
+					// send to user
+					if ((recipient = check_for_user(*it)) != _user_map.end())
+						send_message(user->get_prefix() + " PRIVMSG " + *it + " :" + request.get_params()[1], recipient->first);
+					// send to all other users in channel
+					else
+					{
+						const std::list<User *> &member_list = _channels.find(*it)->second.getMembers();
+						for (std::list<User *>::const_iterator user_it = member_list.begin(); user_it != member_list.end(); ++user_it)
+						{
+							if (*user_it != user)
+								send_message(user->get_prefix() + " PRIVMSG " + *it + " :" + request.get_params()[1], (*user_it)->get_fd());
+						}
+					}
 				}
 				return;
 			}
