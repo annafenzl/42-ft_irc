@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:21:43 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/16 16:03:13 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/18 00:21:59 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,6 @@ void Server::join_names_command( Request request )
 	std::string 						password;
 	size_t								pos2;
 
-	if (request.get_params ().size () < 1
-		&& request.get_cmd () == "NAMES"
-		&& request.get_user ()->get_channel () != NULL)
-		request.get_params ().insert (request.get_params ().end (),
-				request.get_user ()->get_channel ()->getName ());
-	
 	if (request.get_params ().size () < 1)
 	{
 		send_message (request, EXIT_ERR_NEEDMOREPARAMS, "");
@@ -108,14 +102,12 @@ void Server::join_names_command( Request request )
 	
 		if (request.get_cmd () == "JOIN")
 		{
-			request.get_user ()->set_channel (&it->second);
 			if (it->second.getMember (request.get_user ()) == NULL)
-			{
-				it->second.insert (request.get_user ());
 				send_message (request, EXIT_CHANNEL_JOINED, channelName);
-			}
 			else
 				send_message (request, EXIT_ERR_ALREADY_JOINED, channelName);
+			it->second.insert (request.get_user ());
+			request.get_user ()->getChannels (0).insert (std::make_pair (it->first, &it->second));
 		}
 		
 		else if (request.get_cmd () == "NAMES")

@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:09:30 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/16 15:45:30 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/17 22:00:23 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,7 @@ void Server::topic_command( Request request )
 	std::string							info;
 	channelmap::iterator				it;
 
-	if (request.get_params ().size () < 1
-		&& request.get_user ()->get_channel () != NULL)
-		request.get_params ().insert (request.get_params ().end (), 
-				request.get_user ()->get_channel ()->getName ());
-	else if (request.get_params ().size () < 1)
+	if (request.get_params ().size () < 1)
 	{
 		send_message (request, EXIT_ERR_NEEDMOREPARAMS, "");
 		return ;
