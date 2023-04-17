@@ -6,7 +6,7 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/17 15:05:55 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/17 16:13:00 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@
 
 class Server
 {
-	typedef std::map<int, User>		usermap;
+	typedef std::map<int, User>				usermap;
 	typedef std::map<std::string, Channel>	channelmap;
 
 	private:
@@ -64,7 +64,6 @@ class Server
 		nfds_t				_fd_count;
 		usermap				_user_map;
 		channelmap			_channels;
-
 
 	public:
 	// -------------- Constructor ------------------

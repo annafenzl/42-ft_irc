@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   who_cmd.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 02:40:53 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/12 17:35:22 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/17 16:06:29 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
  * 	/WHO when an argument (#username) is provided;
  * 	/WHO when an argument (#channel) is provided;
 **/
-
 void Server::who_command( Request request )
 {
 	std::string					info;

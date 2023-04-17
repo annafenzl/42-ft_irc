@@ -6,7 +6,7 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/17 15:14:44 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/17 16:15:14 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void Server::setup_socket()
 
 	memset(_user_poll, 0, sizeof(_user_poll));
 	_user_poll[0].fd = _listening_socket;
-	_user_poll[0].events = POLLIN;
+	_user_poll[0].events = POLLIN | POLLHUP | POLLOUT;
 	_fd_count = 1;
 }
 
@@ -103,6 +103,10 @@ void Server::run()
 						new_client();
 					else
 						client_request(i);
+				}
+				else if (_user_poll[i].revents & POLLHUP | _user_poll[i].revents & POLLOUT )
+				{
+					remove_user(&(_user_map.find(_user_poll[i].fd)->second));
 				}
 			} catch (std::exception& e) {
 				std::cerr << "\033[0;31m" << e.what() << "\033[0m" << '\n';
