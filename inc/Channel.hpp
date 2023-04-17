@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 18:15:17 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/14 14:36:17 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/17 14:50:11 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,15 @@ class Channel
 		const std::string &getModes( void ) const;
 		const std::list<User *> &getMembers( void ) const;
 		std::list<User *> &getMembers( int );
-		User *getMember( User *user );
 
 		/// ! setters !
 		void setTopic( const std::string & topic );
 		void insert( User * user );
 
 		/// ! utility !
+		bool isMember(User *user) const;
 		static bool isValidChannelName( const std::string & name );
+		void removeMember(User *user);
 
 		/// ! exceptions !
 		class InvalidChannelName: public std::exception

@@ -6,7 +6,7 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/16 14:19:44 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/17 15:05:55 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ class Server
 
 	void handle_command(char* cmd, int user_fd);
 	void execute_command(Request request);
+	void remove_user(User *user);
+
 	
 	void				check_login_complete(User *user);
 	usermap::iterator	check_for_user(std::string nickname);

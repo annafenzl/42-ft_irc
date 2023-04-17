@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 11:22:22 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/14 14:41:57 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/17 14:54:10 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void Channel::setTopic( const std::string & topic ) { _topic = topic; }
 
 void Channel::insert( User * user )
 {
-	if (getMember (user) == NULL)
+	if (isMember(user) == false)
 		_members.insert (_members.end (), user);
 }
 
@@ -86,15 +86,19 @@ bool	Channel::isValidChannelName( const std::string & name )
 	return (true);
 }
 
-User *Channel::getMember( User *user )
+/*
+	returns true if the passed User is part of the Channel
+*/
+bool Channel::isMember( User *user ) const
 {
-	std::list<User *>::iterator it;
-
-	it = std::find (_members.begin (), _members.end (), user);
-	if (it != _members.end ())
-		return (*it);
-	return (NULL);
+	return (find (_members.begin (), _members.end (), user) != _members.end ());
 }
+
+void Channel::removeMember(User *user)
+{
+	_members.remove(user);
+}
+
 
 /// ! exceptions !
 const char *Channel::InvalidChannelName::what( void ) const throw()

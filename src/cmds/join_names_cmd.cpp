@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join_names_cmd.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:21:43 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/14 15:25:25 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/17 14:54:31 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void Server::join_names_command( Request request )
 		{
 			request.get_user ()->set_channel (&it->second);
 			User *original_user = request.get_user ();
-			if (it->second.getMember (request.get_user ()) == NULL)
+			if (it->second.isMember (request.get_user ()) == false)
 			{
 				it->second.insert (request.get_user ());
 				send_message (request, EXIT_CHANNEL_JOINED, channelName);

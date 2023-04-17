@@ -6,7 +6,7 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/16 14:21:36 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/17 15:10:55 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,9 @@ std::string	Server::get_password()
 {
 	return _password;
 }
+
+const Server::channelmap &Server::getChannels( void ) 
+	const { return (_channels); }
 
 // -------------- Methods ----------------------
 
@@ -140,13 +143,10 @@ void Server::client_request(int index)
 	if (read_bytes <= 0)
 	{
 		if (read_bytes == 0)
-		{
 			std::cout << "user(fd) " << sender_fd << " hung up" << std::endl;
-			_user_map.erase(sender_fd);
-		}
 		else
 			throw RecieveMessageFailed();
-		remove_from_poll(index);
+		remove_user(&_user_map.find(sender_fd)->second);
 	}
 	else
 		handle_command(buff, sender_fd);
@@ -238,12 +238,6 @@ void Server::execute_command( Request request)
 		send_message(SERVER_NAME " 421 " + request.get_user()->get_nickname() + " " + cmd + " :Unknown command", request.get_user()->get_fd());
 }
 
-void Server::send_message(std::string message, int fd)
-{
-	std::cout << "RESPONSE IS <" << message << ">" << std::endl;
-	send(fd, message.append(END_SEQUENCE).c_str(), message.size(), 0);
-}
-
 /*
 	searches for User in the map, returns a iterator to the User, if not found _user_map.end()
 */
@@ -259,8 +253,11 @@ std::map<int,User>::iterator Server::check_for_user(std::string nickname)
 	return _user_map.end();
 }
 
-const Server::channelmap &Server::getChannels( void ) 
-	const { return (_channels); }
+void Server::send_message(std::string message, int fd)
+{
+	std::cout << "RESPONSE IS <" << message << ">" << std::endl;
+	send(fd, message.append(END_SEQUENCE).c_str(), message.size(), 0);
+}
 
 void Server::send_message(Request req, t_exit err, std::string info)
 {
@@ -335,3 +332,28 @@ void Server::send_message(Request req, t_exit err, std::string info)
 	}
 	send_message (mes, req.get_user ()->get_fd ());
 }
+
+// removes the user from poll array, user_map, and all the channels he was in
+void Server::remove_user(User *user)
+{
+	// remove from all channels
+	for (channelmap::iterator it = _channels.begin(); it != _channels.end(); ++it)
+	{
+		if (it->second.isMember(user))
+			it->second.removeMember(user);
+	}
+
+	// remove from poll array
+	for (unsigned int i = 0; i < _fd_count; ++i)
+	{
+		if (_user_poll[i].fd == user->get_fd())
+		{
+			std::cout << "USER " << user->get_nickname() << " hung up on " << user->get_fd() << std::endl;
+			remove_from_poll(i);
+			break ;
+		}
+	}
+	// remove from map
+	_user_map.erase(user->get_fd());
+}
+
