@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   globops_cmd.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 11:18:48 by pguranda          #+#    #+#             */
-/*   Updated: 2023/04/09 11:48:41 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/17 15:48:31 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,18 @@
 //Implementation of a GLOBOPS command for IRC
 void Server::globops_command(Request request)
 {
-	std::string response;
-	
-	std::string		message = request.get_params()[0];
-	User			*user = request.get_user();
+	std::string	response;
+	User		*user = request.get_user();
 	
 	if (!user->is_registered())
 	{
-		send_message(SERVER_NAME " 462 " + user->get_nickname() + " :Unauthorized command (not yet registered)", user->get_fd());
-		return ;
+		response = SERVER_NAME " 462 " + user->get_nickname() + " :Unauthorized command (not yet registered)";
 	}
-	if (!user->is_operator())
+	else if (!user->is_operator())
 	{
 		response = SERVER_NAME " 481 " + user->get_nickname() + " :Permission Denied- You're not an IRC operator";
 	}
-	if (message.empty())
+	else if (request.get_params().size() == 0)
 	{
 		response = SERVER_NAME " 461 " + user->get_nickname() + " :Not enough parameters";
 	}
@@ -44,7 +41,7 @@ void Server::globops_command(Request request)
 	{
 		if (it->second.get_fd() != user->get_fd() && it->second.is_operator())
 		{
-			send_message(SERVER_NAME " GLOBOPS " + user->get_nickname() + " : " + message, it->second.get_fd());
+			send_message(SERVER_NAME " GLOBOPS " + user->get_nickname() + " : " + request.get_params()[0], it->second.get_fd());
 		}
 	}
 }

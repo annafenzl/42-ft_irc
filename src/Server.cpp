@@ -6,7 +6,7 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/17 15:10:55 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/17 15:14:44 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,25 +152,27 @@ void Server::client_request(int index)
 		handle_command(buff, sender_fd);
 }
 
-void Server::add_to_poll(int user_fd)
+// removes the user from poll array, user_map, and all the channels he was in
+void Server::remove_user(User *user)
 {
-	if (_fd_count >= SOMAXCONN)
-		throw FdPollFullError();
-	
-	_user_poll[_fd_count].fd = user_fd;
-	_user_poll[_fd_count].events = POLLIN;
+	// remove from all channels
+	for (channelmap::iterator it = _channels.begin(); it != _channels.end(); ++it)
+	{
+		if (it->second.isMember(user))
+			it->second.removeMember(user);
+	}
 
-	++_fd_count;
-}
-
-void Server::remove_from_poll(int index)
-{
-	close(_user_poll[index].fd);
-	_user_poll[index].fd = _user_poll[_fd_count-1].fd;
-	_user_poll[index].events = POLLIN;
-	_user_poll[_fd_count - 1].fd = -1;
-	
-	--_fd_count;
+	// remove from poll array
+	for (unsigned int i = 0; i < _fd_count; ++i)
+	{
+		if (_user_poll[i].fd == user->get_fd())
+		{
+			remove_from_poll(i);
+			break ;
+		}
+	}
+	// remove from map
+	_user_map.erase(user->get_fd());
 }
 
 void Server::handle_command(char* cmd, int user_fd)
@@ -236,6 +238,27 @@ void Server::execute_command( Request request)
 		globops_command(request);
 	else
 		send_message(SERVER_NAME " 421 " + request.get_user()->get_nickname() + " " + cmd + " :Unknown command", request.get_user()->get_fd());
+}
+
+void Server::add_to_poll(int user_fd)
+{
+	if (_fd_count >= SOMAXCONN)
+		throw FdPollFullError();
+	
+	_user_poll[_fd_count].fd = user_fd;
+	_user_poll[_fd_count].events = POLLIN;
+
+	++_fd_count;
+}
+
+void Server::remove_from_poll(int index)
+{
+	close(_user_poll[index].fd);
+	_user_poll[index].fd = _user_poll[_fd_count-1].fd;
+	_user_poll[index].events = POLLIN;
+	_user_poll[_fd_count - 1].fd = -1;
+	
+	--_fd_count;
 }
 
 /*
@@ -333,27 +356,4 @@ void Server::send_message(Request req, t_exit err, std::string info)
 	send_message (mes, req.get_user ()->get_fd ());
 }
 
-// removes the user from poll array, user_map, and all the channels he was in
-void Server::remove_user(User *user)
-{
-	// remove from all channels
-	for (channelmap::iterator it = _channels.begin(); it != _channels.end(); ++it)
-	{
-		if (it->second.isMember(user))
-			it->second.removeMember(user);
-	}
-
-	// remove from poll array
-	for (unsigned int i = 0; i < _fd_count; ++i)
-	{
-		if (_user_poll[i].fd == user->get_fd())
-		{
-			std::cout << "USER " << user->get_nickname() << " hung up on " << user->get_fd() << std::endl;
-			remove_from_poll(i);
-			break ;
-		}
-	}
-	// remove from map
-	_user_map.erase(user->get_fd());
-}
 
