@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:21:43 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/18 12:23:25 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 21:04:29 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,24 @@
  *	usage:	/JOIN #channel1,#channel2
  *			/NAMES #channel1,#channel2
  ***********************************************/
+
+void Server::send_names_list(Request &request, Channel &channel)
+{
+	std::string info;
+	std::list<User *>::const_iterator userIt;
+
+	userIt = channel.getMembers().begin();
+	while (userIt != channel.getMembers().end())
+	{
+		if (userIt != channel.getMembers().begin())
+			info += ' ';
+		info += (*userIt)->get_nickname();
+		userIt++;
+	}
+	send_message(SERVER_NAME " 353 " + request.get_user()->get_nickname() + " = " + channel.getName() + " :" + info, request.get_user()->get_fd());
+	send_message(SERVER_NAME " 366 " + request.get_user()->get_nickname() + " " + channel.getName() + " :End of NAMES list", request.get_user()->get_fd());
+}	
+
 
 void Server::join_names_command( Request request )
 {
@@ -99,7 +117,7 @@ void Server::join_names_command( Request request )
 				send_message (request, EXIT_ERR_BADCHANNELKEY, channelName);
 			continue ;
 		}
-	
+		//After JOIN, NAMES is ran automatically to show all the users in the channel in the client
 		if (request.get_cmd () == "JOIN")
 		{
 			if (it->second.getMember (request.get_user ()) == NULL)
@@ -108,6 +126,7 @@ void Server::join_names_command( Request request )
 				send_message (request, EXIT_ERR_ALREADY_JOINED, channelName);
 			it->second.insert (request.get_user ());
 			request.get_user ()->getChannels (0).insert (std::make_pair (it->first, &it->second));
+			send_names_list(request, it->second );
 		}
 		
 		else if (request.get_cmd () == "NAMES")
@@ -120,11 +139,7 @@ void Server::join_names_command( Request request )
 				info += (*userIt)->get_nickname ();	
 				userIt++;
 			}
-			std::cout << "list: " << info << std::endl;
-			// send_message (request, EXIT_RPL_NAMREPLY, info);
 			send_message (SERVER_NAME " 353 " + request.get_user ()->get_nickname () + " = " + channelName + " :" + info, request.get_user ()->get_fd ());
-
-			// send_message (request, EXIT_RPL_ENDOFNAMES, channelName);
 			send_message(SERVER_NAME " 366 " + channelName + " :End of NAMES list", request.get_user()->get_fd());
 		}
 	}

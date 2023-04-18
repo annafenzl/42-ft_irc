@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:35:55 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/12 15:14:50 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 21:24:47 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,5 @@ void Server::cap_command(Request request)
 		response = (SERVER_NAME " CAP * LS :End of CAP LS negotiation");
 		send_message(response, request.get_user()->get_fd());
 	}
-	
 	// CAP REQ to blindly request a particular set of capabilities.
 }
-

@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/18 14:52:32 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 22:12:07 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ class Server
 	// -------------- Getters ----------------------
 	int get_port();
 	const channelmap &getChannels( void ) const;
+
+	Channel *find_channel(std::string channel_name);
 	
 	std::string get_password();
 
@@ -116,6 +118,8 @@ class Server
 	void send_message(std::string, int fd);
 	void send_message(Request req, t_exit err, std::string info);
 	void showtime_bot_command(Request request);
+	void kick_command(Request request);
+	void send_names_list(Request &request, Channel &channel);
 
 	// -------------- Exceptions -------------------
 	class IncorrectPortNumber: public std::exception {

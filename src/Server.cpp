@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: annafenzl <annafenzl@student.42.fr>        +#+  +:+       +#+        */
+/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/18 16:34:47 by annafenzl        ###   ########.fr       */
+/*   Updated: 2023/04/18 22:14:50 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,6 @@ void Server::run()
 	{
 		if (poll(_user_poll, _fd_count, -1) == -1) // -1 is waiting for ever but i can specify the timeout
 			throw PollFailedError();
-
 		unsigned int		current_size = _fd_count;
 		for (unsigned int i = 0; i < current_size; i++)
 		{
@@ -141,8 +140,6 @@ void Server::client_request(int index)
 	
 	memset(buff, 0, MAXLINE); 
 	read_bytes = recv(sender_fd, buff, MAXLINE, 0);
-
-	std::cout << "read bytes: " << read_bytes <<  std::endl;
 	
 	if (read_bytes <= 0)
 	{
@@ -171,7 +168,47 @@ void Server::remove_user(User *user)
 
 			for (std::list<User *>::const_iterator iter = it->second.getMembers(0).begin(); iter != it->second.getMembers(0).end(); iter ++)
 			{
-					send_message(user->get_prefix() + " QUIT Quit: " + it->second.getName() + " has left.", (*iter)->get_fd());
+					send_message(user->get_prefix() + " QUIT :" + "", (*iter)->get_fd());
+			}
+		}
+	}
+
+	// remove empty channels
+	for (std::list<std::string>::const_iterator it = empty_channels.begin(); it != empty_channels.end(); ++it)
+	{
+		_channels.erase(*it);
+	}
+	
+
+	// remove from poll array
+	for (unsigned int i = 0; i < _fd_count; ++i)
+	{
+		if (_user_poll[i].fd == user->get_fd())
+		{
+			remove_from_poll(i);
+			break ;
+		}
+	}
+	// remove from map to consider emoving teh channels in the User class??
+	_user_map.erase(user->get_fd());
+	
+}
+
+void Server::remove_user(User *user, std::string & reason)
+{
+	std::list<std::string> empty_channels;
+	
+	// remove from all channels
+	for (channelmap::iterator it = _channels.begin(); it != _channels.end(); ++it)
+	{
+		if (it->second.isMember(user))
+		{
+			if (it->second.remove(user))
+				empty_channels.insert(empty_channels.end(), it->second.getName());
+
+			for (std::list<User *>::const_iterator iter = it->second.getMembers(0).begin(); iter != it->second.getMembers(0).end(); iter ++)
+			{
+					send_message(user->get_prefix() + " QUIT :" + reason, (*iter)->get_fd());
 			}
 		}
 	}
@@ -258,7 +295,8 @@ void Server::execute_command( Request request)
 		channel_mode_command (request);
 	else if (cmd == "KILL")
 		kill_command(request);
-		
+	else if (cmd == "KICK")
+		kick_command(request);
 	else
 		send_message(SERVER_NAME " 421 " + request.get_user()->get_nickname() + " " + cmd + " :Unknown command", request.get_user()->get_fd());
 }
@@ -398,4 +436,14 @@ void Server::send_message(Request req, t_exit err, std::string info)
 	send_message (mes, req.get_user ()->get_fd ());
 }
 
-
+Channel * Server::find_channel(std::string channel_name)
+{
+	for (std::map<std::string,Channel>::iterator it = _channels.begin(); it != _channels.end(); ++it)
+	{
+		if (it->second.getName() == channel_name)
+		{
+			return &it->second;
+		}
+	}
+	return NULL;
+}

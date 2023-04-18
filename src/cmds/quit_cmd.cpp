@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 16:05:10 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/18 15:09:49 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 20:51:54 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void Server::quit_command(Request request)
 	std::string	reason = (request.get_params().size() == 0) ? "" : request.get_params()[0];	
 
 	// server acknowledges that by sending ERROR message
-	send_message(SERVER_NAME " QUIT: " + user->get_nickname() + " " + reason, user->get_fd());
+	// send_message(SERVER_NAME " QUIT: " + user->get_nickname() + " " + reason, user->get_fd());
 
-	remove_user(user);
+	remove_user(user, reason);
 }
