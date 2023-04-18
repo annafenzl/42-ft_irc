@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 11:18:44 by pguranda          #+#    #+#             */
-/*   Updated: 2023/04/14 14:28:53 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 13:54:50 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void Server::kill_command(Request request)
 				break;
 			}
 		}
-		for(channelmap::iterator it = _channels.begin(); it != _channels.end(); it++) 
+	for(channelmap::iterator it = _channels.begin(); it != _channels.end(); it++) 
 		{
 			std::list<User*>& members = it->second.getMembers(0);
 			members.remove(dead_user);

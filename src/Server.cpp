@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/18 12:11:49 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 15:11:02 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,13 @@ void Server::remove_user(User *user)
 	for (channelmap::iterator it = _channels.begin(); it != _channels.end(); ++it)
 	{
 		if (it->second.isMember(user))
+		{
 			it->second.removeMember(user);
+			for (std::list<User *>::const_iterator iter = it->second.getMembers(0).begin(); iter != it->second.getMembers(0).end(); iter ++)
+			{
+					send_message(user->get_prefix() + " QUIT Quit: " + it->second.getName() + " has left.", (*iter)->get_fd());
+			}
+		}
 	}
 
 	// remove from poll array
@@ -175,8 +181,9 @@ void Server::remove_user(User *user)
 			break ;
 		}
 	}
-	// remove from map
+	// remove from map to consider emoving teh channels in the User class??
 	_user_map.erase(user->get_fd());
+	
 }
 
 void Server::handle_command(char* cmd, int user_fd)

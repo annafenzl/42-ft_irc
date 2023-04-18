@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/18 10:30:24 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 14:52:32 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ class Server
 	void handle_command(char* cmd, int user_fd);
 	void execute_command(Request request);
 	void remove_user(User *user);
+	void remove_user(User *user, std::string &string);
 
 	
 	void				check_login_complete(User *user);
