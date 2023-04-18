@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/17 11:26:53 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 10:10:57 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,17 +101,15 @@ class Server
 	void privmsg_command(Request request);
 	// void join_command(Request request);
 	void quit_command(Request request);
-	void notice_command(Request request);
-	void join_names_command(Request request);
+	void join_names_command (Request request);
+	void list_command (Request request);
+	void topic_command (Request request);
+	void part_command (Request request);
+	void who_command (Request request);
+	void channel_mode_command (Request request);
 	void oper_command(Request request);
 	void kill_command(Request request);
-	void topic_command(Request request);
-	void list_command(Request request);
-	void part_command(Request request);
-	void who_command(Request request);
-	void globops_command(Request request);
-	void showtime_bot_command(Request request);
-	// void quit_command(Request request);
+	void notice_command(Request request);
 	
 	void send_message(std::string, int fd);
 	void send_message(Request req, t_exit err, std::string info);

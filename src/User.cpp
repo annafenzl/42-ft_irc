@@ -3,26 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   User.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 13:39:50 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/16 15:28:26 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/18 10:16:49 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../inc/User.hpp"
 
 // --------------- constructors ---------------
-User::User():_name("*"), _nickname("*"), _fullname("*"), _registered(false), _pass_provided(false), _channel(NULL) {}
+User::User():_name("*"), _nickname("*"), _fullname("*"), _registered(false), _pass_provided(false) {}
 
 User::User(int fd, char *hostmask)
-	:_name("*"), _nickname("*"), _fullname("*"), _hostmask(hostmask), _fd(fd), _registered(false), _pass_provided(false), _channel(NULL) {}
+	:_name("*"), _nickname("*"), _fullname("*"), _hostmask(hostmask), _fd(fd), _registered(false), _pass_provided(false) {}
 
 User::User( const User & user ):
 	_name(user.get_name ()), _nickname(user.get_nickname ()),
 	_fullname(user.get_fullname ()), _hostmask(user.get_hostmask ()),
 	_fd (user.get_fd ()), _registered(user.is_registered ()),
-	_pass_provided (user.is_pass_provided ()), _channel(NULL) {}
+	_pass_provided (user.is_pass_provided ())
+{
+	std::map<std::string, Channel *>::const_iterator it;
+	
+	_channels = std::map<std::string, Channel *>();
+	it = _channels.begin ();
+	while (it != _channels.end ())
+	{
+		_channels.insert (*it);
+		it++;
+	}
+}
 
 // --------------- getters --------------------
 
@@ -38,7 +49,15 @@ std::string User::get_prefix() const	{ return ":" + _nickname + "!" + _name + "@
 
 int User::get_fd() const				{ return _fd;}
 
-Channel *User::get_channel() const		{ return _channel; }
+const std::map<std::string, Channel *> &User::getChannels ( void ) const
+{
+	return (_channels);
+}
+
+std::map<std::string, Channel *> &User::getChannels( int )
+{
+	return (_channels);
+}
 
 bool User::is_registered() const		{ return _registered;}
 
@@ -56,10 +75,9 @@ void User::set_fullname(std::string fullname)		{ _fullname = fullname; }
 
 void User::set_registered(bool value)				{ _registered = value; }
 
-void User::set_pass_provided(bool value)			{ _pass_provided = value; }
-
 void User::set_operator(bool value)					{ _operator_status = value; }
-void User::set_channel(Channel *channel)			{ _channel = channel; }
+
+void User::set_pass_provided(bool value)			{ _pass_provided = value; }
 
 // --------------- methods -------------------
 

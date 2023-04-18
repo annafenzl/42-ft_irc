@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:09:30 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/11 12:58:11 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/17 22:00:23 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,7 @@ void Server::topic_command( Request request )
 	std::string							info;
 	channelmap::iterator				it;
 
-	if (request.get_params ().size () < 1
-		&& request.get_user ()->get_channel () != NULL)
-		request.get_params ().insert (request.get_params ().end (), 
-				request.get_user ()->get_channel ()->getName ());
-	else if (request.get_params ().size () < 1)
+	if (request.get_params ().size () < 1)
 	{
 		send_message (request, EXIT_ERR_NEEDMOREPARAMS, "");
 		return ;
@@ -29,20 +25,16 @@ void Server::topic_command( Request request )
 	it = _channels.find (request.get_params ()[0]);
 	if (it == _channels.end ())
 		return (send_message (request, EXIT_ERR_NOSUCHCHANNEL, request.get_params ()[0]));
-	
-	if (request.get_params ().size () == 1)
+	info = request.get_params ()[0] + " :";
+	if (request.get_params ().size () == 1 
+		&& (it->second.getTopic ().empty () || it->second.getTopic () == "*"))
 	{
-		info = it->second.getTopic ();
-		if (info == "*")
-			info = "no topic";
-		else
-			info = "Current topic: " + info;
-		send_message (request, EXIT_INFO_ONLY, info);
+		send_message (request, EXIT_RPL_NOTOPIC, info + "no topic");
+		return ;
 	}
-	else
-	{
+	if (request.get_params ().size () > 1)
 		it->second.setTopic (request.get_params ()[1]);
-		send_message (request, EXIT_INFO_ONLY, "Topic changed to: " 
-			+ it->second.getTopic ());
-	}
+	info += it->second.getTopic ();
+	send_message (request, EXIT_RPL_TOPIC,  info);
+	send_message (request, EXIT_TOPIC_STRING, info);
 }

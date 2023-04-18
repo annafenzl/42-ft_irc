@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   nick_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:35:58 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/16 14:15:53 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/18 09:37:07 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*
 	forbidden chars are "!@#$%^&*()+={}[];,:\"\t'<>." 
 */
-bool	checkforbiddenchars(std::string &nickname)
+bool	checkforbiddenchars(std::string nickname)
 {
 	for (unsigned int i = 0; i < std::string(FORBIDDEN_CHARS).size(); ++i)
 	{

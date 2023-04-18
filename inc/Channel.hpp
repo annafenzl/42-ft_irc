@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 18:15:17 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/14 14:36:17 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 09:34:18 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,38 +28,48 @@ class Channel
 {
 	private:
 		std::string			_name;
+		std::string			_password;
 		std::string			_topic;
 		std::list<User *>	_members;
+		std::list<User *>	_ops;
 		std::string			_modes;
 		
 		/// ! constructors, copy assignment operator, destructor !
 	public:
 		Channel( void );
 		Channel( const Channel & channel );
-		Channel( const std::string & name );
+		Channel( const std::string & name, const std::string & password );
 		Channel &operator=( const Channel & channel );
 		~Channel( void );
 		
 		/// ! getters !
 		const std::string &getName( void ) const;
+		const std::string &getPassword( void ) const;
 		const std::string &getTopic( void ) const;
 		const std::string &getModes( void ) const;
+		
 		const std::list<User *> &getMembers( void ) const;
 		std::list<User *> &getMembers( int );
+		const std::list<User *> &getOps( void ) const;
+		std::list<User *> &getOps( int );
+		
 		User *getMember( User *user );
+		User *getMember( const std::string & nickame );
+		User *getOp( User *op );
 
-		/// ! setters !
+		/// ! modifiers !
 		void setTopic( const std::string & topic );
 		void insert( User * user );
+		void remove( User *user );
+		void insertOp( User * op );
+		void removeOp( User * op );
+		void addMode (char m );
+		void removeMode (char m );
 
 		/// ! utility !
 		static bool isValidChannelName( const std::string & name );
+		bool isOp( User * user );
 
-		/// ! exceptions !
-		class InvalidChannelName: public std::exception
-		{
-			public:
-				const char	*what( void ) const throw();
-		};
+		bool hasMode (char m );
 };
 #endif
