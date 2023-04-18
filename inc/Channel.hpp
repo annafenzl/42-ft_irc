@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 18:15:17 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/18 09:34:18 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 10:20:08 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,10 @@ class Channel
 		void removeMode (char m );
 
 		/// ! utility !
+		bool isMember(User *user) const;
 		static bool isValidChannelName( const std::string & name );
 		bool isOp( User * user );
+		void removeMember(User *user);
 
 		bool hasMode (char m );
 };

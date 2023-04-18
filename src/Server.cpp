@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/18 09:38:04 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 10:22:57 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,9 @@ std::string	Server::get_password()
 	return _password;
 }
 
+const Server::channelmap &Server::getChannels( void ) 
+	const { return (_channels); }
+
 // -------------- Methods ----------------------
 
 void Server::setup_socket()
@@ -77,7 +80,7 @@ void Server::setup_socket()
 
 	memset(_user_poll, 0, sizeof(_user_poll));
 	_user_poll[0].fd = _listening_socket;
-	_user_poll[0].events = POLLIN;
+	_user_poll[0].events = POLLIN | POLLHUP | POLLOUT;
 	_fd_count = 1;
 }
 
@@ -100,6 +103,10 @@ void Server::run()
 						new_client();
 					else
 						client_request(i);
+				}
+				else if (_user_poll[i].revents & POLLHUP | _user_poll[i].revents & POLLOUT )
+				{
+					remove_user(&(_user_map.find(_user_poll[i].fd)->second));
 				}
 			} catch (std::exception& e) {
 				std::cerr << "\033[0;31m" << e.what() << "\033[0m" << '\n';
@@ -140,37 +147,36 @@ void Server::client_request(int index)
 	if (read_bytes <= 0)
 	{
 		if (read_bytes == 0)
-		{
 			std::cout << "user(fd) " << sender_fd << " hung up" << std::endl;
-			_user_map.erase(sender_fd);
-		}
 		else
 			throw RecieveMessageFailed();
-		remove_from_poll(index);
+		remove_user(&_user_map.find(sender_fd)->second);
 	}
 	else
 		handle_command(buff, sender_fd);
 }
 
-void Server::add_to_poll(int user_fd)
+// removes the user from poll array, user_map, and all the channels he was in
+void Server::remove_user(User *user)
 {
-	if (_fd_count >= SOMAXCONN)
-		throw FdPollFullError();
-	
-	_user_poll[_fd_count].fd = user_fd;
-	_user_poll[_fd_count].events = POLLIN;
+	// remove from all channels
+	for (channelmap::iterator it = _channels.begin(); it != _channels.end(); ++it)
+	{
+		if (it->second.isMember(user))
+			it->second.removeMember(user);
+	}
 
-	++_fd_count;
-}
-
-void Server::remove_from_poll(int index)
-{
-	close(_user_poll[index].fd);
-	_user_poll[index].fd = _user_poll[_fd_count-1].fd;
-	_user_poll[index].events = POLLIN;
-	_user_poll[_fd_count - 1].fd = -1;
-	
-	--_fd_count;
+	// remove from poll array
+	for (unsigned int i = 0; i < _fd_count; ++i)
+	{
+		if (_user_poll[i].fd == user->get_fd())
+		{
+			remove_from_poll(i);
+			break ;
+		}
+	}
+	// remove from map
+	_user_map.erase(user->get_fd());
 }
 
 void Server::handle_command(char* cmd, int user_fd)
@@ -237,10 +243,25 @@ void Server::execute_command( Request request)
 		send_message(SERVER_NAME " 421 " + request.get_user()->get_nickname() + " " + cmd + " :Unknown command", request.get_user()->get_fd());
 }
 
-void Server::send_message(std::string message, int fd)
+void Server::add_to_poll(int user_fd)
 {
-	std::cout << "RESPONSE IS <" << message << ">" << std::endl;
-	send(fd, message.append(END_SEQUENCE).c_str(), message.size(), 0);
+	if (_fd_count >= SOMAXCONN)
+		throw FdPollFullError();
+	
+	_user_poll[_fd_count].fd = user_fd;
+	_user_poll[_fd_count].events = POLLIN;
+
+	++_fd_count;
+}
+
+void Server::remove_from_poll(int index)
+{
+	close(_user_poll[index].fd);
+	_user_poll[index].fd = _user_poll[_fd_count-1].fd;
+	_user_poll[index].events = POLLIN;
+	_user_poll[_fd_count - 1].fd = -1;
+	
+	--_fd_count;
 }
 
 /*
@@ -258,8 +279,11 @@ std::map<int,User>::iterator Server::check_for_user(std::string nickname)
 	return _user_map.end();
 }
 
-const Server::channelmap &Server::getChannels( void ) 
-	const { return (_channels); }
+void Server::send_message(std::string message, int fd)
+{
+	std::cout << "RESPONSE IS <" << message << ">" << std::endl;
+	send(fd, message.append(END_SEQUENCE).c_str(), message.size(), 0);
+}
 
 void Server::send_message(Request req, t_exit err, std::string info)
 {
@@ -354,3 +378,5 @@ void Server::send_message(Request req, t_exit err, std::string info)
 	}
 	send_message (mes, req.get_user ()->get_fd ());
 }
+
+

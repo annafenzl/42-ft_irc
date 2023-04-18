@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 13:39:50 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/18 10:16:49 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 10:50:36 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ std::map<std::string, Channel *> &User::getChannels( int )
 {
 	return (_channels);
 }
+
 
 bool User::is_registered() const		{ return _registered;}
 

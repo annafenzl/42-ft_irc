@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 11:22:22 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/18 09:37:42 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 10:54:53 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,15 +83,15 @@ std::list<User *> &Channel::getMembers( int ) { return (_members); }
 const std::list<User *> &Channel::getOps( void ) const { return (_ops); }
 std::list<User *> &Channel::getOps( int ) { return (_ops); }
 
-User *Channel::getMember( User *user )
-{
-	std::list<User *>::iterator it;
+// User *Channel::getMember( User *user )
+// {
+// 	std::list<User *>::iterator it;
 
-	it = std::find (_members.begin (), _members.end (), user);
-	if (it != _members.end ())
-		return (*it);
-	return (NULL);
-}
+// 	it = std::find (_members.begin (), _members.end (), user);
+// 	if (it != _members.end ())
+// 		return (*it);
+// 	return (NULL);
+// }
 
 User *Channel::getMember( const std::string & nickname )
 {
@@ -123,11 +123,9 @@ void Channel::setTopic( const std::string & topic ) { _topic = topic; }
 void Channel::insert( User * user )
 {
 	if (getMember (user) == NULL)
-	{
 		_members.insert (_members.end (), user);
 		if (_members.size () == 1)
 			_ops.insert (_ops.end (), user);
-	}
 }
 
 void Channel::remove( User * user )
@@ -203,10 +201,30 @@ bool	Channel::isValidChannelName( const std::string & name )
 	return (true);
 }
 
-bool Channel::isOp( User *user )
+User *Channel::getMember( User *user )
 {
-	return (std::find (_ops.begin (), _ops.end (), user) != _ops.end ());
+	std::list<User *>::iterator it;
+
+	it = std::find (_members.begin (), _members.end (), user);
+	if (it != _members.end ())
+		return (*it);
+	return (NULL);
 }
+
+/*
+	returns true if the passed User is part of the Channel
+*/
+bool Channel::isMember( User *user ) const
+{
+	return (find (_members.begin (), _members.end (), user) != _members.end ());
+}
+
+void Channel::removeMember(User *user)
+{
+	_members.remove(user);
+}
+
+
 
 bool Channel::hasMode( char m )
 {
