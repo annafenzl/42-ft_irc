@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   notice_cmd.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 15:22:07 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/17 10:55:55 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 22:41:25 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../inc/Server.hpp"
+# include Server.hpp
 
 # include <sstream>
 # include <set>

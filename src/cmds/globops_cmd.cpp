@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   globops_cmd.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 11:18:48 by pguranda          #+#    #+#             */
-/*   Updated: 2023/04/17 15:48:31 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/18 23:07:43 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../inc/Server.hpp"
-# include <algorithm>
-# include <iterator>
+# include "Server.hpp"
 
 //Implementation of a GLOBOPS command for IRC
 void Server::globops_command(Request request)

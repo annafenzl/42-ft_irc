@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   pass_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:49:01 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/11 10:24:48 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 22:41:55 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/Server.hpp"
+#include Server.hpp
 
 /*
 	Command: PASS

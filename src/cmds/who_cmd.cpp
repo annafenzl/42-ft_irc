@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   who_cmd.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 02:40:53 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/18 10:21:29 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 23:08:07 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../inc/Server.hpp"
+# include "Server.hpp"
 
 /** /WHO when no args is provided: display all connected allUsers to the server;
  * 	/WHO when an argument (#username) is provided;

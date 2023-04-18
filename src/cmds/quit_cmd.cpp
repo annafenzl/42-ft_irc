@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   quit_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 16:05:10 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/18 20:51:54 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 22:42:18 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../inc/Server.hpp"
+# include "Server.hpp"
 
 // If a client connection is closed without the client issuing a QUIT command to the server,
 // the server MUST distribute a QUIT message to other clients informing them of this,

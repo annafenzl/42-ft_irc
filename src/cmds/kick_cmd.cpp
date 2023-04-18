@@ -3,18 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   kick_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 21:54:36 by pguranda          #+#    #+#             */
-/*   Updated: 2023/04/18 22:18:17 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 22:40:55 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/Server.hpp"
-#include <algorithm>
-#include <sstream>
-#include <set>
-#include <iterator>
+#include "Server.hpp"
 
 // Helper function to split a string by a delimiter
 std::vector<std::string> split(const std::string& str, char delimiter)

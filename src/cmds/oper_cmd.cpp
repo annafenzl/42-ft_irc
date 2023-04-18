@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   oper_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 18:13:39 by pguranda          #+#    #+#             */
-/*   Updated: 2023/04/17 15:26:02 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/18 22:41:27 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../inc/Server.hpp"
+# include Server.hpp
 # include <algorithm>
 
 /*

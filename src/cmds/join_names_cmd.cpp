@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   join_names_cmd.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:21:43 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/18 21:04:29 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 23:07:51 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../inc/Server.hpp"
+# include "Server.hpp"
 
 /************************************************
  *	! /JOIN /NAMES handler !

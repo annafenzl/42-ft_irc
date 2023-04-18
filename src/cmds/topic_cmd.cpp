@@ -6,11 +6,11 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:09:30 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/17 22:00:23 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/18 22:42:45 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../inc/Server.hpp"
+# include "Server.hpp"
 
 void Server::topic_command( Request request )
 {

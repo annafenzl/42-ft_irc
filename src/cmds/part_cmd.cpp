@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   part_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:24:20 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/18 09:37:20 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 23:08:01 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../inc/Server.hpp"
+# include "Server.hpp"
 
 void Server::part_command( Request request )
 {

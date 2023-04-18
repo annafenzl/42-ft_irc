@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg_cmd.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 16:12:24 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/18 10:21:23 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 22:41:55 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../inc/Server.hpp"
+# include Server.hpp
 
 # include <sstream>
 # include <set>

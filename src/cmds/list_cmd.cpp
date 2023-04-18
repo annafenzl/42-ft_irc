@@ -6,11 +6,11 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:22:55 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/16 16:24:58 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/18 22:40:41 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../inc/Server.hpp"
+# include "Server.hpp"
 
 void Server::list_command( Request request )
 {

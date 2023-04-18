@@ -3,18 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   kill_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 11:18:44 by pguranda          #+#    #+#             */
-/*   Updated: 2023/04/18 21:14:58 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 22:41:01 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../inc/Server.hpp"
-# include <algorithm>
-
-# include <sstream>
-# include <set>
+# include "Server.hpp"
 
 void Server::kill_command(Request request)
 {

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   nick_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:35:58 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/18 10:21:06 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 22:41:41 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../inc/Server.hpp"
+# include Server.hpp
 
 /*
 	forbidden chars are "!@#$%^&*()+={}[];,:\"\t'<>." 
