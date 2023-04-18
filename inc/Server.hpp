@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/18 22:12:07 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 22:56:02 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 # include <sstream>
 # include <utility>
 # include <ctime>
+# include <numeric>
 # include "exit.hpp"
 # include "User.hpp"
 # include "Request.hpp"
@@ -119,7 +120,9 @@ class Server
 	void send_message(Request req, t_exit err, std::string info);
 	void showtime_bot_command(Request request);
 	void kick_command(Request request);
+	
 	void send_names_list(Request &request, Channel &channel);
+	void broadcast_join_message(User* user, Channel& channel);
 
 	// -------------- Exceptions -------------------
 	class IncorrectPortNumber: public std::exception {
