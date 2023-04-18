@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: annafenzl <annafenzl@student.42.fr>        +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 18:15:17 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/18 16:20:43 by annafenzl        ###   ########.fr       */
+/*   Updated: 2023/04/18 23:25:38 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@ class Channel
 {
 	private:
 		std::string			_name;
-		std::string			_password;
 		std::string			_topic;
 		std::list<User *>	_members;
 		std::list<User *>	_ops;
 		std::string			_modes;
+		std::string			_password;
 		
 		/// ! constructors, copy assignment operator, destructor !
 	public:

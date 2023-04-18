@@ -6,12 +6,11 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 18:13:39 by pguranda          #+#    #+#             */
-/*   Updated: 2023/04/18 22:41:27 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/18 23:38:04 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include Server.hpp
-# include <algorithm>
+# include "Server.hpp"
 
 /*
 	Command: OPER

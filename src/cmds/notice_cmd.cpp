@@ -6,14 +6,11 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 15:22:07 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/18 22:41:25 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/18 23:29:38 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include Server.hpp
-
-# include <sstream>
-# include <set>
+# include "Server.hpp"
 
 std::set<std::string> split_targets(std::string targets, std::string &duplicate);
 

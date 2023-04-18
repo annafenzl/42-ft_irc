@@ -14,7 +14,7 @@
 NAME = ircserv
 
 CC = c++
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g -std=c++98 -MD
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g -std=c++98 -I./inc
 RM := rm -f
 CDEPS = $(patsubst %, inc/%.hpp, Bot Channel exit Request Server User);
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/18 22:14:50 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 23:37:28 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ Server::Server(char **argv)
 
 	// set time of creation
 	time_t now = time(0);
-	char *time_str;
 	_time_of_creation = std::string(ctime(&now));
 	_time_of_creation.pop_back();
 }
@@ -103,7 +102,7 @@ void Server::run()
 					else
 						client_request(i);
 				}
-				else if (_user_poll[i].revents & POLLHUP | _user_poll[i].revents & POLLOUT )
+				else if ((_user_poll[i].revents & POLLHUP) | (_user_poll[i].revents & POLLOUT) )
 				{
 					remove_user(&(_user_map.find(_user_poll[i].fd)->second));
 				}
@@ -239,7 +238,7 @@ void Server::handle_command(char* cmd, int user_fd)
 	User	*user = &_user_map.find(user_fd)->second;
 
 	user->append_buff(cmd);
-	for (int end_pos = user->buff.find(END_SEQUENCE); end_pos != std::string::npos ; end_pos = user->buff.find(END_SEQUENCE))
+	for (size_t end_pos = user->buff.find(END_SEQUENCE); end_pos != std::string::npos ; end_pos = user->buff.find(END_SEQUENCE))
 	{
 		std::string part = user->buff.substr(0, end_pos);
 		user->buff.erase(0, end_pos + 2);

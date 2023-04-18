@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/18 22:12:07 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 23:30:22 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 # include <sstream>
 # include <utility>
 # include <ctime>
+# include <set>
 # include "exit.hpp"
 # include "User.hpp"
 # include "Request.hpp"

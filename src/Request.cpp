@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 14:14:39 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/14 15:08:25 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 23:23:48 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void Request::parse(std::string input)
 	// skip whitespace
 	input = input.substr(input.find_first_not_of(" "));
 	// find command
-	int space_pos = input.find_first_of(" ");
+	size_t space_pos = input.find_first_of(" ");
 
 	
 	
