@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/14 15:36:47 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/17 14:08:37 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,23 @@
 // -------------- Constructor ------------------
 Server::Server(char **argv)
 {
-	// PORTS WITH 878whatever are still valid!!!!
-	long	port = strtol(argv[1], NULL, 0);
-	if (port < 1 || port > 65535)  // portnumbers up until 1024 are reserved!!
+	// parse port
+	char	*end;
+	long	port = strtol(argv[1], &end, 0);
+	if (port < 1 || port > 65535 || end[0] != '\0')
 		throw IncorrectPortNumber();
 	_port = (int) port;
 	
+	// parse password
 	_password = argv[2]; 
 	if (_password.empty())
 		throw InvalidPassword();
+
+	// set time of creation
+	time_t now = time(0);
+	char *time_str;
+	_time_of_creation = std::string(ctime(&now));
+	_time_of_creation.pop_back();
 }
 
 // -------------- Getters ----------------------
@@ -226,6 +234,13 @@ void Server::execute_command( Request request)
 		who_command (request);
 	else if (cmd == "GLOBOPS")
 		globops_command(request);
+	else if (cmd == "SHOWTIME")
+		showtime_bot_command(request);
+	else if (cmd == "MODE")
+	{
+		// if (_channels.find(request.get_params()[0]);
+		send_message(SERVER_NAME " 368 " + request.get_user()->get_nickname() + " MODE " + request.get_params()[0] + " :End of channel ban list", request.get_user()->get_fd());
+	}
 	else
 		send_message(SERVER_NAME " 421 " + request.get_user()->get_nickname() + " " + cmd + " :Unknown command", request.get_user()->get_fd());
 }
