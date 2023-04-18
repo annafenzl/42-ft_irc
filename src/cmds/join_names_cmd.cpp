@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:21:43 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/18 10:20:44 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 11:39:43 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ void Server::join_names_command( Request request )
 				userIt++;
 			}
 			send_message (request, EXIT_RPL_NAMREPLY, info);
+			// send_message (SERVER_NAME " 353 " + request.get_user ()->get_nickname () + " = " + channelName + " :" + info, request.get_user ()->get_fd ()
 			send_message (request, EXIT_RPL_ENDOFNAMES, channelName);
 		}
 	}
