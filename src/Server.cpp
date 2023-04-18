@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/18 11:18:56 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 12:04:53 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,16 +222,23 @@ void Server::execute_command( Request request)
 		quit_command(request);
 	else if (cmd == "JOIN" || cmd == "NAMES")
 		join_names_command (request);
+	else if (cmd == "GLOBOPS")
+		globops_command(request);
+	else if (cmd == "SHOWTIME")
+		showtime_bot_command(request);
 	else if (cmd == "LIST")
 		list_command (request);
 	else if (cmd == "TOPIC")
 		topic_command (request);
+	else if (cmd == "OPER")
+		oper_command(request);
 	else if (cmd == "PART")
 		part_command (request);
 	else if (cmd == "WHO")
 		who_command (request);
 	else if (cmd == "MODE")
 		channel_mode_command (request);
+		
 	else
 		send_message(SERVER_NAME " 421 " + request.get_user()->get_nickname() + " " + cmd + " :Unknown command", request.get_user()->get_fd());
 }
