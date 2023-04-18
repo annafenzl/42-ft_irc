@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:21:43 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/18 11:54:37 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 12:23:25 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,21 +112,20 @@ void Server::join_names_command( Request request )
 		
 		else if (request.get_cmd () == "NAMES")
 		{
-			info = "NAMES " + channelName + ": ",
-				request.get_user ()->get_fd ();
 			userIt = it->second.getMembers ().begin ();
 			while (userIt != it->second.getMembers ().end ())
 			{
 				if (userIt != it->second.getMembers ().begin ())
-					info += ",";
+					info += ' ';
 				info += (*userIt)->get_nickname ();	
 				userIt++;
 			}
-			std::cout << "list: " << request.get_user() << std::endl;
+			std::cout << "list: " << info << std::endl;
 			// send_message (request, EXIT_RPL_NAMREPLY, info);
 			send_message (SERVER_NAME " 353 " + request.get_user ()->get_nickname () + " = " + channelName + " :" + info, request.get_user ()->get_fd ());
 
-			send_message (request, EXIT_RPL_ENDOFNAMES, channelName);
+			// send_message (request, EXIT_RPL_ENDOFNAMES, channelName);
+			send_message(SERVER_NAME " 366 " + channelName + " :End of NAMES list", request.get_user()->get_fd());
 		}
 	}
 }
