@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: annafenzl <annafenzl@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 18:15:17 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/18 10:20:08 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 16:20:43 by annafenzl        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ class Channel
 		/// ! modifiers !
 		void setTopic( const std::string & topic );
 		void insert( User * user );
-		void remove( User *user );
+		int remove( User *user );
 		void insertOp( User * op );
 		void removeOp( User * op );
 		void addMode (char m );

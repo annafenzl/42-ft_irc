@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: annafenzl <annafenzl@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/18 15:11:02 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 16:34:47 by annafenzl        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ void Server::client_request(int index)
 	memset(buff, 0, MAXLINE); 
 	read_bytes = recv(sender_fd, buff, MAXLINE, 0);
 
-	std::cout << std::endl;
+	std::cout << "read bytes: " << read_bytes <<  std::endl;
 	
 	if (read_bytes <= 0)
 	{
@@ -159,18 +159,29 @@ void Server::client_request(int index)
 // removes the user from poll array, user_map, and all the channels he was in
 void Server::remove_user(User *user)
 {
+	std::list<std::string> empty_channels;
+	
 	// remove from all channels
 	for (channelmap::iterator it = _channels.begin(); it != _channels.end(); ++it)
 	{
 		if (it->second.isMember(user))
 		{
-			it->second.removeMember(user);
+			if (it->second.remove(user))
+				empty_channels.insert(empty_channels.end(), it->second.getName());
+
 			for (std::list<User *>::const_iterator iter = it->second.getMembers(0).begin(); iter != it->second.getMembers(0).end(); iter ++)
 			{
 					send_message(user->get_prefix() + " QUIT Quit: " + it->second.getName() + " has left.", (*iter)->get_fd());
 			}
 		}
 	}
+
+	// remove empty channels
+	for (std::list<std::string>::const_iterator it = empty_channels.begin(); it != empty_channels.end(); ++it)
+	{
+		_channels.erase(*it);
+	}
+	
 
 	// remove from poll array
 	for (unsigned int i = 0; i < _fd_count; ++i)

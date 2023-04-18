@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: annafenzl <annafenzl@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 11:22:22 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/18 10:54:53 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 16:14:42 by annafenzl        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,13 +128,14 @@ void Channel::insert( User * user )
 			_ops.insert (_ops.end (), user);
 }
 
-void Channel::remove( User * user )
+/*
+	removes user from _members
+	returns true if there is no member left
+*/
+int Channel::remove( User * user )
 {
-	std::list<User *>::iterator it;
-
-	it = std::find (_members.begin (), _members.end (), user);
-	if (it != _members.end ())
-		_members.erase (it);
+	_members.remove(user);
+	return(_members.empty());
 }
 
 void Channel::insertOp( User * op )
@@ -149,11 +150,7 @@ void Channel::insertOp( User * op )
 
 void Channel::removeOp( User * op )
 {
-	std::list<User *>::iterator it;
-
-	it = std::find (_ops.begin (), _ops.end (), op);
-	if (it != _ops.end ())
-		_ops.erase (it);
+	_ops.remove(op);
 }
 
 void Channel::addMode( char m )
