@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 02:40:53 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/12 17:35:22 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/18 07:58:45 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,5 +75,3 @@ void Server::who_command( Request request )
 	send_message (request, EXIT_RPL_ENDOFWHO, "");
 	return ;
 }
-
-

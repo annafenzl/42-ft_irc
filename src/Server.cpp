@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/16 16:04:16 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/18 03:47:40 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,7 +224,8 @@ void Server::execute_command( Request request)
 		part_command (request);
 	else if (cmd == "WHO")
 		who_command (request);
-	// else if (cmd == "MODE")
+	else if (cmd == "MODE")
+		channel_mode_command (request);
 	else
 		send_message(SERVER_NAME " 421 " + request.get_user()->get_nickname() + " " + cmd + " :Unknown command", request.get_user()->get_fd());
 }
@@ -334,6 +335,11 @@ void Server::send_message(Request req, t_exit err, std::string info)
 		case EXIT_ERR_INVALID_CHANNEL_NAME:
 			mes.append ("invalid channel name");
 			break;
+		case EXIT_MODE_STRING:
+			mes = "";
+			mes.append (SERVER_NAME).append (" MODE " + info);
+			send_message (mes, req.get_user ()->get_fd ());
+			return ;
 		default:
 		    std::ostringstream stream2;
 			stream2 << static_cast<int>(err);

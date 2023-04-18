@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/12 17:24:37 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/18 03:47:00 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ class Server
 	void topic_command (Request request);
 	void part_command (Request request);
 	void who_command (Request request);
+	void channel_mode_command (Request request);
 	
 	void send_message(std::string, int fd);
 	void send_message(Request req, t_exit err, std::string info);

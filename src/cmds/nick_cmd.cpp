@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   nick_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: annafenzl <annafenzl@student.42.fr>        +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:35:58 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/06 22:10:41 by annafenzl        ###   ########.fr       */
+/*   Updated: 2023/04/18 00:45:20 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 /*
 	forbidden chars are "!@#$%^&*()+={}[];,:\"\t'<>." 
 */
+# include "../../inc/Server.hpp"
 bool	checkforbiddenchars(std::string password)
 {
 	for (unsigned int i = 0; i < std::string(FORBIDDEN_CHARS).size(); ++i)

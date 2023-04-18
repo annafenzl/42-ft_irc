@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 11:22:22 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/16 14:15:09 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/18 07:21:41 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 /// ! constructors and destructor !
 Channel::Channel( void )
-	: _name("*"), _topic("*"), _modes("*"), _password("*")
+	: _name("*"), _topic("*"), _modes("nt"), _password("*")
 {}
 
 Channel::Channel( const std::string & name, const std::string & password )
-	: _name(name), _topic("*"), _modes("*"), _password(password)
+	: _name(name), _topic("*"), _modes("nt"), _password(password)
 {
 	std::cout << "\033[0;32m[INFO] new channel: " + _name 
 		+  ", with password: '" + _password + "' created\033[0m" << std::endl;
@@ -41,6 +41,12 @@ Channel &Channel::operator=( const Channel & channel )
 		insert (*it);
 		it++;
 	}
+	it = channel.getOps ().begin ();
+	while (it != channel.getOps ().end ())
+	{
+		_ops.insert (_ops.end (), *it);
+		it++;
+	}
 	return (*this);
 }
 
@@ -56,27 +62,133 @@ Channel::Channel( const Channel & channel ):
 		insert (*it);
 		it++;
 	}
+	it = channel.getOps ().begin ();
+	while (it != channel.getOps ().end ())
+	{
+		_ops.insert (_ops.end (), *it);
+		it++;
+	}
 }
 
 Channel::~Channel( void ) {}
 
-/// ! basic getters !
+/// ! getters !
 const std::string &Channel::getName( void ) const { return (_name ); }
 const std::string &Channel::getPassword( void ) const { return (_password ); }
 const std::string &Channel::getTopic( void ) const { return (_topic ); }
 const std::string &Channel::getModes( void ) const { return (_modes); }
+
 const std::list<User *> &Channel::getMembers( void ) const { return (_members); }
 std::list<User *> &Channel::getMembers( int ) { return (_members); }
+const std::list<User *> &Channel::getOps( void ) const { return (_ops); }
+std::list<User *> &Channel::getOps( int ) { return (_ops); }
 
-/// ! handlers !
+User *Channel::getMember( User *user )
+{
+	std::list<User *>::iterator it;
+
+	it = std::find (_members.begin (), _members.end (), user);
+	if (it != _members.end ())
+		return (*it);
+	return (NULL);
+}
+
+User *Channel::getMember( const std::string & nickname )
+{
+	std::list<User *>::iterator it;
+
+	it = _members.begin ();
+	while (it != _members.end ())
+	{
+		if ((*it)->get_nickname () == nickname)
+			return (*it);
+		it++;
+	}
+	return (NULL);
+}
+
+User *Channel::getOp( User *op )
+{
+	std::list<User *>::iterator it;
+
+	it = std::find (_ops.begin (), _ops.end (), op);
+	if (it != _ops.end ())
+		return (*it);
+	return (NULL);
+}
+
+/// ! modifiers !
 void Channel::setTopic( const std::string & topic ) { _topic = topic; }
 
 void Channel::insert( User * user )
 {
 	if (getMember (user) == NULL)
+	{
 		_members.insert (_members.end (), user);
+		if (_members.size () == 1)
+			_ops.insert (_ops.end (), user);
+	}
 }
 
+void Channel::remove( User * user )
+{
+	std::list<User *>::iterator it;
+
+	it = std::find (_members.begin (), _members.end (), user);
+	if (it != _members.end ())
+		_members.erase (it);
+}
+
+void Channel::insertOp( User * op )
+{
+	if (getOp (op) == NULL)
+	{
+		_ops.insert (_ops.end (), op);
+		if (_ops.size () == 1)
+			_ops.insert (_ops.end (), op);
+	}
+}
+
+void Channel::removeOp( User * op )
+{
+	std::list<User *>::iterator it;
+
+	it = std::find (_ops.begin (), _ops.end (), op);
+	if (it != _ops.end ())
+		_ops.erase (it);
+}
+
+void Channel::addMode( char m )
+{
+	size_t i;
+
+	i = 0;
+	while (_modes[i])
+	{
+		if (_modes[i] == m)
+			break ;
+		i++;
+	}
+	if (i == _modes.length ())
+		_modes += m;
+}
+
+void Channel::removeMode( char m )
+{
+	size_t i;
+	std::string nModes;
+
+	i = 0;
+	while (_modes[i])
+	{
+		if (_modes[i] != m)
+			nModes += _modes[i];
+		i++;
+	}
+	_modes = nModes;
+}
+
+/// ! utility !
 bool	Channel::isValidChannelName( const std::string & name )
 {
 	int i;
@@ -91,18 +203,22 @@ bool	Channel::isValidChannelName( const std::string & name )
 	return (true);
 }
 
-User *Channel::getMember( User *user )
+bool Channel::isOp( User *user )
 {
-	std::list<User *>::iterator it;
-
-	it = std::find (_members.begin (), _members.end (), user);
-	if (it != _members.end ())
-		return (*it);
-	return (NULL);
+	return (std::find (_ops.begin (), _ops.end (), user) != _ops.end ());
 }
 
-/// ! exceptions !
-const char *Channel::InvalidChannelName::what( void ) const throw()
+bool Channel::hasMode( char m )
 {
-	return ("invalid class name");
+	size_t i;
+	std::string nModes;
+
+	i = 0;
+	while (_modes[i])
+	{
+		if (_modes[i] == m)
+			return (true);
+		i++;
+	}
+	return (false);
 }

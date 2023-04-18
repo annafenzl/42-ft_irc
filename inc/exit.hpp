@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 14:25:33 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/16 15:55:09 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/18 02:07:46 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef enum e_exit
 	EXIT_ERR_INVALID_CHANNEL_NAME = 1001,
 	EXIT_LEFT_CHANNEL = 1002,
 	EXIT_TOPIC_STRING = 1003,
-	EXIT_CHANNEL_JOINED = 1004
+	EXIT_CHANNEL_JOINED = 1004,
+	EXIT_MODE_STRING = 1005
 }	t_exit;
 #endif
