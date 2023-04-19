@@ -36,6 +36,19 @@ void Server::send_names_list(Request &request, Channel &channel)
 	send_message(SERVER_NAME " 366 " + request.get_user()->get_nickname() + " " + channel.getName() + " :End of NAMES list", request.get_user()->get_fd());
 }	
 
+void Server::broadcast_join_message(User* user, Channel& channel)
+{
+	std::string join_message = ":" + user->get_nickname() + "!" + user->get_nickname() + "@"  SERVER_NAME " JOIN " + channel.getName();
+	std::list<User*>::const_iterator userIt;
+	
+	for (userIt = channel.getMembers().begin(); userIt != channel.getMembers().end(); ++userIt)
+	{
+		if ((*userIt) != user)
+		{
+			send_message(join_message, (*userIt)->get_fd());
+		}
+	}
+}
 
 void Server::join_names_command( Request request )
 {
@@ -133,6 +146,7 @@ void Server::join_names_command( Request request )
 			else
 				send_message (request, RES_ERR_USERONCHANNEL);
 			it->second.insert (request.get_user ());
+			broadcast_join_message(request.get_user(), it->second);
 			request.get_user ()->getChannels (0).insert (std::make_pair (it->first, &it->second));
 			send_names_list(request, it->second );
 		}

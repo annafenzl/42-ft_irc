@@ -204,7 +204,6 @@ void Server::remove_user(User *user, std::string & reason)
 		{
 			if (it->second.remove(user))
 				empty_channels.insert(empty_channels.end(), it->second.getName());
-
 			for (std::list<User *>::const_iterator iter = it->second.getMembers(0).begin(); iter != it->second.getMembers(0).end(); iter ++)
 			{
 					send_message(user->get_prefix() + " QUIT :" + reason, (*iter)->get_fd());
@@ -289,6 +288,8 @@ void Server::execute_command( Request request)
 		kill_command(request);
 	else if (cmd == "KICK")
 		kick_command(request);
+	else if (cmd == "NOTICE")
+		notice_command(request);
 	else
 		send_message(SERVER_NAME " 421 " + request.get_user()->get_nickname() + " " + cmd + " :Unknown command", request.get_user()->get_fd());
 }

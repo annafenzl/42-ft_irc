@@ -33,6 +33,7 @@
 # include <sstream>
 # include <utility>
 # include <ctime>
+# include <numeric>
 # include <set>
 # include "response.hpp"
 # include "User.hpp"
@@ -119,7 +120,9 @@ class Server
 	void send_message(Request req, t_res err);
 	void showtime_bot_command(Request request);
 	void kick_command(Request request);
+	
 	void send_names_list(Request &request, Channel &channel);
+	void broadcast_join_message(User* user, Channel& channel);
 
 	// -------------- Exceptions -------------------
 	class IncorrectPortNumber: public std::exception {

@@ -3,10 +3,11 @@
 /*                                                        :::      ::::::::   */
 /*   globops_cmd.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 11:18:48 by pguranda          #+#    #+#             */
-/*   Updated: 2023/04/18 23:07:43 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/18 23:00:16 by pguranda         ###   ########.fr       */
+
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +36,20 @@ void Server::globops_command(Request request)
 		send_message(response, user->get_fd());
 		return ;
 	}
+	//make a string with all the params
+	std::string params;
+	for (size_t i = 0; i < request.get_params().size(); i++)
+	{
+		params += request.get_params()[i];
+		if (i != request.get_params().size() - 1)
+			params += " ";
+	}
 	for(std::map<int, User>::const_iterator it = _user_map.begin(); it != _user_map.end(); ++it)
 	{
 		if (it->second.get_fd() != user->get_fd() && it->second.is_operator())
 		{
-			send_message(SERVER_NAME " GLOBOPS " + user->get_nickname() + " : " + request.get_params()[0], it->second.get_fd());
+			send_message( ":" + user->get_nickname() + "!" + user->get_nickname() + "@" + user->get_hostmask() + " GLOBOPS :" + params, it->second.get_fd());
+
 		}
 	}
 }
