@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 00:45:11 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/19 02:36:02 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/19 03:02:30 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,24 +24,24 @@ void Server::mode_command( Request request )
 	
 	if (request.get_params ().size () < 1)
 	{
-		send_message2 (request, RES_ERR_NEEDMOREPARAMS);
+		send_message (request, RES_ERR_NEEDMOREPARAMS);
 		return ;
 	}
 	request.set_channel_name (request.get_params ()[0]);
 	if (!Channel::isValidChannelName (request.get_params ()[0]))
 	{
-		send_message2 (request, RES_ERR_INVALIDCHANNELNAME);
+		send_message (request, RES_ERR_INVALIDCHANNELNAME);
 		return ;
 	}
 	channelIt = _channels.find (request.get_params ()[0]);
 	if (channelIt == _channels.end ())
 	{
-		send_message2 (request, RES_ERR_NOSUCHCHANNEL);
+		send_message (request, RES_ERR_NOSUCHCHANNEL);
 		return ;
 	}
 	if (!channelIt->second.isOp (request.get_user ()))
 	{
-		send_message2 (request, RES_ERR_CHANNOPRIVSNEEDED);
+		send_message (request, RES_ERR_CHANNOPRIVSNEEDED);
 		return ;
 	}
 	if (request.get_params ().size () > 1)
@@ -60,7 +60,7 @@ void Server::mode_command( Request request )
 				{
 					if (i == request.get_params ().size () - 1)
 					{
-						send_message2 (request, RES_ERR_NEEDMOREPARAMS);
+						send_message (request, RES_ERR_NEEDMOREPARAMS);
 						continue ;
 					}
 					user = channelIt->second.getMember (request.get_params ()[i + 1]);
@@ -111,5 +111,5 @@ void Server::mode_command( Request request )
 		request.set_info ("+" + channelIt->second.getModes ());
 	else
 		request.set_info (updates);
-	send_message2 (request, RES_MODE);
+	send_message (request, RES_MODE);
 }

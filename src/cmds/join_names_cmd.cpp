@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:21:43 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/19 01:34:50 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/19 03:02:30 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void Server::join_names_command( Request request )
 
 	if (request.get_params ().size () < 1)
 	{
-		send_message2 (request, RES_ERR_NEEDMOREPARAMS);
+		send_message (request, RES_ERR_NEEDMOREPARAMS);
 		return ;
 	}
 
@@ -88,12 +88,12 @@ void Server::join_names_command( Request request )
 		
 		if (!Channel::isValidChannelName (channelName))
 		{
-			send_message2 (request, RES_ERR_INVALIDCHANNELNAME);
+			send_message (request, RES_ERR_INVALIDCHANNELNAME);
 			continue ;
 		}
 		else if (!request.get_user ()->is_registered ())
 		{
-			send_message2 (request, RES_ERR_NOTREGISTERED_CHAN);
+			send_message (request, RES_ERR_NOTREGISTERED_CHAN);
 			continue ;
 		}
 		
@@ -107,7 +107,7 @@ void Server::join_names_command( Request request )
 		}
 		else if (it == _channels.end () && request.get_cmd () == "NAMES")
 		{
-			send_message2 (request, RES_ERR_NOSUCHCHANNEL);
+			send_message (request, RES_ERR_NOSUCHCHANNEL);
 			continue ;
 		}
 		else if (it != _channels.end () && request.get_cmd () == "JOIN"
@@ -120,18 +120,18 @@ void Server::join_names_command( Request request )
 				+ "', channel password: '" + it->second.getPassword ()
 				+ "'\033[0m" << std::endl;
 			if (password == "*")
-				send_message2 (request, RES_ERR_BANNEDFROMCHAN);
+				send_message (request, RES_ERR_BANNEDFROMCHAN);
 			else
-				send_message2 (request, RES_ERR_BADCHANNELKEY);
+				send_message (request, RES_ERR_BADCHANNELKEY);
 			continue ;
 		}
 		//After JOIN, NAMES is ran automatically to show all the users in the channel in the client
 		if (request.get_cmd () == "JOIN")
 		{
 			if (!it->second.isMember (request.get_user ()))
-				send_message2 (request, RES_CHANNELJOINED);
+				send_message (request, RES_CHANNELJOINED);
 			else
-				send_message2 (request, RES_ERR_USERONCHANNEL);
+				send_message (request, RES_ERR_USERONCHANNEL);
 			it->second.insert (request.get_user ());
 			request.get_user ()->getChannels (0).insert (std::make_pair (it->first, &it->second));
 			send_names_list(request, it->second );

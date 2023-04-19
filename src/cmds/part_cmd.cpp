@@ -6,11 +6,13 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:24:20 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/19 02:43:39 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/19 03:16:50 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "Server.hpp"
+
+// /PART ?<channel> ?<reason>
 
 void Server::part_command( Request request )
 {
@@ -20,7 +22,7 @@ void Server::part_command( Request request )
 
 	if (request.get_params ().size () < 1)
 	{
-		send_message2 (request, RES_ERR_NEEDMOREPARAMS);
+		send_message (request, RES_ERR_NEEDMOREPARAMS);
 		return ;
 	}
 	channelIt = request.get_user ()->getChannels (0).find (request.get_params ()[0]);
@@ -33,7 +35,7 @@ void Server::part_command( Request request )
 	if (channelIt == request.get_user ()->getChannels (0).end ())
 	{
 		std::cout << "\033[0;31mnot on channel\033[0m" << std::endl;
-		send_message2 (request, RES_ERR_NOTONCHANNEL);
+		send_message (request, RES_ERR_NOTONCHANNEL);
 		return ;
 	}
 	// remove user from channel
@@ -59,5 +61,5 @@ void Server::part_command( Request request )
 	else if (channelItServ == _channels.end ())
 		std::cout << "\033[0;31mFailed to find and delete channel\033[0m" << std::endl;
 	std::cout << "there are now: " << _channels.size () << " channels" << std::endl;
-	send_message2 (request, RES_CHANNELLEFT);
+	send_message (request, RES_CHANNELLEFT);
 }

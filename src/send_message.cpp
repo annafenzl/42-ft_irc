@@ -6,13 +6,17 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 02:37:04 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/19 02:37:52 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/19 03:05:26 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-void Server::send_message2(Request req, t_res err)
+/////////////////////////////////////////////////
+/// Server response messages config
+/////////////////////////////////////////////////
+
+void Server::send_message(Request req, t_res err)
 {
     std::ostringstream stream;
 

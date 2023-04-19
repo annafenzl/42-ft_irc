@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 02:40:53 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/19 02:47:16 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/19 03:02:30 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void Server::who_command( Request request )
 		request.set_channel_name (request.get_params ()[0]);
 		if (channelIt == _channels.end ())
 		{
-			send_message2 (request, RES_ERR_NOSUCHCHANNEL);
+			send_message (request, RES_ERR_NOSUCHCHANNEL);
 			return ;
 		}
 		channelUserIt = channelIt->second.getMembers ().begin ();
@@ -55,7 +55,7 @@ void Server::who_command( Request request )
 		request.set_info (request.get_params ()[0]);
 		if (userIt == _user_map.end ())
 		{
-			send_message2 (request, RES_ERR_NOSUCHNICK);
+			send_message (request, RES_ERR_NOSUCHNICK);
 			return ;
 		}
 		allUsers.insert (allUsers.end (), &userIt->second);
@@ -72,9 +72,9 @@ void Server::who_command( Request request )
 			+ " *" // user status and modes
 			+ ":0" // hopcount
 			+ " " + (*allUsersIt)->get_fullname ());
-		send_message2 (request, RES_RPL_WHOREPLY);
+		send_message (request, RES_RPL_WHOREPLY);
 		allUsersIt++;
 	}
-	send_message2 (request, RES_RPL_ENDOFWHO);
+	send_message (request, RES_RPL_ENDOFWHO);
 	return ;
 }
