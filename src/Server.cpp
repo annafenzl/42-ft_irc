@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/19 18:17:25 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/19 22:28:57 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,6 +291,8 @@ void Server::execute_command( Request request)
 		kick_command(request);
 	else if (cmd == "NOTICE")
 		notice_command(request);
+	else if (cmd == "INVITE")
+		invite_command(request);
 	else
 		send_message(SERVER_NAME " 421 " + request.get_user()->get_nickname() + " " + cmd + " :Unknown command", request.get_user()->get_fd());
 }

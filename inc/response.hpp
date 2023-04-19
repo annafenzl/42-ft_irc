@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 14:25:33 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/19 05:55:53 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/19 22:34:57 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,15 @@ typedef enum e_res
 	RES_ERR_CHANNELALREADYJOINED = 1000,
 	RES_CHANNELJOINED = 1001,
 	RES_CHANNELLEFT = 1002,
-	RES_MODE = 1003
+	RES_MODE = 1003,
+
+	/** INVITE */
+	RES_ERR_USERONCHANNEL = 443,
+	RES_ERR_USERNOTINCHANNEL = 441,
+	RES_ERR_USERNOTREGISTERED = 451,
+	RES_ERR_INVITEONLYCHAN = 473,
+
+	RES_INVITED = 341,
+	
 }	t_res;
 #endif

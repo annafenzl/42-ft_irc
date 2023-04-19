@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 21:54:36 by pguranda          #+#    #+#             */
-/*   Updated: 2023/04/19 16:56:13 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/19 22:19:19 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void Server::kick_command(Request request)
 			continue;
 		}
 
-		if (!user->is_operator())
+		if (!channel->isOp(user))
 		{
 			response = SERVER_NAME " 482 " + channels[i] + " :You're not a channel operator";
 			send_message(response, user->get_fd());

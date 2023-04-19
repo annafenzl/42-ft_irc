@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/19 16:34:59 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/19 22:26:59 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ class Server
 	void send_message(Request req, t_res err);
 	void showtime_bot_command(Request request);
 	void kick_command(Request request);
+	void invite_command(Request request);
 	
 	void send_names_list(Request &request, Channel &channel);
 	void broadcast (std::string message, User* user, Channel& channel);
