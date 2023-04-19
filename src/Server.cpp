@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/19 02:37:36 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/19 13:43:49 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,7 +216,6 @@ void Server::remove_user(User *user, std::string & reason)
 	{
 		_channels.erase(*it);
 	}
-	
 
 	// remove from poll array
 	for (unsigned int i = 0; i < _fd_count; ++i)
@@ -227,9 +226,8 @@ void Server::remove_user(User *user, std::string & reason)
 			break ;
 		}
 	}
-	// remove from map to consider emoving teh channels in the User class??
+	// remove from map to consider removing the channels in the User class??
 	_user_map.erase(user->get_fd());
-	
 }
 
 void Server::handle_command(char* cmd, int user_fd)
@@ -241,7 +239,6 @@ void Server::handle_command(char* cmd, int user_fd)
 	{
 		std::string part = user->buff.substr(0, end_pos);
 		user->buff.erase(0, end_pos + 2);
-		
 		Request request(part, user);
 		request.print();
 		execute_command(request);

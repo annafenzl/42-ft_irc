@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg_cmd.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 16:12:24 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/18 23:28:51 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/19 14:03:34 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,14 +129,6 @@ void	Server::privmsg_command(Request request)
 			}
 		}
 	}
-	
-	//BOT handling of commands sent with PRIVMSG
-	// showtime_bot_command(request);
-	// ERR_NOTOPLEVEL	
-		// 413   "<mask> :No toplevel domain specified"
-	// ERR_WILDTOPLEVEL
-		// 414 "<mask> :Wildcard in toplevel domain"
-	// RPL_AWAY if the user is currently away
-	
+
 	send_message(response, user->get_fd());
 }
