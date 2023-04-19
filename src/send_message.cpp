@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 02:37:04 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/19 03:05:26 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/19 06:02:27 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,15 @@ void Server::send_message(Request req, t_res err)
 	stream << static_cast<int>(err);
 	switch (err)
 	{
+		case RES_ERR_BADCHANNAME:
+			send_message (
+				":" + std::string (SERVER_NAME)
+				+ " " + stream.str ()
+				+ " " + req.get_user ()->get_nickname ()
+				+ " " + req.get_channel_name ()
+				+ " :bad channel name"
+				, req.get_user ()->get_fd ());
+			break ;
 		case RES_RPL_LISTSTART:
 			send_message (
 				":" + std::string (SERVER_NAME)
@@ -63,7 +72,7 @@ void Server::send_message(Request req, t_res err)
 				+ " " + stream.str ()
 				+ " " + req.get_user ()->get_nickname ()
 				+ " " + req.get_channel_name ()
-				+ " You're not an operator"
+				+ " :You're not an operator"
 				, req.get_user ()->get_fd ());
 			break ;
 		case RES_RPL_WHOREPLY:
@@ -111,22 +120,13 @@ void Server::send_message(Request req, t_res err)
 				+ " :not on channel"
 				, req.get_user ()->get_fd ());
 			break ;
-		case RES_ERR_USERONCHANNEL:
-			send_message (
-				":" + std::string (SERVER_NAME)
-				+ " " + stream.str ()
-				+ " " + req.get_user ()->get_nickname ()
-				+ " " + req.get_channel_name ()
-				+ " :is already on channel"
-				, req.get_user ()->get_fd ());
-			break ;
 		case RES_ERR_BADCHANNELKEY:
 			send_message (
 				":" + std::string (SERVER_NAME)
 				+ " " + std::ostringstream(RES_ERR_NOSUCHCHANNEL).str ()
 				+ " " + req.get_user ()->get_nickname ()
 				+ " " + req.get_channel_name ()
-				+ " :incorrect password"
+				+ " :password is incorrect"
 				, req.get_user ()->get_fd ());
 			break ;
 		case RES_ERR_BANNEDFROMCHAN:
@@ -174,13 +174,13 @@ void Server::send_message(Request req, t_res err)
 				+ " " + req.get_info ()
 				, req.get_user ()->get_fd ());
 			break ;
-		case RES_ERR_INVALIDCHANNELNAME:
+		case RES_ERR_CHANNELALREADYJOINED:
 			send_message (
 				":" + std::string (SERVER_NAME)
-				+ " " + std::ostringstream(RES_ERR_NOSUCHCHANNEL).str ()
+				+ " " + std::ostringstream(RES_ERR_BADCHANNAME).str ()
 				+ " " + req.get_user ()->get_nickname ()
 				+ " " + req.get_channel_name ()
-				+ " :invalid channel name"
+				+ " :already on channel"
 				, req.get_user ()->get_fd ());
 			break ;
 		case RES_CHANNELLEFT:

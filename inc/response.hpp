@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 14:25:33 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/19 02:40:31 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/19 05:55:53 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ typedef enum e_res
 	RES_ERR_NOSUCHCHANNEL = 403,
 	RES_ERR_NOTONCHANNEL = 442,
 	RES_ERR_CHANNOPRIVSNEEDED = 482,
+	RES_ERR_BADCHANNAME = 479,
 
 	/** JOIN */
 	RES_ERR_NOTREGISTERED_CHAN = 451,
-	RES_ERR_USERONCHANNEL = 443,
 	RES_ERR_BADCHANNELKEY = 475,
 	RES_ERR_BANNEDFROMCHAN = 474,
 
@@ -41,7 +41,7 @@ typedef enum e_res
 	RES_RPL_WHOREPLY = 352,
 
 	/** Custom */
-	RES_ERR_INVALIDCHANNELNAME = 1000,
+	RES_ERR_CHANNELALREADYJOINED = 1000,
 	RES_CHANNELJOINED = 1001,
 	RES_CHANNELLEFT = 1002,
 	RES_MODE = 1003

@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:24:20 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/19 05:03:05 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/19 05:32:54 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,28 +31,23 @@ void Server::part_command( Request request )
 	channelmap::iterator								channelIt;
 
 	if (request.get_params ().size () < 1)
-	{
-		send_message (request, RES_ERR_NEEDMOREPARAMS);
-		return ;
-	}
+		return (send_message (request, RES_ERR_NEEDMOREPARAMS));
+		
 	request.set_channel_name (request.get_params ()[0]);
 	if (request.get_params ().size () > 1)
 		request.set_info (request.get_params ()[1]);
+	
 	// check whether channel exist
 	channelIt = _channels.find (request.get_params ()[0]);
 	if (channelIt == _channels.end ())
-	{	
-		send_message (request, RES_ERR_NOSUCHCHANNEL);
-		return ;
-	}
+		return (send_message (request, RES_ERR_NOSUCHCHANNEL));
+	
 	// check whether user on channel
 	if (request.get_user ()->getChannels ().find (request.get_params ()[0])
 		== request.get_user ()->getChannels ().end ())
-	{
 		std::cout << "\033[0;31mnot on channel\033[0m" << std::endl;
-		send_message (request, RES_ERR_NOTONCHANNEL);
-		return ;
-	}
+		return (send_message (request, RES_ERR_NOTONCHANNEL));
+		
 	// remove user from channel
 	channelIt->second.remove (request.get_user ());
 	std::cout << channelIt->first << " now has: " 
