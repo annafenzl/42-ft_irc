@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:09:30 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/19 05:33:28 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/19 09:31:30 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void Server::topic_command( Request request )
 {
+	std::ostringstream				stream;
 	channelmap::iterator				it;
 
 	if (request.get_params ().size () < 1)
@@ -35,4 +36,11 @@ void Server::topic_command( Request request )
 		return (send_message (request, RES_ERR_CHANNOPRIVSNEEDED));
 	request.set_info (it->second.getTopic ());
 	send_message (request, RES_RPL_TOPIC);
+
+	stream << static_cast<int>(RES_RPL_TOPIC);
+	broadcast (":" + std::string (SERVER_NAME)
+				+ " " + stream.str ()
+				+ " " + request.get_user ()->get_nickname ()
+				+ " " + request.get_channel_name ()
+				+ " :" + request.get_info (), request.get_user (), it->second);
 }

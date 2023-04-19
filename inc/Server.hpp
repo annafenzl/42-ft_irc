@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/19 09:02:15 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/19 09:20:35 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,8 +122,7 @@ class Server
 	void kick_command(Request request);
 	
 	void send_names_list(Request &request, Channel &channel);
-	void broadcast_join_message(User* user, Channel& channel);
-	void broadcast_part_message(User* user, Channel& channel, const std::string & reason );
+	void broadcast (std::string message, User* user, Channel& channel);
 
 	// -------------- Exceptions -------------------
 	class IncorrectPortNumber: public std::exception {

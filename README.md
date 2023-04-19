@@ -88,5 +88,3 @@ RESPONSE IS <:ircserv.com 442 sdasd :not on channel> -->
 
 
 // bugs: adding ops
-// on change topic, 
-// on part, maybe with reason

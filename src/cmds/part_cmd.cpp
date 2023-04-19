@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:24:20 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/19 09:04:37 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/19 09:27:01 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,6 @@
 /// Usage:
 /// /PART ?<channel> ?<reason>
 /////////////////////////////////////////////////
-
-void Server::broadcast_part_message(User* user, Channel& channel, const std::string & reason )
-{
-	std::string join_message = ":" + user->get_nickname() + "!" + user->get_nickname() + "@"  SERVER_NAME " PART " 
-		+ channel.getName() + " :" + reason;
-	std::list<User*>::const_iterator userIt;
-	
-	for (userIt = channel.getMembers().begin(); userIt != channel.getMembers().end(); ++userIt)
-		send_message(join_message, (*userIt)->get_fd());
-}
 
 void Server::part_command( Request request )
 {
@@ -63,7 +53,10 @@ void Server::part_command( Request request )
 		<< request.get_user ()->getChannels ().size () << "channels" << std::endl;
 	// notify other members or remove channel if empty
 	if (channelIt->second.getMembers ().size () != 0)
-		broadcast_part_message(request.get_user(), channelIt->second, request.get_info ());
+		broadcast(":" + request.get_user ()->get_nickname() + "!" 
+			+ request.get_user ()->get_nickname() + "@"  SERVER_NAME " PART " 
+			+ channelIt->second.getName() + " :" + request.get_info ()
+			, request.get_user(), channelIt->second);
 	else 
 	{
 		_channels.erase (channelIt);
