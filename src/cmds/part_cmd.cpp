@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:24:20 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/19 05:32:54 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/19 09:04:37 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,10 @@
 /// /PART ?<channel> ?<reason>
 /////////////////////////////////////////////////
 
-void Server::broadcast_part_message(User* user, Channel& channel)
+void Server::broadcast_part_message(User* user, Channel& channel, const std::string & reason )
 {
-	std::string join_message = ":" + user->get_nickname() + "!" + user->get_nickname() + "@"  SERVER_NAME " PART " + channel.getName();
+	std::string join_message = ":" + user->get_nickname() + "!" + user->get_nickname() + "@"  SERVER_NAME " PART " 
+		+ channel.getName() + " :" + reason;
 	std::list<User*>::const_iterator userIt;
 	
 	for (userIt = channel.getMembers().begin(); userIt != channel.getMembers().end(); ++userIt)
@@ -36,16 +37,19 @@ void Server::part_command( Request request )
 	request.set_channel_name (request.get_params ()[0]);
 	if (request.get_params ().size () > 1)
 		request.set_info (request.get_params ()[1]);
+
+	// check valid channel name
+	if (!Channel::isValidChannelName (request.get_params ()[0]))
+		return (send_message (request, RES_ERR_BADCHANNAME));
 	
-	// check whether channel exist
+	// check whether channel exists
 	channelIt = _channels.find (request.get_params ()[0]);
 	if (channelIt == _channels.end ())
 		return (send_message (request, RES_ERR_NOSUCHCHANNEL));
-	
-	// check whether user on channel
-	if (request.get_user ()->getChannels ().find (request.get_params ()[0])
-		== request.get_user ()->getChannels ().end ())
-		std::cout << "\033[0;31mnot on channel\033[0m" << std::endl;
+
+	// check whether user is on channel
+	if (request.get_user ()->getChannels (0).find (request.get_params ()[0])
+		== request.get_user ()->getChannels (0).end ())
 		return (send_message (request, RES_ERR_NOTONCHANNEL));
 		
 	// remove user from channel
@@ -57,9 +61,9 @@ void Server::part_command( Request request )
 		(request.get_user ()->getChannels (0).find (request.get_params ()[0]));
 	std::cout << request.get_user ()->get_name () << " is now in " 
 		<< request.get_user ()->getChannels ().size () << "channels" << std::endl;
-	// Notify other members or remove channel if empty
+	// notify other members or remove channel if empty
 	if (channelIt->second.getMembers ().size () != 0)
-		broadcast_part_message(request.get_user(), channelIt->second);
+		broadcast_part_message(request.get_user(), channelIt->second, request.get_info ());
 	else 
 	{
 		_channels.erase (channelIt);

@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 00:45:11 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/19 07:43:15 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/19 09:02:49 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /////////////////////////////////////////////////
 /// Usage:
-/// /MODE <channel> ?{args}
+/// /MODE <channel> ?[ (+/-)<modes> {args} ]
 /////////////////////////////////////////////////
 
 void Server::mode_command( Request request )
@@ -40,9 +40,6 @@ void Server::mode_command( Request request )
 	if (channelIt == _channels.end ())
 		return (send_message (request, RES_ERR_NOSUCHCHANNEL));
 		
-	if (request.get_params ().size () > 1 && !channelIt->second.isOp (request.get_user ()))
-		return (send_message (request, RES_ERR_CHANNOPRIVSNEEDED));
-
 	if (request.get_params ().size () > 1)
 	{
 		i = 0;
@@ -50,6 +47,9 @@ void Server::mode_command( Request request )
 		{
 			if (request.get_params ()[i][0] != '+' && request.get_params ()[i][0] != '-')
 				continue ;
+			else if (!channelIt->second.isOp (request.get_user ()))
+				return (send_message (request, RES_ERR_CHANNOPRIVSNEEDED));
+
 			j = 0;
 			isset = false;
 			while (request.get_params ()[i][++j])
