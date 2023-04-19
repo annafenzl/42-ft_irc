@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   notice_cmd.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 15:22:07 by annafenzl         #+#    #+#             */
 /*   Updated: 2023/04/18 23:20:26 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../inc/Server.hpp"
-
-# include <sstream>
-# include <set>
+# include "Server.hpp"
 
 std::set<std::string> split_targets(std::string targets, std::string &duplicate);
 

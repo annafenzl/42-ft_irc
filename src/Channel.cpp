@@ -3,10 +3,11 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 11:22:22 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/18 22:33:12 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/19 00:04:43 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,64 +75,28 @@ Channel::~Channel( void ) {}
 
 /// ! getters !
 const std::string &Channel::getName( void ) const { return (_name ); }
-const std::string &Channel::getPassword( void ) const { return (_password ); }
 const std::string &Channel::getTopic( void ) const { return (_topic ); }
 const std::string &Channel::getModes( void ) const { return (_modes); }
-
+const std::string &Channel::getPassword( void ) const { return (_password ); }
 const std::list<User *> &Channel::getMembers( void ) const { return (_members); }
 std::list<User *> &Channel::getMembers( int ) { return (_members); }
 const std::list<User *> &Channel::getOps( void ) const { return (_ops); }
 std::list<User *> &Channel::getOps( int ) { return (_ops); }
 
-// User *Channel::getMember( User *user )
-// {
-// 	std::list<User *>::iterator it;
-
-// 	it = std::find (_members.begin (), _members.end (), user);
-// 	if (it != _members.end ())
-// 		return (*it);
-// 	return (NULL);
-// }
-
-User *Channel::getMember( const std::string & nickname )
-{
-	std::list<User *>::iterator it;
-
-	it = _members.begin ();
-	while (it != _members.end ())
-	{
-		if ((*it)->get_nickname () == nickname)
-			return (*it);
-		it++;
-	}
-	return (NULL);
-}
-
-User *Channel::getOp( User *op )
-{
-	std::list<User *>::iterator it;
-
-	it = std::find (_ops.begin (), _ops.end (), op);
-	if (it != _ops.end ())
-		return (*it);
-	return (NULL);
-}
-
-/// ! modifiers !
+/// ! setters !
 void Channel::setTopic( const std::string & topic ) { _topic = topic; }
 
+/// ! container modifiers !
 void Channel::insert( User * user )
 {
-	if (getMember (user) == NULL)
+	if (!isMember (user))
+	{
 		_members.insert (_members.end (), user);
 		if (_members.size () == 1)
-			_ops.insert (_ops.end (), user);
+			insertOp (user);
+	}
 }
 
-/*
-	removes user from _members
-	returns true if there is no member left
-*/
 int Channel::remove( User * user )
 {
 	_members.remove(user);
@@ -140,12 +105,8 @@ int Channel::remove( User * user )
 
 void Channel::insertOp( User * op )
 {
-	if (getOp (op) == NULL)
-	{
+	if (!isOp (op))
 		_ops.insert (_ops.end (), op);
-		if (_ops.size () == 1)
-			_ops.insert (_ops.end (), op);
-	}
 }
 
 void Channel::removeOp( User * op )
@@ -198,32 +159,17 @@ bool	Channel::isValidChannelName( const std::string & name )
 	return (true);
 }
 
-User *Channel::getMember( User *user )
-{
-	std::list<User *>::iterator it;
-
-	it = std::find (_members.begin (), _members.end (), user);
-	if (it != _members.end ())
-		return (*it);
-	return (NULL);
-}
-
-/*
-	returns true if the passed User is part of the Channel
-*/
 bool Channel::isMember( User *user ) const
 {
 	return (find (_members.begin (), _members.end (), user) != _members.end ());
 }
 
-void Channel::removeMember(User *user)
+bool Channel::isOp( User *user ) const
 {
-	_members.remove(user);
+	return (find (_ops.begin (), _ops.end (), user) != _ops.end ());
 }
 
-
-
-bool Channel::hasMode( char m )
+bool Channel::hasMode( char m ) const
 {
 	size_t i;
 	std::string nModes;
@@ -236,4 +182,18 @@ bool Channel::hasMode( char m )
 		i++;
 	}
 	return (false);
+}
+
+User *Channel::getMember( const std::string & nickname )
+{
+	std::list<User *>::iterator it;
+
+	it = _members.begin ();
+	while (it != _members.end ())
+	{
+		if ((*it)->get_nickname () == nickname)
+			return (*it);
+		it++;
+	}
+	return (NULL);
 }

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   who_cmd.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 02:40:53 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/18 10:21:29 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/19 03:02:30 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../inc/Server.hpp"
+# include "Server.hpp"
 
 /** /WHO when no args is provided: display all connected allUsers to the server;
  * 	/WHO when an argument (#username) is provided;
@@ -18,7 +18,6 @@
 **/
 void Server::who_command( Request request )
 {
-	std::string					info;
 	std::vector<User *>			allUsers;
 	channelmap::iterator		channelIt;
 	usermap::iterator			userIt;
@@ -37,10 +36,10 @@ void Server::who_command( Request request )
 	else if (Channel::isValidChannelName (request.get_params ()[0]))
 	{
 		channelIt = _channels.find (request.get_params ()[0]);
+		request.set_channel_name (request.get_params ()[0]);
 		if (channelIt == _channels.end ())
 		{
-			send_message (request, EXIT_ERR_NOSUCHCHANNEL,
-				request.get_params ()[0]);
+			send_message (request, RES_ERR_NOSUCHCHANNEL);
 			return ;
 		}
 		channelUserIt = channelIt->second.getMembers ().begin ();
@@ -53,24 +52,29 @@ void Server::who_command( Request request )
 	else
 	{
 		userIt = check_for_user (request.get_params ()[0]);
+		request.set_info (request.get_params ()[0]);
 		if (userIt == _user_map.end ())
 		{
-			send_message (request, EXIT_ERR_NOSUCHNICK,
-				request.get_params ()[0]);
+			send_message (request, RES_ERR_NOSUCHNICK);
 			return ;
 		}
+		allUsers.insert (allUsers.end (), &userIt->second);
 	}
 	allUsersIt = allUsers.begin ();
 	while (allUsersIt != allUsers.end ())
 	{
-		info = (*allUsersIt)->get_nickname () 
+		// :<server> 352 <client> <channel> <username> <host> <server> <nick> <H|G>[*][@|+] :<hopcount> <real name>
+		request.set_info (
 			+ " " + (*allUsersIt)->get_name ()
 			+ " " + (*allUsersIt)->get_hostmask ()
-			+ SERVER_NAME
-			+ " " + (*allUsersIt)->get_fullname ();
-		send_message (request, EXIT_RPL_WHOREPLY, info);
+			+ " " + SERVER_NAME // server user is connected to, SERVER_NAME by default
+			+ " " + (*allUsersIt)->get_nickname ()
+			+ " *" // user status and modes
+			+ ":0" // hopcount
+			+ " " + (*allUsersIt)->get_fullname ());
+		send_message (request, RES_RPL_WHOREPLY);
 		allUsersIt++;
 	}
-	send_message (request, EXIT_RPL_ENDOFWHO, "");
+	send_message (request, RES_RPL_ENDOFWHO);
 	return ;
 }

@@ -7,12 +7,11 @@
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 11:18:48 by pguranda          #+#    #+#             */
 /*   Updated: 2023/04/18 23:00:16 by pguranda         ###   ########.fr       */
+
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../inc/Server.hpp"
-# include <algorithm>
-# include <iterator>
+# include "Server.hpp"
 
 //Implementation of a GLOBOPS command for IRC
 void Server::globops_command(Request request)

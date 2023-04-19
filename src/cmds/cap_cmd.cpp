@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   cap_cmd.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:35:55 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/18 21:24:47 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 22:29:52 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../inc/Server.hpp"
+# include "Server.hpp"
 
 /*
 	Command: CAP

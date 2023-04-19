@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   showtime_bot_cmd.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/17 11:05:50 by pguranda          #+#    #+#             */
-/*   Updated: 2023/04/17 14:55:12 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/18 23:39:04 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/Server.hpp"
+#include "Server.hpp"
 
 # include <sstream>
 # include <set>

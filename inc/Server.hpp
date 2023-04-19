@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/18 22:56:02 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/19 03:03:07 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@
 # include <utility>
 # include <ctime>
 # include <numeric>
-# include "exit.hpp"
+# include <set>
+# include "response.hpp"
 # include "User.hpp"
 # include "Request.hpp"
 # include "Channel.hpp"
@@ -104,20 +105,19 @@ class Server
 	void user_command(Request request);
 	void pass_command(Request request);
 	void privmsg_command(Request request);
-	// void join_command(Request request);
 	void quit_command(Request request);
 	void join_names_command (Request request);
 	void list_command (Request request);
 	void topic_command (Request request);
 	void part_command (Request request);
 	void who_command (Request request);
-	void channel_mode_command (Request request);
+	void mode_command (Request request);
 	void oper_command(Request request);
 	void kill_command(Request request);
 	void notice_command(Request request);
 	void globops_command(Request request);
 	void send_message(std::string, int fd);
-	void send_message(Request req, t_exit err, std::string info);
+	void send_message(Request req, t_res err);
 	void showtime_bot_command(Request request);
 	void kick_command(Request request);
 	
