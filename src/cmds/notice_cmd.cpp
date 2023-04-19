@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 15:22:07 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/19 16:39:30 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/19 16:59:34 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,7 @@ void	Server::notice_command(Request request)
 		if (channel != _channels.end())
 		{
 			if ((*channel).second.isMember(user) == false)
-			{
-				// send_message(user->get_prefix() + " 482 " + user->get_nickname() + " " + *it + " :You're not on that channel", user->get_fd());
 				return;
-			}
 		}
 		if (recipient != _user_map.end())
 		{
