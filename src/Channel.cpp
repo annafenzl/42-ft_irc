@@ -100,6 +100,7 @@ void Channel::insert( User * user )
 int Channel::remove( User * user )
 {
 	_members.remove(user);
+	_ops.remove(user);
 	return(_members.empty());
 }
 

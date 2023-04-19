@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 00:45:11 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/19 09:02:49 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/19 09:54:17 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void Server::mode_command( Request request )
 			isset = false;
 			while (request.get_params ()[i][++j])
 			{
+
 				if (request.get_params ()[i][j] == 'o' && request.get_params ()[i].length () == 2)
 				{
 					if (i == request.get_params ().size () - 1)
@@ -84,7 +85,8 @@ void Server::mode_command( Request request )
 					|| (request.get_params ()[i][0] == '-'
 						&& channelIt->second.hasMode (request.get_params ()[i][j]))))
 				{
-					std::cout << "\033[0;36m[LOG]current modes are: " << channelIt->second.getModes () << "\033[0m\n" << std::endl;
+					std::cout << "\033[0;36m[LOG]current modes are: " <<
+						channelIt->second.getModes () << "\033[0m\n" << std::endl;
 					if (request.get_params ()[i][0] == '+'
 						&& !channelIt->second.hasMode (request.get_params ()[i][j]))
 						channelIt->second.addMode (request.get_params ()[i][j]);
@@ -95,7 +97,8 @@ void Server::mode_command( Request request )
 						updates += std::string(" ") + request.get_params ()[i][0];
 						isset = true;
 					}
-					std::cout << "\033[0;36m[LOG]mew modes are: " << channelIt->second.getModes () << "\033[0m\n" << std::endl;
+					std::cout << "\033[0;36m[LOG]mew modes are: " << 
+						channelIt->second.getModes () << "\033[0m\n" << std::endl;
 					updates += request.get_params ()[i][j];
 				}
 			}
