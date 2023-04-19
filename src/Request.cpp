@@ -6,14 +6,14 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 14:14:39 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/18 23:23:48 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/19 02:11:30 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../inc/Request.hpp"
 
 // ------------- constructor -------------
-Request::Request(std::string input, User *user): _user(user)
+Request::Request(std::string input, User *user): _user(user), _channel_name("*"), _info("*")
 {
 	parse(input);
 }
@@ -27,6 +27,14 @@ std::vector<std::string>	Request::get_params() const		{ return _params; }
 User						*Request::get_user() const		{ return _user; }
 
 void						Request::set_user(User *user)	{ _user = user; }
+
+void						Request::set_channel_name( const std::string & channelName ) { _channel_name = channelName; }
+
+const 						std::string &Request::get_channel_name( void ) const { return _channel_name; }
+
+void						Request::set_info( const std::string & info ) { _info = info; }
+
+const 						std::string &Request::get_info( void ) const { return _info; }
 
 // ------------- methods ----------------
 

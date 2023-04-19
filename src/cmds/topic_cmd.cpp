@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:09:30 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/18 22:42:45 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/19 02:33:23 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,31 @@
 
 void Server::topic_command( Request request )
 {
-	std::string							info;
 	channelmap::iterator				it;
 
 	if (request.get_params ().size () < 1)
 	{
-		send_message (request, EXIT_ERR_NEEDMOREPARAMS, "");
+		send_message2 (request, RES_ERR_NEEDMOREPARAMS);
 		return ;
 	}
+	request.set_channel_name (request.get_params ()[0]);
 	it = _channels.find (request.get_params ()[0]);
 	if (it == _channels.end ())
-		return (send_message (request, EXIT_ERR_NOSUCHCHANNEL, request.get_params ()[0]));
-	info = request.get_params ()[0] + " :";
+		return (send_message2 (request, RES_ERR_NOSUCHCHANNEL));
 	if (request.get_params ().size () == 1 
 		&& (it->second.getTopic ().empty () || it->second.getTopic () == "*"))
 	{
-		send_message (request, EXIT_RPL_NOTOPIC, info + "no topic");
+		send_message2 (request, RES_RPL_NOTOPIC);
 		return ;
 	}
-	if (request.get_params ().size () > 1)
+	if (request.get_params ().size () > 1
+		&& (!it->second.hasMode ('t') || it->second.isOp (request.get_user ())))
 		it->second.setTopic (request.get_params ()[1]);
-	info += it->second.getTopic ();
-	send_message (request, EXIT_RPL_TOPIC,  info);
-	send_message (request, EXIT_TOPIC_STRING, info);
+	else if (request.get_params ().size () > 1)
+	{
+		send_message2 (request, RES_ERR_CHANNOPRIVSNEEDED);
+		return ;
+	}
+	request.set_info (it->second.getTopic ());
+	send_message2 (request, RES_RPL_TOPIC);
 }

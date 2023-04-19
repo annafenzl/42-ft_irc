@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   channel_mode_cmd.cpp                               :+:      :+:    :+:   */
+/*   mode_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 00:45:11 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/18 07:50:47 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/19 02:36:02 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../inc/Server.hpp"
 
-void Server::channel_mode_command( Request request )
+void Server::mode_command( Request request )
 {
 	channelmap::iterator channelIt;
 	size_t			i;
@@ -20,24 +20,28 @@ void Server::channel_mode_command( Request request )
 	std::string			nModes;
 	std::string			updates;
 	User				*user;
-	User				*op;
 	bool				isset;
-	
 	
 	if (request.get_params ().size () < 1)
 	{
-		send_message (request, EXIT_ERR_NEEDMOREPARAMS, "");
+		send_message2 (request, RES_ERR_NEEDMOREPARAMS);
 		return ;
 	}
-	else if (!Channel::isValidChannelName (request.get_params ()[0]))
+	request.set_channel_name (request.get_params ()[0]);
+	if (!Channel::isValidChannelName (request.get_params ()[0]))
 	{
-		send_message (request, EXIT_ERR_INVALID_CHANNEL_NAME, request.get_params ()[0]);
+		send_message2 (request, RES_ERR_INVALIDCHANNELNAME);
 		return ;
 	}
 	channelIt = _channels.find (request.get_params ()[0]);
 	if (channelIt == _channels.end ())
 	{
-		send_message (request, EXIT_ERR_NOSUCHCHANNEL, request.get_params ()[0]);
+		send_message2 (request, RES_ERR_NOSUCHCHANNEL);
+		return ;
+	}
+	if (!channelIt->second.isOp (request.get_user ()))
+	{
+		send_message2 (request, RES_ERR_CHANNOPRIVSNEEDED);
 		return ;
 	}
 	if (request.get_params ().size () > 1)
@@ -56,7 +60,7 @@ void Server::channel_mode_command( Request request )
 				{
 					if (i == request.get_params ().size () - 1)
 					{
-						send_message (request, EXIT_ERR_NEEDMOREPARAMS, "");
+						send_message2 (request, RES_ERR_NEEDMOREPARAMS);
 						continue ;
 					}
 					user = channelIt->second.getMember (request.get_params ()[i + 1]);
@@ -65,14 +69,13 @@ void Server::channel_mode_command( Request request )
 						send_message (":irc.example.com #channel : \x034Not on Channel!", request.get_user ()->get_fd ());
 						continue ;
 					}
-					op = channelIt->second.getOp (user);
-					if ((request.get_params ()[i][0] == '+' && op == NULL) ||
-						(request.get_params ()[i][0] == '-' && op != NULL))
+					if ((request.get_params ()[i][0] == '+' && !channelIt->second.isOp (user)) ||
+						(request.get_params ()[i][0] == '-' && channelIt->second.isOp (user)))
 					{
-						if (request.get_params ()[i][0] == '+' && op == NULL)
-							channelIt->second.insertOp (op);
+						if (request.get_params ()[i][0] == '+' && !channelIt->second.isOp (user))
+							channelIt->second.insertOp (user);
 						else
-							channelIt->second.removeOp (op);
+							channelIt->second.removeOp (user);
 						updates += " ";
 						updates += request.get_params ()[i];
 						updates += " ";
@@ -105,9 +108,8 @@ void Server::channel_mode_command( Request request )
 		}
 	}
 	if (updates.empty ())
-		send_message (request, EXIT_MODE_STRING, request.get_params ()[0]
-			+ " +" + channelIt->second.getModes ());
+		request.set_info ("+" + channelIt->second.getModes ());
 	else
-		send_message (request, EXIT_MODE_STRING, request.get_params ()[0]
-			+ updates);
+		request.set_info (updates);
+	send_message2 (request, RES_MODE);
 }

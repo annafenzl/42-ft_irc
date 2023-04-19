@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:24:20 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/18 23:08:01 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/19 02:43:39 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,20 @@ void Server::part_command( Request request )
 
 	if (request.get_params ().size () < 1)
 	{
-		send_message (request, EXIT_ERR_NEEDMOREPARAMS, "");
+		send_message2 (request, RES_ERR_NEEDMOREPARAMS);
 		return ;
 	}
 	channelIt = request.get_user ()->getChannels (0).find (request.get_params ()[0]);
 	std::cout << request.get_user ()->get_name () << " is initially in " 
 		<< request.get_user ()->getChannels ().size () << "channels" << std::endl;
+	request.set_channel_name (request.get_params ()[0]);
+	if (request.get_params ().size () > 1)
+		request.set_info (request.get_params ()[1]);
 	// check if user on channel
 	if (channelIt == request.get_user ()->getChannels (0).end ())
 	{
 		std::cout << "\033[0;31mnot on channel\033[0m" << std::endl;
-		send_message (request, EXIT_ERR_NOTONCHANNEL, request.get_params ()[0]);
+		send_message2 (request, RES_ERR_NOTONCHANNEL);
 		return ;
 	}
 	// remove user from channel
@@ -56,5 +59,5 @@ void Server::part_command( Request request )
 	else if (channelItServ == _channels.end ())
 		std::cout << "\033[0;31mFailed to find and delete channel\033[0m" << std::endl;
 	std::cout << "there are now: " << _channels.size () << " channels" << std::endl;
-	send_message (request, EXIT_LEFT_CHANNEL, request.get_params ()[0]);
+	send_message2 (request, RES_CHANNELLEFT);
 }

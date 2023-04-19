@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 18:15:17 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/18 23:25:38 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/19 00:59:07 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #ifndef CHANNEL_HPP
 # define CHANNEL_HPP
 # include "User.hpp"
-# include "exit.hpp"
+# include "response.hpp"
 # include <list>
 # include <algorithm>
 
@@ -29,10 +29,10 @@ class Channel
 	private:
 		std::string			_name;
 		std::string			_topic;
-		std::list<User *>	_members;
-		std::list<User *>	_ops;
 		std::string			_modes;
 		std::string			_password;
+		std::list<User *>	_members;
+		std::list<User *>	_ops;
 		
 		/// ! constructors, copy assignment operator, destructor !
 	public:
@@ -44,21 +44,18 @@ class Channel
 		
 		/// ! getters !
 		const std::string &getName( void ) const;
-		const std::string &getPassword( void ) const;
 		const std::string &getTopic( void ) const;
 		const std::string &getModes( void ) const;
-		
+		const std::string &getPassword( void ) const;
 		const std::list<User *> &getMembers( void ) const;
 		std::list<User *> &getMembers( int );
 		const std::list<User *> &getOps( void ) const;
 		std::list<User *> &getOps( int );
-		
-		User *getMember( User *user );
-		User *getMember( const std::string & nickame );
-		User *getOp( User *op );
 
-		/// ! modifiers !
+		/// ! setters !
 		void setTopic( const std::string & topic );
+
+		/// ! container modifiers !
 		void insert( User * user );
 		int remove( User *user );
 		void insertOp( User * op );
@@ -67,11 +64,10 @@ class Channel
 		void removeMode (char m );
 
 		/// ! utility !
-		bool isMember(User *user) const;
 		static bool isValidChannelName( const std::string & name );
-		bool isOp( User * user );
-		void removeMember(User *user);
-
-		bool hasMode (char m );
+		bool isMember(User *user) const;
+		bool isOp(User *user) const;
+		bool hasMode (char m ) const;
+		User *getMember( const std::string & nickame );
 };
 #endif

@@ -16,9 +16,9 @@ NAME = ircserv
 CC = c++
 CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g -std=c++98 -I./inc
 RM := rm -f
-CDEPS = $(patsubst %, inc/%.hpp, Bot Channel exit Request Server User);
+CDEPS = $(patsubst %, inc/%.hpp, Bot Channel response Request Server User);
 
-SRC = main.cpp	$(addprefix src/, Server.cpp User.cpp Request.cpp Channel.cpp Bot.cpp) \
+SRC = main.cpp	$(addprefix src/, Server.cpp User.cpp Request.cpp Channel.cpp Bot.cpp send_message.cpp) \
 				$(addprefix src/cmds/, cap_cmd.cpp nick_cmd.cpp ping_cmd.cpp pass_cmd.cpp \
 				user_cmd.cpp quit_cmd.cpp privmsg_cmd.cpp notice_cmd.cpp\
 				oper_cmd.cpp kill_cmd.cpp globops_cmd.cpp \

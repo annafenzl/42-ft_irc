@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/18 23:37:28 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/19 02:37:36 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,13 +252,6 @@ void Server::handle_command(char* cmd, int user_fd)
 void Server::execute_command( Request request)
 {
 	std::string cmd = request.get_cmd();
-
-	if ((cmd == "JOIN" || cmd == "PART")
-		&& !request.get_user ()->is_registered ())
-	{
-		send_message (request, EXIT_ERR_NOTREGISTERED, "");
-		return ;
-	}
 		
 	if (cmd == "CAP")
 		cap_command(request);
@@ -291,7 +284,7 @@ void Server::execute_command( Request request)
 	else if (cmd == "WHO")
 		who_command (request);
 	else if (cmd == "MODE")
-		channel_mode_command (request);
+		mode_command (request);
 	else if (cmd == "KILL")
 		kill_command(request);
 	else if (cmd == "KICK")
@@ -339,100 +332,6 @@ void Server::send_message(std::string message, int fd)
 {
 	std::cout << "RESPONSE IS <" << message << ">" << std::endl;
 	send(fd, message.append(END_SEQUENCE).c_str(), message.size(), 0);
-}
-
-void Server::send_message(Request req, t_exit err, std::string info)
-{
-	std::string mes;
-    std::ostringstream stream;
-
-	stream << static_cast<int>(err);
-	mes.append (SERVER_NAME).append (" " + stream.str ()
-		+ " " + req.get_user ()->get_nickname () + " :");
-
-	switch (err)
-	{
-		case EXIT_ERR_NEEDMOREPARAMS:
-			mes.append ("need more parameters");
-			break;
-		case EXIT_ERR_TOOMANYCHANNELS:
-			mes.append ("Too many channels");
-			break;
-		case EXIT_ERR_NOSUCHCHANNEL:
-			mes.append ("no such channel: " + info);
-			break;
-		case EXIT_RPL_ENDOFWHO:
-			mes.append ("end of /WHO");
-			break ;
-		case EXIT_RPL_ENDOFNAMES:
-			mes.append (info + " :end of NAMES");
-			break ;
-		case EXIT_RPL_LISTSTART:
-			mes.append ("start of /LIST");
-			break ;
-		case EXIT_RPL_LISTEND:
-			mes.append ("end of /LIST");
-			break ;
-		case EXIT_RPL_WHOREPLY:
-		case EXIT_RPL_LIST:
-		case EXIT_RPL_NAMREPLY:
-		case EXIT_RPL_NOTOPIC:
-		case EXIT_RPL_TOPIC:
-			mes.append (info);
-			break;
-		case EXIT_ERR_NOTREGISTERED:
-			mes.append ("You are not yet registered");
-			break ;
-		case EXIT_ERR_ALREADYREGISTERED:
-			mes.append ("You are already registered");
-			break ;
-		case EXIT_ERR_NOSUCHNICK:
-			mes.append ("no such nickname");
-			break ;
-		case EXIT_ERR_NOTONCHANNEL:
-			mes.append ("not on channel");
-			break ;
-		case EXIT_ERR_BANNEDFROMCHAN:
-			mes.append ("permission denied. Have you provided the password?");
-			break ;
-		case EXIT_ERR_BADCHANNELKEY:
-			mes.append ("incorrect password");
-			break ;
-		/////////////////////////////////////////////////
-		/// custom
-		/////////////////////////////////////////////////
-		case EXIT_CHANNEL_JOINED:
-			send_message (":" + req.get_user ()->get_nickname () + "!" 
-				+ req.get_user ()->get_name () + "@" + SERVER_NAME + " JOIN "
-				+ info, req.get_user ()->get_fd ());
-			return ;
-		case EXIT_LEFT_CHANNEL:
-			send_message (":" + req.get_user ()->get_nickname () + "!" 
-				+ req.get_user ()->get_name () + "@" + SERVER_NAME + " PART "
-				+ info, req.get_user ()->get_fd ());
-			return ;
-		case EXIT_TOPIC_STRING:
-			mes = "";
-			mes.append (SERVER_NAME).append (" TOPIC " + info);
-			send_message (mes, req.get_user ()->get_fd ());
-			return ;
-		case EXIT_ERR_ALREADY_JOINED:
-			mes.append ("already joined: " + info);
-			break;
-		case EXIT_ERR_INVALID_CHANNEL_NAME:
-			mes.append ("invalid channel name");
-			break;
-		case EXIT_MODE_STRING:
-			mes = "";
-			mes.append (SERVER_NAME).append (" MODE " + info);
-			send_message (mes, req.get_user ()->get_fd ());
-			return ;
-		default:
-		    std::ostringstream stream2;
-			stream2 << static_cast<int>(err);
-			mes.append ("error code not found: " + stream2.str ());
-	}
-	send_message (mes, req.get_user ()->get_fd ());
 }
 
 Channel * Server::find_channel(std::string channel_name)
