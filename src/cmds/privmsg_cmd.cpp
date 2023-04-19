@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 16:12:24 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/19 14:34:43 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/19 16:35:37 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,14 @@ void	Server::privmsg_command(Request request)
 						const std::list<User *> &member_list = _channels.find(*it)->second.getMembers();
 						if (member_list.empty())
 							continue ;
+							//check if member_list contains the user
+						std::list<User*>::const_iterator user_it = std::find(member_list.begin(), member_list.end(), user);
+						if (user_it == member_list.end())
+						{
+							// If the user is not a member of the channel
+							send_message(user->get_prefix() + " 482 " + user->get_nickname() + " " + *it + " :You're not on that channel", user->get_fd());
+							return;
+						}
 						for (std::list<User *>::const_iterator user_it = member_list.begin(); user_it != member_list.end(); ++user_it)
 						{
 							if (*user_it != user)
