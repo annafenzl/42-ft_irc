@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 16:12:24 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/19 14:03:34 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/19 14:34:43 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	Server::privmsg_command(Request request)
 			for (it = targets.begin(); it != targets.end(); ++it)
 			{
 				// ERR_CANNOTSENDTOCHAN
-				std::cout << "available channels: "<< std::endl;
+				// std::cout << "available channels: "<< std::endl;
 				for (channelmap::iterator it = _channels.begin(); it != _channels.end(); ++it)
 					std::cout << it->first << ", ";
 				std::cout << std::endl;
@@ -118,6 +118,8 @@ void	Server::privmsg_command(Request request)
 					else
 					{
 						const std::list<User *> &member_list = _channels.find(*it)->second.getMembers();
+						if (member_list.empty())
+							continue ;
 						for (std::list<User *>::const_iterator user_it = member_list.begin(); user_it != member_list.end(); ++user_it)
 						{
 							if (*user_it != user)

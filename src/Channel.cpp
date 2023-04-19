@@ -198,3 +198,9 @@ User *Channel::getMember( const std::string & nickname )
 	}
 	return (NULL);
 }
+
+
+void Channel::removeMember(User *user)
+{
+	_members.remove(user);
+}

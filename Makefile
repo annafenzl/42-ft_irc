@@ -40,6 +40,10 @@ clean:
 
 fclean: clean
 	$(RM) $(NAME)
+	@rm -rf *.d
+	@rm -rf src/*.d
+	@rm -rf inc/*.d
+	@rm -rf src/cmds/*.d
 
 re: fclean all
 
