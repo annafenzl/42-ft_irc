@@ -84,6 +84,3 @@ PARAMS: <#channel1> <No boundaries on the net!>
 ----------------------------------
 RESPONSE IS <:ircserv.com 442 sdasd :not on channel> -->
 >>>>>>> origin/katchogl
-
-// prevent gsl dangling pointer issue, need to make copy get_params ()
-	// else params returned by functon call are destroyed, and begin or end its are invalid!
