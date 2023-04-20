@@ -15,11 +15,11 @@
 
 /// ! constructors and destructor !
 Channel::Channel( void )
-	: _name("*"), _topic("*"), _modes("nt"), _password("*")
+	: _name("*"), _topic("*"), _modes("t"), _password("*")
 {}
 
 Channel::Channel( const std::string & name, const std::string & password )
-	: _name(name), _topic("*"), _modes("nt"), _password(password)
+	: _name(name), _topic("*"), _modes("t"), _password(password)
 {
 	std::cout << "\033[0;32m[INFO] new channel: " + _name 
 		+  ", with password: '" + _password + "' created\033[0m" << std::endl;
@@ -150,7 +150,7 @@ bool	Channel::isValidChannelName( const std::string & name )
 {
 	int i;
 
-	if (name.empty () || (name[0] != '#' && name[0] != '&'))
+	if (name.empty () || (name[0] != '#'))
 		return (false);
 	i = -1;
 	while (name[++i])

@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 00:45:11 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/19 09:54:17 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/20 11:16:37 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,13 @@ void Server::mode_command( Request request )
 	if (updates.empty ())
 		request.set_info ("+" + channelIt->second.getModes ());
 	else
+	{
 		request.set_info (updates);
+		broadcast (":" + std::string (SERVER_NAME)
+					+ " MODE"
+					+ " " + channelIt->second.getName ()
+					+ " " + updates
+					, request.get_user (), channelIt->second);
+	}
 	send_message (request, RES_MODE);
 }

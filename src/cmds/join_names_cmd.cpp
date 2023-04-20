@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:21:43 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/19 09:23:05 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/20 11:35:37 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ void Server::join_names_command( Request request )
 	std::string 						passwords;
 	std::string 						password;
 	size_t								pos2;
+
+	std::list<User *>::const_iterator			opIt;
 
 	if (request.get_params ().size () < 1)
 		return (send_message (request, RES_ERR_NEEDMOREPARAMS));
@@ -141,6 +143,18 @@ void Server::join_names_command( Request request )
 				
 			request.get_user ()->getChannels (0).insert (std::make_pair (it->first, &it->second));
 			send_names_list(request, it->second );
+			// notify new member on all ops
+			opIt = it->second.getOps ().begin ();
+			while (opIt != it->second.getOps ().end ())
+			{
+				send_message (
+					":" + std::string (SERVER_NAME)
+					+ " MODE"
+					+ " " + it->second.getName ()
+					+ " +o " + (*opIt)->get_nickname ()
+					, request.get_user ()->get_fd ());
+				opIt++;
+			}
 		}
 		else if (request.get_cmd () == "NAMES")
 		{
