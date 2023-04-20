@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 16:12:24 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/18 23:28:51 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/20 12:20:47 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 	edits passed &duplicate string, if the target it already in the set
 */
 
-std::set<std::string>	split_targets(std::string targets, std::string &duplicate)
+std::set<std::string>	Server::split_targets(std::string targets, std::string &duplicate)
 {
 	std::set<std::string>	splitted_targets;
 	std::istringstream		line(targets);

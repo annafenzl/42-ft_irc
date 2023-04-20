@@ -84,6 +84,3 @@ PARAMS: <#channel1> <No boundaries on the net!>
 ----------------------------------
 RESPONSE IS <:ircserv.com 442 sdasd :not on channel> -->
 >>>>>>> origin/katchogl
-
-
-/Fix &, add notify new memeber on all ops, add broadcast on /MODE

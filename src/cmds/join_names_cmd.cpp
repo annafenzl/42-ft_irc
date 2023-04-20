@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:21:43 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/20 11:35:37 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/20 16:58:21 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void Server::broadcast (std::string message, User* user, Channel& channel)
 	std::list<User*>::const_iterator userIt;
 	
 	for (userIt = channel.getMembers().begin(); userIt != channel.getMembers().end(); ++userIt)
-		if ((*userIt) != user)
+		if (user == NULL || (*userIt) != user)
 			send_message(message, (*userIt)->get_fd());
 }
 

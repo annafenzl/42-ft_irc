@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/19 09:20:35 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/20 12:20:50 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,10 +93,10 @@ class Server
 	void execute_command(Request request);
 	void remove_user(User *user);
 	void remove_user(User *user, std::string &string);
-
 	
 	void				check_login_complete(User *user);
 	usermap::iterator	check_for_user(std::string nickname);
+	std::set<std::string>	split_targets(std::string targets, std::string &duplicate);
 
 	// --- commands
 	void cap_command(Request request);
