@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kick_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 21:54:36 by pguranda          #+#    #+#             */
-/*   Updated: 2023/04/19 16:56:13 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/20 18:16:21 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void Server::kick_command(Request request)
 				send_message(response, user->get_fd());
 				continue;
 			}
-			channel->removeMember(target_user);
+			channel->remove(target_user);
 			std::string kick_message = "KICK " + channels[i] + " " + users_to_kick[j] + " :" + comment;
 			send_message(kick_message, target_user->get_fd());
 			//send the kick message to all users in the channel

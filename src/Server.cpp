@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/19 18:17:25 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/20 13:12:07 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,7 +237,7 @@ void Server::handle_command(char* cmd, int user_fd)
 	User	*user = &_user_map.find(user_fd)->second;
 
 	user->append_buff(cmd);
-	for (size_t end_pos = user->buff.find(END_SEQUENCE);end_pos != std::string::npos ; end_pos = user->buff.find(END_SEQUENCE))
+	for (size_t end_pos = user->buff.find(END_SEQUENCE);end_pos != 512 ; end_pos = user->buff.find(END_SEQUENCE))
 	{
 		std::string part = user->buff.substr(0, end_pos);
 		user->buff.erase(0, end_pos + 2);
