@@ -15,11 +15,11 @@
 
 /// ! constructors and destructor !
 Channel::Channel( void )
-	: _name("*"), _topic("*"), _modes(t_mode), _password("*")
+	: _name("*"), _topic("*"), _modes(t_mode), _password("*"), _limit(-1)
 {}
 
 Channel::Channel( const std::string & name, const std::string & password )
-	: _name(name), _topic("*"), _modes(t_mode), _password(password)
+	: _name(name), _topic("*"), _modes(t_mode), _password(password), _limit(-1)
 {
 	std::cout << "\033[0;32m[INFO] new channel: " + _name 
 		+  ", with password: '" + _password + "' created\033[0m" << std::endl;
@@ -53,7 +53,7 @@ Channel &Channel::operator=( const Channel & channel )
 
 Channel::Channel( const Channel & channel ):
 	_name(channel.getName ()), _topic(channel.getTopic ()),
-	_modes(channel.getModes ()), _password(channel.getPassword ())
+	_modes(channel.getModes ()), _password(channel.getPassword ()), _limit(channel.getLimit())
 {
 	std::list<User *>::const_iterator it;
 	
@@ -74,9 +74,10 @@ Channel::Channel( const Channel & channel ):
 Channel::~Channel( void ) {}
 
 /// ! getters !
+int		Channel::getLimit( void ) const { return (_modes); }
+short	Channel::getModes( void ) const { return (_modes); }
 const std::string &Channel::getName( void ) const { return (_name ); }
 const std::string &Channel::getTopic( void ) const { return (_topic ); }
-short Channel::getModes( void ) const { return (_modes); }
 const std::string &Channel::getPassword( void ) const { return (_password ); }
 const std::list<User *> &Channel::getMembers( void ) const { return (_members); }
 std::list<User *> &Channel::getMembers( int ) { return (_members); }
@@ -85,6 +86,7 @@ std::list<User *> &Channel::getOps( int ) { return (_ops); }
 
 /// ! setters !
 void Channel::setTopic( const std::string & topic ) { _topic = topic; }
+void Channel::setPassword( const std::string & password ) { _password= password; }
 
 /// ! container modifiers !
 void Channel::insert( User * user )
@@ -178,7 +180,7 @@ bool Channel::isOp( User *user ) const
 
 bool Channel::hasMode( char mode ) const
 {
-	return (_modes & mode);
+	return (_modes & ModeToBitmask(mode));
 }
 
 User *Channel::getMember( const std::string & nickname )
@@ -195,9 +197,9 @@ User *Channel::getMember( const std::string & nickname )
 	return (NULL);
 }
 
-std::string Channel::getModeAsString(const char sign) const
+std::string Channel::getModeAsString( void ) const
 {
-	std::string mode_string = (sign == '+') ? "+" : "-";
+	std::string mode_string = "+";
 
 	if (_modes & i_mode)
 		mode_string.append("i");
@@ -213,38 +215,50 @@ std::string Channel::getModeAsString(const char sign) const
 	return mode_string;
 }
 
-bool Channel::execMode(char mode, std::vector<std::string> params)
+bool Channel::execMode(char mode, char sign, std::vector<std::string> params, unsigned int * i)
 {
-	bool ret = true;
-
 	// also need to reverse settings in case of '-'
-	// need to find a way to handle flags with params (k and l are called at the same time)
+	// need to find a way to handle flags with params (k and l are called at the same time
+	(void)i;
+	if (params.size() > 0)
+		std::cout << "hey";
 
 	// invite only
-	if (params.size() > 9)
-		std::cout << "mus los" << std::endl;
 	if (mode == 'i')
 	{
 		std::cout << "got i" << std::endl;
+		return true;
 	}
+	// topic
 	else if (mode == 't')
 	{
 		std::cout << "got t" << std::endl;
+		return true;
 	}
 	// operator
 	else if (mode == 'o')
 	{
 		std::cout << "got o" << std::endl;
+		return true;
 	}
 	// key
 	else if (mode == 'k')
 	{
 		std::cout << "got k" << std::endl;
+		if (sign == '-')
+			setPassword("*");
+		return true;
 	}
 	// limit
 	else if (mode == 'l')
 	{
-		std::cout << "got l" << std::endl;
+		// int update_limit = strtol(params[2].c_str(), NULL, 10);
+		// if (update_limit > static_cast<int>(_members.size()))
+		// {
+		// 	_limit = update_limit;
+		// 	std::cout << "set limit to " << _limit << std::endl;
+			return true;
+		// }
 	}
-	return ret;
+	return false;
 }

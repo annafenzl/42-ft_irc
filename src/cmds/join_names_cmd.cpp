@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join_names_cmd.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:21:43 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/19 09:23:05 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/21 16:49:14 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,8 @@ void Server::join_names_command( Request request )
 			send_message (request, RES_ERR_CHANNELALREADYJOINED);
 		else if (request.get_cmd () == "JOIN")
 		{
+			// if (it->second.getLimit() != -1 && static_cast<int>(it->second.getMembers().size()) == it->second.getLimit())
+				
 			send_message (request, RES_CHANNELJOINED);
 			it->second.insert (request.get_user ());
 			

@@ -6,7 +6,7 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 18:15:17 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/20 18:53:21 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/21 20:04:49 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ class Channel
 		std::string			_password;
 		std::list<User *>	_members;
 		std::list<User *>	_ops;
+		int					_limit;
 		
 		/// ! constructors, copy assignment operator, destructor !
 	public:
@@ -56,6 +57,7 @@ class Channel
 		
 		/// ! getters !
 		short getModes( void ) const;
+		int   getLimit( void ) const;
 		const std::string &getName( void ) const;
 		const std::string &getTopic( void ) const;
 		const std::string &getPassword( void ) const;
@@ -66,6 +68,7 @@ class Channel
 
 		/// ! setters !
 		void setTopic( const std::string & topic );
+		void setPassword( const std::string & password );
 
 		/// ! container modifiers !
 		void insert( User * user );
@@ -75,7 +78,7 @@ class Channel
 		void removeOp( User * op );
 
 		void editMode (char mode, char sign);
-		bool execMode (char mode, std::vector<std::string> params);
+		bool execMode (char mode, char sign, std::vector<std::string> params, unsigned int *i);
 
 
 		/// ! utility !
@@ -87,6 +90,6 @@ class Channel
 		bool hasMode (char mode ) const;
 		
 		User *getMember( const std::string & nickame );
-		std::string getModeAsString(const char sign) const;
+		std::string getModeAsString( void ) const;
 };
 #endif
