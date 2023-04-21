@@ -173,7 +173,6 @@ bool Channel::isOp( User *user ) const
 bool Channel::hasMode( char m ) const
 {
 	size_t i;
-	std::string nModes;
 
 	i = 0;
 	while (_modes[i])
