@@ -44,6 +44,7 @@ fclean: clean
 	@rm -rf src/*.d
 	@rm -rf inc/*.d
 	@rm -rf src/cmds/*.d
+	@rm -rf *.dmg
 
 re: fclean all
 
