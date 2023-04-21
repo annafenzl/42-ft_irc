@@ -85,6 +85,7 @@ const std::list<User *> &Channel::getOps( void ) const { return (_ops); }
 std::list<User *> &Channel::getOps( int ) { return (_ops); }
 
 /// ! setters !
+void Channel::setLimit( int limit ) { _limit = limit; }
 void Channel::setTopic( const std::string & topic ) { _topic = topic; }
 void Channel::setPassword( const std::string & password ) { _password= password; }
 
@@ -219,9 +220,6 @@ bool Channel::execMode(char mode, char sign, std::vector<std::string> params, un
 {
 	// also need to reverse settings in case of '-'
 	// need to find a way to handle flags with params (k and l are called at the same time
-	(void)i;
-	if (params.size() > 0)
-		std::cout << "hey";
 
 	// invite only
 	if (mode == 'i')
@@ -232,8 +230,17 @@ bool Channel::execMode(char mode, char sign, std::vector<std::string> params, un
 	// topic
 	else if (mode == 't')
 	{
-		std::cout << "got t" << std::endl;
-		return true;
+		std::cout << "got l" << std::endl;
+		if (sign == '-')
+		{
+			setTopic("no topic set");
+			return true;
+		}
+		else if (params.size() - 1 > *i)
+		{
+			setTopic(params[++(*i)]);
+			return true;
+		}
 	}
 	// operator
 	else if (mode == 'o')
@@ -246,19 +253,35 @@ bool Channel::execMode(char mode, char sign, std::vector<std::string> params, un
 	{
 		std::cout << "got k" << std::endl;
 		if (sign == '-')
+		{
 			setPassword("*");
-		return true;
+			return true;
+		}
+		else if(params.size() - 1 > *i)
+		{
+			setPassword(params[++(*i)]);
+			return true;
+		}
 	}
 	// limit
 	else if (mode == 'l')
 	{
-		// int update_limit = strtol(params[2].c_str(), NULL, 10);
-		// if (update_limit > static_cast<int>(_members.size()))
-		// {
-		// 	_limit = update_limit;
-		// 	std::cout << "set limit to " << _limit << std::endl;
+		std::cout << "got l" << std::endl;
+		if (sign == '-')
+		{
+			setLimit(-1);
 			return true;
-		// }
+		}
+		else if (params.size() - 1 > *i)
+		{
+			int update_limit = strtol(params[++(*i)].c_str(), NULL, 10);
+			if (update_limit > static_cast<int>(_members.size()))
+			{
+				_limit = update_limit;
+				std::cout << "set limit to " << _limit << std::endl;
+				return true;
+			}
+		}
 	}
 	return false;
 }

@@ -6,7 +6,7 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 18:15:17 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/21 20:04:49 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/21 20:38:04 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ class Channel
 
 		/// ! setters !
 		void setTopic( const std::string & topic );
+		void setLimit( int limit );
 		void setPassword( const std::string & password );
 
 		/// ! container modifiers !
@@ -79,7 +80,6 @@ class Channel
 
 		void editMode (char mode, char sign);
 		bool execMode (char mode, char sign, std::vector<std::string> params, unsigned int *i);
-
 
 		/// ! utility !
 		static bool isValidChannelName( const std::string & name );
