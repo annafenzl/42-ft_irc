@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 14:25:33 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/21 20:43:40 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/21 22:06:17 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef enum e_res
 	RES_ERR_NOTREGISTERED_CHAN = 451,
 	RES_ERR_BADCHANNELKEY = 475,
 	RES_ERR_BANNEDFROMCHAN = 474,
+	RES_ERR_CHANNELISFULL = 471,
 
 	/** LIST */
 	RES_RPL_LISTSTART = 321,
