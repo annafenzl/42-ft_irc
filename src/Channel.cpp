@@ -20,6 +20,7 @@ Channel::Channel( void )
 
 Channel::Channel( const std::string & name, const std::string & password )
 	: _name(name), _topic("*"), _modes(t_mode), _password(password), _limit(-1)
+
 {
 	std::cout << "\033[0;32m[INFO] new channel: " + _name 
 		+  ", with password: '" + _password + "' created\033[0m" << std::endl;
@@ -171,12 +172,12 @@ bool Channel::isValidMode(char mode)
 
 bool Channel::isMember( User *user ) const
 {
-	return (find (_members.begin (), _members.end (), user) != _members.end ());
+	return (std::find (_members.begin (), _members.end (), user) != _members.end ());
 }
 
 bool Channel::isOp( User *user ) const
 {
-	return (find (_ops.begin (), _ops.end (), user) != _ops.end ());
+	return (std::find (_ops.begin (), _ops.end (), user) != _ops.end ());
 }
 
 bool Channel::hasMode( char mode ) const

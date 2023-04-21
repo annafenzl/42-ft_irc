@@ -81,9 +81,16 @@ void Server::mode_command( Request request)
 			updates += " ";
 		}
 	}
-	if (!updates.empty ())
-		request.set_info (updates);
-	else
+	if (updates.empty ())
 		request.set_info (channelIt->second.getModeAsString ());
+  else
+  {
+    request.set_info (updates);
+    broadcast (":" + std::string (SERVER_NAME)
+          + " MODE"
+          + " " + channelIt->second.getName ()
+          + " " + updates
+          , request.get_user (), channelIt->second);
+  }
 	send_message (request, RES_MODE);
 }

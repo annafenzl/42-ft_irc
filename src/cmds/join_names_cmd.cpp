@@ -41,7 +41,7 @@ void Server::broadcast (std::string message, User* user, Channel& channel)
 	std::list<User*>::const_iterator userIt;
 	
 	for (userIt = channel.getMembers().begin(); userIt != channel.getMembers().end(); ++userIt)
-		if ((*userIt) != user)
+		if (user == NULL || (*userIt) != user)
 			send_message(message, (*userIt)->get_fd());
 }
 
@@ -57,6 +57,8 @@ void Server::join_names_command( Request request )
 	std::string 						passwords;
 	std::string 						password;
 	size_t								pos2;
+
+	std::list<User *>::const_iterator			opIt;
 
 	if (request.get_params ().size () < 1)
 		return (send_message (request, RES_ERR_NEEDMOREPARAMS));
@@ -141,6 +143,18 @@ void Server::join_names_command( Request request )
 				
 			request.get_user ()->getChannels (0).insert (std::make_pair (it->first, &it->second));
 			send_names_list(request, it->second );
+			// notify new member on all ops
+			opIt = it->second.getOps ().begin ();
+			while (opIt != it->second.getOps ().end ())
+			{
+				send_message (
+					":" + std::string (SERVER_NAME)
+					+ " MODE"
+					+ " " + it->second.getName ()
+					+ " +o " + (*opIt)->get_nickname ()
+					, request.get_user ()->get_fd ());
+				opIt++;
+			}
 		}
 		else if (request.get_cmd () == "NAMES")
 		{

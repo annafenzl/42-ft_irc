@@ -94,10 +94,10 @@ class Server
 	void execute_command(Request request);
 	void remove_user(User *user);
 	void remove_user(User *user, std::string &string);
-
 	
 	void				check_login_complete(User *user);
 	usermap::iterator	check_for_user(std::string nickname);
+	std::set<std::string>	split_targets(std::string targets, std::string &duplicate);
 
 	// --- commands
 	void cap_command(Request request);
