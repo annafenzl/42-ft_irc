@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 22:28:21 by pguranda          #+#    #+#             */
-/*   Updated: 2023/04/21 10:08:59 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/21 13:47:49 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,7 @@ void Server::invite_command(Request request)
 	}
 
 	// Check if channel exists - no requirement that the
-	//    channel the target user is being invited to must exist or be a valid
-	//    channel. 
+	// channel the target user is being invited to must exist or be a valid channel. 
 	it = _channels.find(channelName);
 	if (it == _channels.end())
 	{
@@ -84,5 +83,4 @@ void Server::invite_command(Request request)
 	// Send invitation
 	send_message(":" + request.get_user()->get_nickname() + "!" + request.get_user()->get_nickname() + "@" SERVER_NAME " INVITE " + invitedUser->get_nickname() + " :" + channelName, invitedUser->get_fd());
 	send_message(SERVER_NAME ": 341 " + request.get_user()->get_nickname() + " " + invitedUser->get_nickname() + " " + channelName, request.get_user()->get_fd());
-	// send_message(request, RES_INVITED);
 }
