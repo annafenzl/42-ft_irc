@@ -45,17 +45,26 @@ void Server::part_command( Request request )
 		// PART
 		// check valid channel name
 		if (!Channel::isValidChannelName (channelName))
-			return (send_message (request, RES_ERR_BADCHANNAME));
+		{
+			send_message (request, RES_ERR_BADCHANNAME);
+			continue ;
+		}
 
 		// check whether channel exists
 		channelIt = _channels.find (channelName);
 		if (channelIt == _channels.end ())
-			return (send_message (request, RES_ERR_NOSUCHCHANNEL));
+		{
+			send_message (request, RES_ERR_NOSUCHCHANNEL);
+			continue ;
+		}
 
 		// check whether user is on channel
 		if (request.get_user ()->getChannels (0).find (channelName)
 			== request.get_user ()->getChannels (0).end ())
-			return (send_message (request, RES_ERR_NOTONCHANNEL));
+		{
+			send_message (request, RES_ERR_NOTONCHANNEL);
+			continue ;
+		}
 			
 		// remove user from channel
 		channelIt->second.remove (request.get_user ());
