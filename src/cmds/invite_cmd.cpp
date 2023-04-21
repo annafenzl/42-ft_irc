@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 22:28:21 by pguranda          #+#    #+#             */
-/*   Updated: 2023/04/21 13:47:49 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/21 21:34:32 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,12 @@ void Server::invite_command(Request request)
 	if (it->second.isMember(invitedUser))
 	{
 		send_message(SERVER_NAME ": 443 " + request.get_user()->get_nickname() + " " + invitedUser->get_nickname() + " " + channelName + " is already on channel", request.get_user()->get_fd());
+		return;
+	}
+
+	if (it->second.hasMode('i') && !it->second.isOp(request.get_user()))
+	{
+		send_message( SERVER_NAME ": 482 " + it->second.getName() + " :You're not a channel operator", request.get_user()->get_fd());
 		return;
 	}
 
