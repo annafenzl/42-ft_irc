@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:21:43 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/21 23:20:52 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/21 23:22:12 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ void Server::join_names_command( Request request )
 			std::cout << "Channel members: " << it->second.getMembers().size() << std::endl;
 			if (it->second.hasMode('l') && it->second.getLimit() != -1 && static_cast<int>(it->second.getMembers().size()) >= it->second.getLimit())
 			{
-				send_message (SERVER_NAME " 471 " + request.get_user()->get_nickname() + it->second.getName() + " Cannot join channel (+l) - channel is full", request.get_user()->get_fd());
+				send_message (SERVER_NAME ": 471 " + request.get_user()->get_nickname() + it->second.getName() + " :Cannot join channel (+l) - channel is full", request.get_user()->get_fd());
 				continue;
 			}
 				
