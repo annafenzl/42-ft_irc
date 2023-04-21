@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 21:54:36 by pguranda          #+#    #+#             */
-/*   Updated: 2023/04/21 14:56:54 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/21 20:43:20 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void Server::kick_command(Request request)
 				continue;
 			}
 			std::string kick_message = "KICK " + channels[i] + " " + users_to_kick[j] + " :" + comment;
-			channel->removeMember(&check_for_user(users_to_kick[j])->second);
+			channel->remove(&check_for_user(users_to_kick[j])->second);
 			send_message(kick_message, target_user->get_fd());
 			for (std::list<User*>::const_iterator userIt = channel->getMembers().begin(); userIt != channel->getMembers().end(); ++userIt)
 			{

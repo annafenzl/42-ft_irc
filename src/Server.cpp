@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/19 22:28:57 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/21 20:43:46 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,7 +237,7 @@ void Server::handle_command(char* cmd, int user_fd)
 	User	*user = &_user_map.find(user_fd)->second;
 
 	user->append_buff(cmd);
-	for (size_t end_pos = user->buff.find(END_SEQUENCE);end_pos != std::string::npos ; end_pos = user->buff.find(END_SEQUENCE))
+	for (size_t end_pos = user->buff.find(END_SEQUENCE);end_pos != 512 ; end_pos = user->buff.find(END_SEQUENCE))
 	{
 		std::string part = user->buff.substr(0, end_pos);
 		user->buff.erase(0, end_pos + 2);

@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 14:25:33 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/19 22:34:57 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/21 20:43:40 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef enum e_res
 	RES_RPL_LISTSTART = 321,
 	RES_RPL_LIST = 322,
 	RES_RPL_LISTEND = 323,
+	RES_RPL_CHANNELMODEIS = 324,
 
 	/** TOPIC */
 	RES_RPL_NOTOPIC = 331,

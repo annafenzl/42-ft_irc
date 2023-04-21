@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 00:45:11 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/19 09:54:17 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/21 20:28:46 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,96 +17,73 @@
 /// /MODE <channel> ?[ (+/-)<modes> {args} ]
 /////////////////////////////////////////////////
 
-void Server::mode_command( Request request )
+void Server::mode_command( Request request)
 {
 	channelmap::iterator channelIt;
-	size_t			i;
-	size_t			j;
-	std::string			nModes;
-	std::string			updates;
-	User				*user;
-	bool				isset;
-	
+	std::string	updates;
+	std::vector<std::string> params;
+
 	if (request.get_params ().size () < 1)
 		return (send_message (request, RES_ERR_NEEDMOREPARAMS));
-		
-	request.set_channel_name (request.get_params ()[0]);
 	
+	request.set_channel_name (request.get_params ()[0]);
+
 	if (!Channel::isValidChannelName (request.get_params ()[0]))
 		return (send_message (request, RES_ERR_BADCHANNAME));
-		
-	channelIt = _channels.find (request.get_params ()[0]);
 	
+	channelIt = _channels.find (request.get_params ()[0]);
+
 	if (channelIt == _channels.end ())
 		return (send_message (request, RES_ERR_NOSUCHCHANNEL));
-		
-	if (request.get_params ().size () > 1)
+
+	if (channelIt->second.isOp(request.get_user()) == false)
+		return (send_message (request, RES_ERR_CHANNOPRIVSNEEDED));
+
+	params = request.get_params ();
+
+	if (params.size() == 1)
+		request.set_info (channelIt->second.getModeAsString ());
+	
+	else
 	{
-		i = 0;
-		while (++i < request.get_params ().size ())
+		for (unsigned int i = 1; i < params.size(); ++i)
 		{
-			if (request.get_params ()[i][0] != '+' && request.get_params ()[i][0] != '-')
-				continue ;
-			else if (!channelIt->second.isOp (request.get_user ()))
-				return (send_message (request, RES_ERR_CHANNOPRIVSNEEDED));
-
-			j = 0;
-			isset = false;
-			while (request.get_params ()[i][++j])
+			for (std::string::const_iterator it = params[i].begin(); it != params[i].end(); ++it)
 			{
-
-				if (request.get_params ()[i][j] == 'o' && request.get_params ()[i].length () == 2)
+				char sign = *params[i].begin();
+				if (it == params[i].begin() && (sign == '+' || sign == '-'))
 				{
-					if (i == request.get_params ().size () - 1)
+					updates += sign;
+					continue ;
+				}
+				
+				if (!channelIt->second.isValidMode(*it))
+				{ 
+					std::cout << *it << " is not a valid mode " << std::endl;
+					continue ;
+				}
+	
+				if (sign  == '+' || sign == '-')
+				{
+					if (channelIt->second.execMode (*it, sign ,params, &i)) // TODO: exec, fetch next arg if needed and increment index
 					{
-						send_message (request, RES_ERR_NEEDMOREPARAMS);
-						continue ;
-					}
-					user = channelIt->second.getMember (request.get_params ()[i + 1]);
-					if (user == NULL)
-					{
-						send_message (":irc.example.com #channel : \x034Not on Channel!", request.get_user ()->get_fd ());
-						continue ;
-					}
-					if ((request.get_params ()[i][0] == '+' && !channelIt->second.isOp (user))
-						|| (request.get_params ()[i][0] == '-' && channelIt->second.isOp (user)))
-					{
-						if (request.get_params ()[i][0] == '+' && !channelIt->second.isOp (user))
-							channelIt->second.insertOp (user);
-						else
-							channelIt->second.removeOp (user);
-						updates += " " + request.get_params ()[i]  + " " + request.get_params ()[i + 1];
-						isset = false;
+						updates += *it;
+						if (*it == 'o' || *it == 'k' || *it == 'l')
+							updates += " " + params[i];
+						channelIt->second.editMode (*it, sign);
 					}
 				}
-				else if (request.get_params ()[i][j] != 'o' &&
-					((request.get_params ()[i][0] == '+'
-						&& !channelIt->second.hasMode (request.get_params ()[i][j]))
-					|| (request.get_params ()[i][0] == '-'
-						&& channelIt->second.hasMode (request.get_params ()[i][j]))))
+				else
 				{
-					std::cout << "\033[0;36m[LOG]current modes are: " <<
-						channelIt->second.getModes () << "\033[0m\n" << std::endl;
-					if (request.get_params ()[i][0] == '+'
-						&& !channelIt->second.hasMode (request.get_params ()[i][j]))
-						channelIt->second.addMode (request.get_params ()[i][j]);
-					else
-						channelIt->second.removeMode (request.get_params ()[i][j]);
-					if (!isset)
-					{
-						updates += std::string(" ") + request.get_params ()[i][0];
-						isset = true;
-					}
-					std::cout << "\033[0;36m[LOG]mew modes are: " << 
-						channelIt->second.getModes () << "\033[0m\n" << std::endl;
-					updates += request.get_params ()[i][j];
+					// get info and send response according to mode
 				}
 			}
+			updates += " ";
 		}
 	}
-	if (updates.empty ())
-		request.set_info ("+" + channelIt->second.getModes ());
-	else
+	if (!updates.empty ())
 		request.set_info (updates);
+	else
+		request.set_info (channelIt->second.getModeAsString ());
 	send_message (request, RES_MODE);
 }
