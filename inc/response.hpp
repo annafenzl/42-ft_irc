@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 14:25:33 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/19 05:55:53 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/20 17:48:45 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef enum e_res
 	RES_RPL_LISTSTART = 321,
 	RES_RPL_LIST = 322,
 	RES_RPL_LISTEND = 323,
+	RES_RPL_CHANNELMODEIS = 324,
 
 	/** TOPIC */
 	RES_RPL_NOTOPIC = 331,

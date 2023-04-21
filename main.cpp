@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:06:05 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/08 12:50:04 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/19 18:12:26 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

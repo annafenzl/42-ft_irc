@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg_cmd.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 16:12:24 by afenzl            #+#    #+#             */
 /*   Updated: 2023/04/20 12:20:47 by katchogl         ###   ########.fr       */
@@ -96,7 +96,7 @@ void	Server::privmsg_command(Request request)
 			for (it = targets.begin(); it != targets.end(); ++it)
 			{
 				// ERR_CANNOTSENDTOCHAN
-				std::cout << "available channels: "<< std::endl;
+				// std::cout << "available channels: "<< std::endl;
 				for (channelmap::iterator it = _channels.begin(); it != _channels.end(); ++it)
 					std::cout << it->first << ", ";
 				std::cout << std::endl;
@@ -118,6 +118,16 @@ void	Server::privmsg_command(Request request)
 					else
 					{
 						const std::list<User *> &member_list = _channels.find(*it)->second.getMembers();
+						if (member_list.empty())
+							continue ;
+							//check if member_list contains the user
+						std::list<User*>::const_iterator user_it = std::find(member_list.begin(), member_list.end(), user);
+						if (user_it == member_list.end())
+						{
+							// If the user is not a member of the channel
+							send_message(user->get_prefix() + " 482 " + user->get_nickname() + " " + *it + " :You're not on that channel", user->get_fd());
+							return;
+						}
 						for (std::list<User *>::const_iterator user_it = member_list.begin(); user_it != member_list.end(); ++user_it)
 						{
 							if (*user_it != user)
@@ -129,14 +139,6 @@ void	Server::privmsg_command(Request request)
 			}
 		}
 	}
-	
-	//BOT handling of commands sent with PRIVMSG
-	// showtime_bot_command(request);
-	// ERR_NOTOPLEVEL	
-		// 413   "<mask> :No toplevel domain specified"
-	// ERR_WILDTOPLEVEL
-		// 414 "<mask> :Wildcard in toplevel domain"
-	// RPL_AWAY if the user is currently away
-	
+
 	send_message(response, user->get_fd());
 }

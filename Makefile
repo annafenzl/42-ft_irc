@@ -14,7 +14,7 @@
 NAME = ircserv
 
 CC = c++
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g -std=c++98 -I./inc
+CFLAGS = -Wall -Wextra -Werror -MD -g -std=c++98 -I./inc -fsanitize=address
 RM := rm -f
 CDEPS = $(patsubst %, inc/%.hpp, Bot Channel response Request Server User);
 
@@ -40,6 +40,10 @@ clean:
 
 fclean: clean
 	$(RM) $(NAME)
+	@rm -rf *.d
+	@rm -rf src/*.d
+	@rm -rf inc/*.d
+	@rm -rf src/cmds/*.d
 
 re: fclean all
 

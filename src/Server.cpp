@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/19 02:37:36 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/20 13:12:07 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,13 +190,13 @@ void Server::remove_user(User *user)
 	}
 	// remove from map to consider emoving teh channels in the User class??
 	_user_map.erase(user->get_fd());
-	
 }
 
 void Server::remove_user(User *user, std::string & reason)
 {
-	std::list<std::string> empty_channels;
-	
+	std::list<std::string>	empty_channels;
+	int						user_fd = user->get_fd();
+
 	// remove from all channels
 	for (channelmap::iterator it = _channels.begin(); it != _channels.end(); ++it)
 	{
@@ -221,7 +221,7 @@ void Server::remove_user(User *user, std::string & reason)
 	// remove from poll array
 	for (unsigned int i = 0; i < _fd_count; ++i)
 	{
-		if (_user_poll[i].fd == user->get_fd())
+		if (_user_poll[i].fd == user_fd)
 		{
 			remove_from_poll(i);
 			break ;
@@ -237,14 +237,15 @@ void Server::handle_command(char* cmd, int user_fd)
 	User	*user = &_user_map.find(user_fd)->second;
 
 	user->append_buff(cmd);
-	for (size_t end_pos = user->buff.find(END_SEQUENCE); end_pos != std::string::npos ; end_pos = user->buff.find(END_SEQUENCE))
+	for (size_t end_pos = user->buff.find(END_SEQUENCE);end_pos != 512 ; end_pos = user->buff.find(END_SEQUENCE))
 	{
 		std::string part = user->buff.substr(0, end_pos);
 		user->buff.erase(0, end_pos + 2);
-		
 		Request request(part, user);
 		request.print();
 		execute_command(request);
+		if (_user_map.find(user_fd) == _user_map.end())
+			break;
 	}
 }
 
@@ -293,6 +294,7 @@ void Server::execute_command( Request request)
 	else
 		send_message(SERVER_NAME " 421 " + request.get_user()->get_nickname() + " " + cmd + " :Unknown command", request.get_user()->get_fd());
 }
+
 void Server::add_to_poll(int user_fd)
 {
 	if (_fd_count >= SOMAXCONN)
