@@ -171,12 +171,12 @@ bool Channel::isValidMode(char mode)
 
 bool Channel::isMember( User *user ) const
 {
-	return (find (_members.begin (), _members.end (), user) != _members.end ());
+	return (std::find (_members.begin (), _members.end (), user) != _members.end ());
 }
 
 bool Channel::isOp( User *user ) const
 {
-	return (find (_ops.begin (), _ops.end (), user) != _ops.end ());
+	return (std::find (_ops.begin (), _ops.end (), user) != _ops.end ());
 }
 
 bool Channel::hasMode( char mode ) const

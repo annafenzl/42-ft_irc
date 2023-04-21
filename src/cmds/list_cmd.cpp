@@ -14,28 +14,31 @@
 
 void Server::list_command( Request request )
 {
+	std::set<std::string>				reqChannels;
 	Server::channelmap::const_iterator	channelIt;
-	User *user = request.get_user ();
+	std::string							dup;
 
 	if (!user->is_registered())
 		send_message( SERVER_NAME " 462 " + user->get_nickname() + " :Unauthorized command (not yet registered)", user->get_fd());
 	if (request.get_params ().size () )
 		send_message (request, RES_RPL_LISTSTART);
 	channelIt = _channels.begin ();
+
+	if (request.get_params ().size () > 0)
+		reqChannels = split_targets (request.get_params ()[0], dup);
+		
 	while (channelIt != _channels.end ())
 	{
-		std::ostringstream					stream;
-		if (request.get_params ().size () < 1 
-			|| std::find (request.get_params ().begin (),
-				request.get_params ().end (), channelIt->first)
-				!= request.get_params ().end ())
+		if (request.get_params ().size () == 0
+			|| reqChannels.find (channelIt->first) != reqChannels.end ())
 		{
+			std::ostringstream	stream;
 			stream << channelIt->second.getMembers ().size ();
 			request.set_info (channelIt->first + " " + stream.str () 
 				+ " :" + channelIt->second.getTopic ());
-			channelIt++;
 			send_message (request, RES_RPL_LIST);
 		}
+		channelIt++;
 	}
 	send_message (request, RES_RPL_LISTEND);
 }

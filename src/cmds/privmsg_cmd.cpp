@@ -22,7 +22,7 @@
 	edits passed &duplicate string, if the target it already in the set
 */
 
-std::set<std::string>	split_targets(std::string targets, std::string &duplicate)
+std::set<std::string>	Server::split_targets(std::string targets, std::string &duplicate)
 {
 	std::set<std::string>	splitted_targets;
 	std::istringstream		line(targets);
