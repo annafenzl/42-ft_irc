@@ -32,7 +32,7 @@ OBJ = $(SRC:.cpp=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) -pthread -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 	@echo "\033[0;32mplease run the program with ./ircserv <port> <passwort> \033[0m"
 
 clean:
@@ -50,5 +50,10 @@ re: fclean all
 run :
 	@make
 	./$(NAME) 6668 123
+
+get_client:
+	@echo "\033[0;32mDownloading and launching KVIrc client...\033[0m"
+	@curl -o KVIrc-5.0.0.dmg ftp://ftp.kvirc.net/pub/kvirc/5.0.0/binary/macosx/KVIrc-5.0.0.dmg
+	@open KVIrc-5.0.0.dmg
 
 .PHONY: all clean fclean re
