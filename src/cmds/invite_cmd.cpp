@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 22:28:21 by pguranda          #+#    #+#             */
-/*   Updated: 2023/04/21 09:51:34 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/21 10:08:59 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ void Server::invite_command(Request request)
 	{
 		return send_message(request, RES_ERR_NEEDMOREPARAMS);
 	}
-	if (request.get_params().size() > 2)
-	{
-		return;
-	}
+	// if (request.get_params().size() > 2)
+	// {
+	// 	return;
+	// }
 
 	nickname = request.get_params()[0];
 	channelName = request.get_params()[1];
@@ -49,8 +49,8 @@ void Server::invite_command(Request request)
 	}
 
 	// Check if channel exists - no requirement that the
-//    channel the target user is being invited to must exist or be a valid
-//    channel. 
+	//    channel the target user is being invited to must exist or be a valid
+	//    channel. 
 	it = _channels.find(channelName);
 	if (it == _channels.end())
 	{
@@ -77,7 +77,7 @@ void Server::invite_command(Request request)
 	// Check if invited user is already a member of the channel
 	if (it->second.isMember(invitedUser))
 	{
-		send_message(request, RES_ERR_NOTONCHANNEL);
+		send_message(SERVER_NAME ": 443 " + request.get_user()->get_nickname() + " " + invitedUser->get_nickname() + " " + channelName + " is already on channel", request.get_user()->get_fd());
 		return;
 	}
 

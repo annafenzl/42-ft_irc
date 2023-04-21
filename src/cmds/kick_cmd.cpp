@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 21:54:36 by pguranda          #+#    #+#             */
-/*   Updated: 2023/04/19 22:19:19 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/21 11:55:01 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,8 @@ void Server::kick_command(Request request)
 
 	std::vector<std::string> channels = split(params[0], ',');
 	std::vector<std::string> users_to_kick = split(params[1], ',');
-
-	if (params.size() == 2 && channels.size() != users_to_kick.size())
-	{
-		response = SERVER_NAME " 461 " + user->get_nickname() + " KICK :Mismatched number of channels and users";
-		send_message(response, user->get_fd());
-		return;
-	}
-
 	std::string comment = (params.size() > 2) ? params[2] : user->get_nickname();
+
 	for (std::vector<std::string>::size_type i = 0; i < channels.size(); ++i)
 	{
 		Channel *channel = find_channel(channels[i]);
@@ -95,15 +88,16 @@ void Server::kick_command(Request request)
 				send_message(response, user->get_fd());
 				continue;
 			}
-			channel->removeMember(target_user);
+
 			std::string kick_message = "KICK " + channels[i] + " " + users_to_kick[j] + " :" + comment;
+			channel->removeMember(&check_for_user(users_to_kick[j])->second);
 			send_message(kick_message, target_user->get_fd());
-			//send the kick message to all users in the channel
+
 			for (std::list<User*>::const_iterator userIt = channel->getMembers().begin(); userIt != channel->getMembers().end(); ++userIt)
 			{
 				send_message(kick_message, (*userIt)->get_fd());
 			}
-			//checking if the channel is empty, if yes, delete it
+
 			if (channel->getMembers().empty())
 			{
 				_channels.erase(channel->getName());

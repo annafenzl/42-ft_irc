@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 12:18:05 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/18 10:17:15 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/21 10:25:20 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ class User
 		bool is_registered() const;
 		bool is_pass_provided() const;
 		bool is_operator() const;
+		
 
 		// ------------- setters -----------------
 		
