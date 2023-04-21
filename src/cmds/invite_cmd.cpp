@@ -6,11 +6,9 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 22:28:21 by pguranda          #+#    #+#             */
-/*   Updated: 2023/04/19 22:35:37 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/21 09:51:34 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-
 
 #include "Server.hpp"
 
@@ -28,11 +26,15 @@ void Server::invite_command(Request request)
 	{
 		return send_message(request, RES_ERR_NEEDMOREPARAMS);
 	}
+	if (request.get_params().size() > 2)
+	{
+		return;
+	}
 
 	nickname = request.get_params()[0];
 	channelName = request.get_params()[1];
 
-	// Check if channel name is valid
+	// Check if channel name is valid here is 
 	if (!Channel::isValidChannelName(channelName))
 	{
 		send_message(request, RES_ERR_BADCHANNAME);
@@ -46,11 +48,13 @@ void Server::invite_command(Request request)
 		return;
 	}
 
-	// Check if channel exists
+	// Check if channel exists - no requirement that the
+//    channel the target user is being invited to must exist or be a valid
+//    channel. 
 	it = _channels.find(channelName);
 	if (it == _channels.end())
 	{
-		send_message(request, RES_ERR_NOSUCHCHANNEL);
+		// send_message(request, RES_ERR_NOSUCHCHANNEL);
 		return;
 	}
 
@@ -79,5 +83,6 @@ void Server::invite_command(Request request)
 
 	// Send invitation
 	send_message(":" + request.get_user()->get_nickname() + "!" + request.get_user()->get_nickname() + "@" SERVER_NAME " INVITE " + invitedUser->get_nickname() + " :" + channelName, invitedUser->get_fd());
-	send_message(request, RES_INVITED);
+	send_message(SERVER_NAME ": 341 " + request.get_user()->get_nickname() + " " + invitedUser->get_nickname() + " " + channelName, request.get_user()->get_fd());
+	// send_message(request, RES_INVITED);
 }
