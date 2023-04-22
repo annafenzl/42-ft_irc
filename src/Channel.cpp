@@ -104,7 +104,7 @@ void Channel::insert( User * user )
 int Channel::remove( User * user )
 {
 	_members.remove(user);
-	_ops.remove(user);
+	removeOp (user);
 	return(_members.empty());
 }
 
@@ -112,11 +112,6 @@ void Channel::insertOp( User * op )
 {
 	if (!isOp (op))
 		_ops.insert (_ops.end (), op);
-}
-
-void Channel::removeOp( User * op )
-{
-	_ops.remove(op);
 }
 
 short ModeToBitmask(char mode)
@@ -141,6 +136,7 @@ short ModeToBitmask(char mode)
 
 void Channel::editMode(char mode, char sign)
 {
+
 	short update_mode = ModeToBitmask(mode);
 
 	if (sign == '+')
@@ -169,9 +165,11 @@ bool Channel::isValidMode(char mode)
 	return (std::string(CHANNEL_MODES).find_first_of(mode) != std::string::npos);
 }
 
-bool Channel::isValidArgMode(char mode)
+bool Channel::isValidParamCase(char mode, char sign)
 {
-	return (std::string(ARG_CHANNEL_MODES).find_first_of(mode) != std::string::npos);
+	if (mode == 'o' || ((mode == 'l' || mode == 'k') && sign == '+'))
+		return (true);
+	return (false);
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/22 12:56:24 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/22 16:50:39 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -333,7 +333,7 @@ std::map<int,User>::iterator Server::check_for_user(std::string nickname)
 	return _user_map.end();
 }
 
-void Server::send_message(std::string message, int fd) const
+void Server::send_message(std::string message, int fd)
 {
 	std::cout << "RESPONSE IS <" << message << ">" << std::endl;
 	send(fd, message.append(END_SEQUENCE).c_str(), message.size(), 0);
@@ -365,8 +365,15 @@ bool Channel::execMode(char mode, char sign, std::string param, const Server & s
 	// operator
 	else if (mode == 'o')
 	{
+		if (param.empty())
+		{
+			server.send_message(request, RES_ERR_NEEDMOREPARAMS);
+			return (false);
+		}
 		user = getMember (param);
-		request.set_info (param);
+		if (request.get_user() == user && sign == '-')
+			return (false);
+		request.set_info (param); 
 		std::cout << "inside mode" << std::endl; 
 		if (user == NULL)
 		{
@@ -411,12 +418,13 @@ bool Channel::execMode(char mode, char sign, std::string param, const Server & s
 		if (sign == '-')
 		{
 			setLimit(-1);
+			std::cout << "set limit to -1" << std::endl;
 			return true;
 		}
 		else
 		{
 			int update_limit = strtol(param.c_str(), NULL, 10);
-			if (update_limit > static_cast<int>(_members.size()))
+			if (update_limit >= static_cast<int>(_members.size()))
 			{
 				_limit = update_limit;
 				std::cout << "set limit to " << _limit << std::endl;
@@ -425,4 +433,19 @@ bool Channel::execMode(char mode, char sign, std::string param, const Server & s
 		}
 	}
 	return false;
+}
+
+void Channel::removeOp( User * op )
+{
+	_ops.remove(op);
+	if (_ops.size () == 0 && !_members.empty())
+	{
+		insertOp(*_members.begin());
+		// ... and broadcast
+		Server::broadcast (":" + std::string (SERVER_NAME)
+					+ " MODE"
+					+ " " + _name
+					+ " +o " + (*_members.begin())->get_nickname ()
+					, NULL, *this);
+	}
 }

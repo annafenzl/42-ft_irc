@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 18:15:17 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/22 12:55:21 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/22 15:14:37 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,8 @@ class Channel
 		/// ! utility !
 		static bool isValidChannelName( const std::string & name );
 		static bool isValidMode(char mode);
-		static bool isValidArgMode(char mode);
-	
+		static bool isValidParamCase(char mode, char sign);
+
 		bool isMember(User *user) const;
 		bool isOp(User *user) const;
 		bool hasMode (char mode ) const;

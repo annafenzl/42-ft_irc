@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/22 12:56:12 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/22 16:43:38 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,14 +117,14 @@ class Server
 	void kill_command(Request request);
 	void notice_command(Request request);
 	void globops_command(Request request);
-	void send_message(std::string, int fd) const;
-	void send_message(Request req, t_res err) const;
+	static void send_message(std::string, int fd);
+	static void send_message(Request req, t_res err);
 	void showtime_bot_command(Request request);
 	void kick_command(Request request);
 	void invite_command(Request request);
 	
 	void send_names_list(Request &request, Channel &channel);
-	void broadcast (std::string message, User* user, Channel& channel);
+	static void broadcast (std::string message, User* user, Channel& channel);
 
 	// -------------- Exceptions -------------------
 	class IncorrectPortNumber: public std::exception {

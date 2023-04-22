@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   part_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:24:20 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/21 22:51:09 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/22 16:45:19 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,18 +79,18 @@ void Server::part_command( Request request )
 				+ request.get_user ()->get_nickname() + "@"  SERVER_NAME " PART " 
 				+ channelIt->second.getName() + " :" + request.get_info ()
 				, request.get_user(), channelIt->second);
-			// if there are no more operators, set first in members as op
-			std::cout << "\033[0;36mThere are now " << channelIt->second.getOps ().size () << " ops\033[0m" << std::endl;
-			if (channelIt->second.getOps ().size () == 0)
-			{
-				channelIt->second.insertOp (*channelIt->second.getMembers ().begin ());
-				// ... and broadcast
-				broadcast (":" + std::string (SERVER_NAME)
-							+ " MODE"
-							+ " " + channelIt->second.getName ()
-							+ " +o " + (*channelIt->second.getMembers ().begin ())->get_nickname ()
-							, NULL, channelIt->second);
-			}
+			// // if there are no more operators, set first in members as op
+			// std::cout << "\033[0;36mThere are now " << channelIt->second.getOps ().size () << " ops\033[0m" << std::endl;
+			// if (channelIt->second.getOps ().size () == 0)
+			// {
+			// 	channelIt->second.insertOp (*channelIt->second.getMembers ().begin ());
+			// 	// ... and broadcast
+			// 	broadcast (":" + std::string (SERVER_NAME)
+			// 				+ " MODE"
+			// 				+ " " + channelIt->second.getName ()
+			// 				+ " +o " + (*channelIt->second.getMembers ().begin ())->get_nickname ()
+			// 				, NULL, channelIt->second);
+			// }
 		}
 		else 
 		{

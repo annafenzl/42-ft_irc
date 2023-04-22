@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   send_message.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 02:37:04 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/22 02:46:35 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/22 16:44:25 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 /// Server response messages config
 /////////////////////////////////////////////////
 
-void Server::send_message(Request req, t_res err) const
+void Server::send_message(Request req, t_res err)
 {
     std::ostringstream stream;
 
