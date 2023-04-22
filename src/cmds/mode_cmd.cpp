@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 00:45:11 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/21 21:53:00 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/22 12:57:36 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void Server::mode_command( Request request)
 	channelmap::iterator channelIt;
 	std::string	updates;
 	std::vector<std::string> params;
+	std::string param;
 
 	if (request.get_params ().size () < 1)
 		return (send_message (request, RES_ERR_NEEDMOREPARAMS));
@@ -36,54 +37,81 @@ void Server::mode_command( Request request)
 	if (channelIt == _channels.end ())
 		return (send_message (request, RES_ERR_NOSUCHCHANNEL));
 
-	if (channelIt->second.isOp(request.get_user()) == false)
-		return (send_message (request, RES_ERR_CHANNOPRIVSNEEDED));
-
 	params = request.get_params ();
 
 	if (params.size() == 1)
 		request.set_info (channelIt->second.getModeAsString ());
-	
 	else
 	{
 		for (unsigned int i = 1; i < params.size(); ++i)
 		{
-			for (std::string::const_iterator it = params[i].begin(); it != params[i].end(); ++it)
+			for (std::string::iterator it = params[i].begin(); it != params[i].end(); ++it)
 			{
 				char sign = *params[i].begin();
+				param = "";
 				if (it == params[i].begin() && (sign == '+' || sign == '-'))
 				{
+					if (!updates.empty ())
+						updates += " ";
 					updates += sign;
 					continue ;
 				}
-				
 				if (!channelIt->second.isValidMode(*it))
-				{ 
+				{
 					std::cout << *it << " is not a valid mode " << std::endl;
 					continue ;
 				}
-	
-				if (sign  == '+' || sign == '-')
+				else if (std::find (params[i].begin(), it, *it) != it)
 				{
-					if (channelIt->second.execMode (*it, sign ,params, &i)) // TODO: exec, fetch next arg if needed and increment index
-					{
-						updates += *it;
-						if (*it == 'o' || *it == 'k' || *it == 'l')
-							updates += " " + params[i];
-						channelIt->second.editMode (*it, sign);
-					}
+					std::cout << "\033[0;31mduplicate mode detected: " << *it << ", skipping\033[0m" << std::endl;
+					continue ;
 				}
-				else
+				if (sign == '+' || sign == '-')
 				{
-					// get info and send response according to mode
+					if (!channelIt->second.isOp (request.get_user())) // check if user is op
+					{
+						send_message (request, RES_ERR_CHANNOPRIVSNEEDED);
+						continue ;
+					}
+					else if (Channel::isValidArgMode (*it) && i >= params.size () - 1) // check if not last if is mode with arg
+					{
+						send_message (request, RES_ERR_NEEDMOREPARAMS);
+						continue ;
+					}
+					if (Channel::isValidArgMode (*it)) // set and check arg if is mode with arg
+					{
+						param = params[i + 1];
+						if (param[0] == '+' || param[0] == '-')
+						{
+							send_message (request, RES_ERR_NEEDMOREPARAMS);
+							continue ;
+						}
+						i++;
+					}
+					if (channelIt->second.execMode (*it, sign, param, *this, request)) // execute. if successful, update channel modes
+					{
+						if (Channel::isValidArgMode (*it))
+							channelIt->second.editMode (*it, sign);
+						updates += *it;
+						if (Channel::isValidArgMode (*it))
+							updates += " " + param;
+					}
 				}
 			}
 			updates += " ";
 		}
 	}
-	if (!updates.empty ())
-		request.set_info (updates);
-	else
+	std::cout << "updates are: |" << updates << "|" << std::endl;
+	if (updates.empty () || updates.find_first_not_of(' ') == std::string::npos)
 		request.set_info (channelIt->second.getModeAsString ());
+	else
+	{
+		request.set_info (updates);
+		broadcast (":" + std::string (SERVER_NAME)
+			+ " MODE"
+			+ " " + channelIt->second.getName ()
+			+ " " + updates
+			, request.get_user (), channelIt->second);
+	}
 	send_message (request, RES_MODE);
 }

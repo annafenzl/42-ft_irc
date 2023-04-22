@@ -20,6 +20,7 @@ Channel::Channel( void )
 
 Channel::Channel( const std::string & name, const std::string & password )
 	: _name(name), _topic("*"), _modes(t_mode), _password(password), _limit(-1)
+
 {
 	std::cout << "\033[0;32m[INFO] new channel: " + _name 
 		+  ", with password: '" + _password + "' created\033[0m" << std::endl;
@@ -168,15 +169,20 @@ bool Channel::isValidMode(char mode)
 	return (std::string(CHANNEL_MODES).find_first_of(mode) != std::string::npos);
 }
 
+bool Channel::isValidArgMode(char mode)
+{
+	return (std::string(ARG_CHANNEL_MODES).find_first_of(mode) != std::string::npos);
+}
+
 
 bool Channel::isMember( User *user ) const
 {
-	return (find (_members.begin (), _members.end (), user) != _members.end ());
+	return (std::find (_members.begin (), _members.end (), user) != _members.end ());
 }
 
 bool Channel::isOp( User *user ) const
 {
-	return (find (_ops.begin (), _ops.end (), user) != _ops.end ());
+	return (std::find (_ops.begin (), _ops.end (), user) != _ops.end ());
 }
 
 bool Channel::hasMode( char mode ) const
@@ -200,8 +206,9 @@ User *Channel::getMember( const std::string & nickname )
 
 std::string Channel::getModeAsString( void ) const
 {
-	std::string mode_string = "+";
+	std::string mode_string;
 
+	mode_string = "+";
 	if (_modes & i_mode)
 		mode_string.append("i");
 	if (_modes & t_mode)
@@ -212,76 +219,5 @@ std::string Channel::getModeAsString( void ) const
 		mode_string.append("o");
 	if (_modes & l_mode)
 		mode_string.append("l");
-
 	return mode_string;
-}
-
-bool Channel::execMode(char mode, char sign, std::vector<std::string> params, unsigned int * i)
-{
-	// also need to reverse settings in case of '-'
-	// need to find a way to handle flags with params (k and l are called at the same time
-
-	// invite only
-	if (mode == 'i')
-	{
-		std::cout << "got i" << std::endl;
-		return true;
-	}
-	// topic
-	else if (mode == 't')
-	{
-		std::cout << "got l" << std::endl;
-		if (sign == '-')
-		{
-			setTopic("no topic set");
-			return true;
-		}
-		else if (params.size() - 1 > *i)
-		{
-			setTopic(params[++(*i)]);
-			return true;
-		}
-	}
-	// operator
-	else if (mode == 'o')
-	{
-		std::cout << "got o" << std::endl;
-		return true;
-	}
-	// key
-	else if (mode == 'k')
-	{
-		std::cout << "got k" << std::endl;
-		if (sign == '-')
-		{
-			setPassword("*");
-			return true;
-		}
-		else if(params.size() - 1 > *i)
-		{
-			setPassword(params[++(*i)]);
-			return true;
-		}
-	}
-	// limit
-	else if (mode == 'l')
-	{
-		std::cout << "got l" << std::endl;
-		if (sign == '-')
-		{
-			setLimit(-1);
-			return true;
-		}
-		else if (params.size() - 1 > *i)
-		{
-			int update_limit = strtol(params[++(*i)].c_str(), NULL, 10);
-			if (update_limit > static_cast<int>(_members.size()))
-			{
-				_limit = update_limit;
-				std::cout << "set limit to " << _limit << std::endl;
-				return true;
-			}
-		}
-	}
-	return false;
 }

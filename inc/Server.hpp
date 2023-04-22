@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/19 22:26:59 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/22 12:56:12 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,10 @@ class Server
 	void execute_command(Request request);
 	void remove_user(User *user);
 	void remove_user(User *user, std::string &string);
-
 	
 	void				check_login_complete(User *user);
 	usermap::iterator	check_for_user(std::string nickname);
+	std::set<std::string>	split_targets(std::string targets, std::string &duplicate);
 
 	// --- commands
 	void cap_command(Request request);
@@ -117,8 +117,8 @@ class Server
 	void kill_command(Request request);
 	void notice_command(Request request);
 	void globops_command(Request request);
-	void send_message(std::string, int fd);
-	void send_message(Request req, t_res err);
+	void send_message(std::string, int fd) const;
+	void send_message(Request req, t_res err) const;
 	void showtime_bot_command(Request request);
 	void kick_command(Request request);
 	void invite_command(Request request);

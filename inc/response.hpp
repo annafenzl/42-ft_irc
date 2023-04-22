@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 14:25:33 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/21 22:06:17 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/22 12:57:10 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,11 @@ typedef enum e_res
 	RES_ERR_NOSUCHNICK = 401,
 	RES_RPL_ENDOFWHO = 315,
 	RES_RPL_WHOREPLY = 352,
+	
+	/** MODE */
+	RES_ERR_USERSDONTMATCH = 502,
+	RES_ERR_USERNOTINCHANNEL = 441,
+	RES_ERR_UNKNOWNMODE = 472,
 
 	/** Custom */
 	RES_ERR_CHANNELALREADYJOINED = 1000,
@@ -50,11 +55,12 @@ typedef enum e_res
 
 	/** INVITE */
 	RES_ERR_USERONCHANNEL = 443,
-	RES_ERR_USERNOTINCHANNEL = 441,
 	RES_ERR_USERNOTREGISTERED = 451,
 	RES_ERR_INVITEONLYCHAN = 473,
 
 	RES_INVITED = 341,
 	
+	RES_ERR_NOTANOPERATOR = 1004,
+	RES_ERR_ALREADYANOPERATOR = 1005
 }	t_res;
 #endif
