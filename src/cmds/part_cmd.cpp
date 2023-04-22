@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:24:20 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/20 16:57:51 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/21 22:51:09 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void Server::part_command( Request request )
 		if (request.get_user ()->getChannels (0).find (channelName)
 			== request.get_user ()->getChannels (0).end ())
 		{
+			request.set_info ("");
 			send_message (request, RES_ERR_NOTONCHANNEL);
 			continue ;
 		}

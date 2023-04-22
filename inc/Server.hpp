@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/19 16:34:59 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/21 22:22:55 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,8 @@ class Server
 	void kill_command(Request request);
 	void notice_command(Request request);
 	void globops_command(Request request);
-	void send_message(std::string, int fd);
-	void send_message(Request req, t_res err);
+	void send_message(std::string, int fd) const;
+	void send_message(Request req, t_res err) const;
 	void showtime_bot_command(Request request);
 	void kick_command(Request request);
 	

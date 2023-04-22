@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 14:25:33 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/20 17:48:45 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/21 23:58:33 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,18 @@ typedef enum e_res
 	RES_ERR_NOSUCHNICK = 401,
 	RES_RPL_ENDOFWHO = 315,
 	RES_RPL_WHOREPLY = 352,
+	
+	/** MODE */
+	RES_ERR_USERSDONTMATCH = 502,
+	RES_ERR_USERNOTINCHANNEL = 441,
+	RES_ERR_UNKNOWNMODE = 472,
 
 	/** Custom */
 	RES_ERR_CHANNELALREADYJOINED = 1000,
 	RES_CHANNELJOINED = 1001,
 	RES_CHANNELLEFT = 1002,
-	RES_MODE = 1003
+	RES_MODE = 1003,
+	RES_ERR_NOTANOPERATOR = 1004,
+	RES_ERR_ALREADYANOPERATOR = 1005
 }	t_res;
 #endif

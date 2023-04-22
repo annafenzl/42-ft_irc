@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 14:14:39 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/19 02:11:30 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/22 02:03:51 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ const 						std::string &Request::get_info( void ) const { return _info; }
 void Request::parse(std::string input)
 {
 	std::cout << "\n\n\n-> Parsing |" << input << "| <-" << std::endl;
-	
+
 	// skip whitespace
 	input = input.substr(input.find_first_not_of(" "));
 	// find command
@@ -94,6 +94,7 @@ void Request::parse(std::string input)
 			input.erase(0, ++space_pos);
 		}
 	}
+
 }
 
 // ------------- debug ----------------

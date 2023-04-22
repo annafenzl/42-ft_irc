@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/20 13:12:07 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/22 02:57:31 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -331,7 +331,7 @@ std::map<int,User>::iterator Server::check_for_user(std::string nickname)
 	return _user_map.end();
 }
 
-void Server::send_message(std::string message, int fd)
+void Server::send_message(std::string message, int fd) const
 {
 	std::cout << "RESPONSE IS <" << message << ">" << std::endl;
 	send(fd, message.append(END_SEQUENCE).c_str(), message.size(), 0);
@@ -347,4 +347,80 @@ Channel * Server::find_channel(std::string channel_name)
 		}
 	}
 	return NULL;
+}
+
+
+// moved declaration to Server.cpp cause need Server class
+bool Channel::execMode(char mode, char sign, std::string param, const Server & server, Request request)
+{
+	// also need to reverse settings in case of '-'
+	// need to find a way to handle flags with params (k and l are called at the same time
+	User	*user;
+
+	// invite only channel or only ops can change topic (don't need to be exec'ed, only edit'ed)
+	if (mode == 'i' || mode == 't')
+		return (true);
+	// operator
+	else if (mode == 'o')
+	{
+		user = getMember (param);
+		request.set_info (param);
+		std::cout << "inside mode" << std::endl; 
+		if (user == NULL)
+		{
+			server.send_message (request, RES_ERR_USERNOTINCHANNEL);
+			return (false);
+		}
+		if (sign == '+' && isOp (user))
+		{
+			server.send_message (request, RES_ERR_ALREADYANOPERATOR);
+			return (false);	
+		}
+		else if (sign == '+')
+			insertOp (user);
+		else if (!isOp (user))
+		{
+			server.send_message (request, RES_ERR_NOTANOPERATOR);
+			return (false);
+		}
+		else
+			removeOp (user);
+		return (true);
+	}
+	// key
+	else if (mode == 'k')
+	{
+		std::cout << "got k" << std::endl;
+		if (sign == '-')
+		{
+			setPassword("*");
+			return true;
+		}
+		else
+		{
+			setPassword(param);
+			return true;
+		}
+	}
+	// limit
+	else if (mode == 'l')
+	{
+		std::cout << "got l" << std::endl;
+		if (sign == '-')
+		{
+			setLimit(-1);
+			return true;
+		}
+		else
+		{
+			int update_limit = strtol(param.c_str(), NULL, 10);
+			if (update_limit > static_cast<int>(_members.size()))
+			{
+				_limit = update_limit;
+				std::cout << "set limit to " << _limit << std::endl;
+				return true;
+			}
+		}
+	}
+	return false;
 }

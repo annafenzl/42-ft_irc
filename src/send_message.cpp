@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 02:37:04 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/20 18:12:15 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/22 02:46:35 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,22 @@
 /// Server response messages config
 /////////////////////////////////////////////////
 
-void Server::send_message(Request req, t_res err)
+void Server::send_message(Request req, t_res err) const
 {
     std::ostringstream stream;
 
 	stream << static_cast<int>(err);
 	switch (err)
 	{
+		case RES_ERR_UNKNOWNMODE:
+			send_message (
+				":" + std::string (SERVER_NAME)
+				+ " " + stream.str ()
+				+ " " + req.get_user ()->get_nickname ()
+				+ " " + req.get_channel_name ()
+				+ " :unknown mode"
+				, req.get_user ()->get_fd ());
+			break ;
 		case RES_ERR_BADCHANNAME:
 			send_message (
 				":" + std::string (SERVER_NAME)
@@ -111,15 +120,6 @@ void Server::send_message(Request req, t_res err)
 				+ " :no topic is set"
 				, req.get_user ()->get_fd ());
 			break ;
-		case RES_ERR_NOTONCHANNEL:
-			send_message (
-				":" + std::string (SERVER_NAME)
-				+ " " + stream.str ()
-				+ " " + req.get_user ()->get_nickname ()
-				+ " " + req.get_channel_name ()
-				+ " :not on channel"
-				, req.get_user ()->get_fd ());
-			break ;
 		case RES_ERR_BADCHANNELKEY:
 			stream.str ("");
 			stream << static_cast<int>(RES_ERR_NOSUCHCHANNEL);
@@ -184,7 +184,49 @@ void Server::send_message(Request req, t_res err)
 				+ " " + stream.str ()
 				+ " " + req.get_user ()->get_nickname ()
 				+ " " + req.get_channel_name ()
+				+ " :" + req.get_info () + " is not an operator"
 				+ " :already on channel"
+				, req.get_user ()->get_fd ());
+			break ;
+		case RES_ERR_NOTANOPERATOR:
+			stream.str ("");
+			stream << static_cast<int>(RES_ERR_CHANNOPRIVSNEEDED);
+			send_message (
+				":" + std::string (SERVER_NAME)
+				+ " " + stream.str ()
+				+ " " + req.get_user ()->get_nickname ()
+				+ " " + req.get_channel_name ()
+				+ " :" + req.get_info () + " is not an operator"
+				, req.get_user ()->get_fd ());
+			break ;
+		case RES_ERR_NOTONCHANNEL:
+			send_message (
+				":" + std::string (SERVER_NAME)
+				+ " " + stream.str ()
+				+ " " + req.get_user ()->get_nickname ()
+				+ " " + req.get_channel_name ()
+				+ " :not on channel"
+				, req.get_user ()->get_fd ());
+			break ;
+		case RES_ERR_USERNOTINCHANNEL:
+			send_message (
+				":" + std::string (SERVER_NAME)
+				+ " " + stream.str ()
+				+ " " + req.get_user ()->get_nickname ()
+				+ " " + req.get_info ()
+				+ " " + req.get_channel_name ()
+				+ " :they are not on channel"
+				, req.get_user ()->get_fd ());
+			break ;
+		case RES_ERR_ALREADYANOPERATOR:
+			stream.str ("");
+			stream << static_cast<int>(RES_ERR_USERSDONTMATCH);
+			send_message (
+				":" + std::string (SERVER_NAME)
+				+ " " + stream.str ()
+				+ " " + req.get_user ()->get_nickname ()
+				+ " " + req.get_channel_name ()
+				+ " " + req.get_info () + " is already an operator"
 				, req.get_user ()->get_fd ());
 			break ;
 		case RES_CHANNELLEFT:
@@ -204,6 +246,5 @@ void Server::send_message(Request req, t_res err)
 				+ " " + req.get_user ()->get_nickname ()
 				+ " :an error occurred"
 				, req.get_user ()->get_fd ());
-			break;
 	}
 }

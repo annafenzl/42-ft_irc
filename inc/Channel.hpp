@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 18:15:17 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/21 20:38:04 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/22 02:57:16 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,10 @@
 # include <list>
 # include <vector>
 # include <algorithm>
+# include "Request.hpp"
 
 # define CHANNEL_MODES "itkol"
+# define ARG_CHANNEL_MODES "kol"
 
 enum Modes
 {
@@ -35,6 +37,8 @@ enum Modes
 	o_mode = 8,
 	l_mode = 16,
 };
+
+class Server ;
 
 class Channel
 {
@@ -79,11 +83,12 @@ class Channel
 		void removeOp( User * op );
 
 		void editMode (char mode, char sign);
-		bool execMode (char mode, char sign, std::vector<std::string> params, unsigned int *i);
+		bool execMode (char mode, char sign, std::string param, const Server & server, Request request);
 
 		/// ! utility !
 		static bool isValidChannelName( const std::string & name );
 		static bool isValidMode(char mode);
+		static bool isValidArgMode(char mode);
 	
 		bool isMember(User *user) const;
 		bool isOp(User *user) const;
