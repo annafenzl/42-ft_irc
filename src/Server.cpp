@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/22 16:50:39 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/23 11:40:36 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -374,7 +374,7 @@ bool Channel::execMode(char mode, char sign, std::string param, const Server & s
 		if (request.get_user() == user && sign == '-')
 			return (false);
 		request.set_info (param); 
-		std::cout << "inside mode" << std::endl; 
+		std::cout << "inside mode" << std::endl;
 		if (user == NULL)
 		{
 			server.send_message (request, RES_ERR_USERNOTINCHANNEL);
