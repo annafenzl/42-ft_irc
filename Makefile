@@ -14,7 +14,7 @@
 NAME = ircserv
 
 CC = c++
-CFLAGS = -Wall -Wextra -Werror -g -std=c++98 -I./inc #-fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -std=c++98 -I./inc
 RM := rm -f
 CDEPS = $(patsubst %, inc/%.hpp, Bot Channel response Request Server User);
 
@@ -40,10 +40,6 @@ clean:
 
 fclean: clean
 	$(RM) $(NAME)
-	@rm -rf *.d
-	@rm -rf src/*.d
-	@rm -rf inc/*.d
-	@rm -rf src/cmds/*.d
 	@rm -rf *.dmg
 
 re: fclean all
@@ -57,4 +53,4 @@ get_client:
 	@curl -o KVIrc-5.0.0.dmg ftp://ftp.kvirc.net/pub/kvirc/5.0.0/binary/macosx/KVIrc-5.0.0.dmg
 	@open KVIrc-5.0.0.dmg
  
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re run get_client
