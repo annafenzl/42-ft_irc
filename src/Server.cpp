@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/12 20:40:54 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/23 15:20:54 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,22 @@
 // -------------- Constructor ------------------
 Server::Server(char **argv)
 {
-	char	*check;
-	long	port = strtol(argv[1], &check, 0);
-	if (port < 1 || port > 65535 || *check != '\0')  // portnumbers up until 1024 are reserved!!
+	// parse port
+	char	*end;
+	long	port = strtol(argv[1], &end, 0);
+	if (port < 1 || port > 65535 || end[0] != '\0')
 		throw IncorrectPortNumber();
 	_port = (int) port;
-	_password = argv[2];
-	// are there other passwords that are invalid 
+	
+	// parse password
+	_password = argv[2]; 
 	if (_password.empty())
 		throw InvalidPassword();
 
-	// safe time of creation
-	std::time_t current_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-	_time_of_creation = std::ctime(&current_time);
-	_time_of_creation.pop_back();
+	// set time of creation
+	time_t now = time(0);
+	_time_of_creation = std::string(ctime(&now));
+	_time_of_creation = _time_of_creation.substr(0, _time_of_creation.size() - 1);
 }
 
 // -------------- Getters ----------------------
@@ -41,6 +43,9 @@ std::string	Server::get_password()
 {
 	return _password;
 }
+
+const Server::channelmap &Server::getChannels( void ) 
+	const { return (_channels); }
 
 // -------------- Methods ----------------------
 
@@ -74,7 +79,7 @@ void Server::setup_socket()
 
 	memset(_user_poll, 0, sizeof(_user_poll));
 	_user_poll[0].fd = _listening_socket;
-	_user_poll[0].events = POLLIN;
+	_user_poll[0].events = POLLIN | POLLHUP | POLLOUT;
 	_fd_count = 1;
 }
 
@@ -86,7 +91,6 @@ void Server::run()
 	{
 		if (poll(_user_poll, _fd_count, -1) == -1) // -1 is waiting for ever but i can specify the timeout
 			throw PollFailedError();
-
 		unsigned int		current_size = _fd_count;
 		for (unsigned int i = 0; i < current_size; i++)
 		{
@@ -94,10 +98,12 @@ void Server::run()
 				if (_user_poll[i].revents & POLLIN)
 				{
 					if (_user_poll[i].fd == _listening_socket)
-						add_client();
+						new_client();
 					else
 						client_request(i);
 				}
+				else if ((_user_poll[i].revents & POLLHUP) | (_user_poll[i].revents & POLLOUT) )
+					remove_user(&(_user_map.find(_user_poll[i].fd)->second), "disconnected");
 			} catch (std::exception& e) {
 				std::cerr << "\033[0;31m" << e.what() << "\033[0m" << '\n';
 			}
@@ -106,7 +112,7 @@ void Server::run()
 	close(_listening_socket);
 }
 
-void Server::add_client()
+void Server::new_client()
 {
 	int					user_fd;
 	socklen_t			addrlen;
@@ -120,7 +126,7 @@ void Server::add_client()
 	_user_map.insert(std::make_pair(user_fd, User(user_fd, host)));
 		
 	add_to_poll(user_fd);
-	std::cout << "\nnew client on fd " << user_fd << "!" << std::endl;
+	std::cout << "new client on fd " << user_fd << "!" << std::endl;
 }
 
 void Server::client_request(int index)
@@ -129,27 +135,124 @@ void Server::client_request(int index)
 	int					read_bytes;
 	int					sender_fd = _user_poll[index].fd;
 	
-	memset(buff, 0, MAXLINE);
+	memset(buff, 0, MAXLINE); 
 	read_bytes = recv(sender_fd, buff, MAXLINE, 0);
-
-	std::cout << std::endl;
 	
 	if (read_bytes <= 0)
 	{
 		if (read_bytes == 0)
-		{
 			std::cout << "user(fd) " << sender_fd << " hung up" << std::endl;
-			_user_map.erase(sender_fd);
-		}
 		else
-		{
-			std::cerr << std::strerror(errno) << '\n';
 			throw RecieveMessageFailed();
-		}
-		remove_from_poll(index);
+		remove_user(&_user_map.find(sender_fd)->second, "disconnected");
 	}
 	else
 		handle_command(buff, sender_fd);
+}
+
+void Server::remove_user(User *user, std::string reason)
+{
+	std::list<std::string>	empty_channels;
+	int						user_fd = user->get_fd();
+
+	// remove from all channels
+	for (channelmap::iterator it = _channels.begin(); it != _channels.end(); ++it)
+	{
+		if (it->second.isMember(user))
+		{
+			if (it->second.remove(user))
+				empty_channels.insert(empty_channels.end(), it->second.getName());
+			for (std::list<User *>::const_iterator iter = it->second.getMembers(0).begin(); iter != it->second.getMembers(0).end(); iter ++)
+			{
+					send_message(user->get_prefix() + " QUIT :" + reason, (*iter)->get_fd());
+			}
+		}
+	}
+
+	// remove empty channels
+	for (std::list<std::string>::const_iterator it = empty_channels.begin(); it != empty_channels.end(); ++it)
+	{
+		_channels.erase(*it);
+	}
+	
+
+	// remove from poll array
+	for (unsigned int i = 0; i < _fd_count; ++i)
+	{
+		if (_user_poll[i].fd == user_fd)
+		{
+			remove_from_poll(i);
+			break ;
+		}
+	}
+	// remove from map to consider emoving teh channels in the User class??
+	_user_map.erase(user->get_fd());
+	
+}
+
+void Server::handle_command(char* cmd, int user_fd)
+{
+	User	*user = &_user_map.find(user_fd)->second;
+
+	user->append_buff(cmd);
+	for (size_t end_pos = user->buff.find(END_SEQUENCE);end_pos != 512 && end_pos != std::string::npos ; end_pos = user->buff.find(END_SEQUENCE))
+	{
+		std::string part = user->buff.substr(0, end_pos);
+		user->buff.erase(0, end_pos + 2);
+		Request request(part, user);
+		request.print();
+		execute_command(request);
+		if (_user_map.find(user_fd) == _user_map.end())
+			break;
+	}
+}
+
+void Server::execute_command( Request request)
+{
+	std::string cmd = request.get_cmd();
+		
+	if (cmd == "CAP")
+		cap_command(request);
+	else if (cmd == "PING")
+		ping_command(request);
+	else if (cmd == "PASS")
+		pass_command(request);
+	else if (cmd == "NICK")
+		nick_command(request);
+	else if (cmd == "USER")
+		user_command(request);
+	else if (cmd == "PRIVMSG")
+		privmsg_command(request);
+	else if (cmd == "QUIT")
+		quit_command(request);
+	else if (cmd == "JOIN" || cmd == "NAMES")
+		join_names_command (request);
+	else if (cmd == "GLOBOPS")
+		globops_command(request);
+	else if (cmd == "SHOWTIME")
+		showtime_bot_command(request);
+	else if (cmd == "LIST")
+		list_command (request);
+	else if (cmd == "TOPIC")
+		topic_command (request);
+	else if (cmd == "OPER")
+		oper_command(request);
+	else if (cmd == "PART")
+		part_command (request);
+	else if (cmd == "WHO")
+		who_command (request);
+	else if (cmd == "MODE")
+		mode_command (request);
+	else if (cmd == "KILL")
+		kill_command(request);
+	else if (cmd == "KICK")
+		kick_command(request);
+	else if (cmd == "NOTICE")
+		notice_command(request);
+	else if (cmd == "INVITE")
+		invite_command(request);
+	else
+		send_message(SERVER_NAME " 421 " + request.get_user()->get_nickname() + " " + cmd + " :Unknown command", request.get_user()->get_fd());
 }
 
 void Server::add_to_poll(int user_fd)
@@ -173,68 +276,6 @@ void Server::remove_from_poll(int index)
 	--_fd_count;
 }
 
-void Server::handle_command(char* cmd, int user_fd)
-{
-	User	*user = &_user_map.find(user_fd)->second;
-
-	user->append_buff(cmd);
-	for (int end_pos = user->buff.find(END_SEQUENCE); end_pos != std::string::npos; end_pos = user->buff.find(END_SEQUENCE))
-	{
-		std::string part = user->buff.substr(0, end_pos);
-		user->buff.erase(0, end_pos + 2);
-		
-		Request request(part, user);
-		request.print();
-		execute_command(request);
-	}
-}
-
-void Server::execute_command( Request request)
-{
-	std::string cmd = request.get_cmd();
-
-	if ((cmd == "JOIN" || cmd == "PART")
-		&& !request.get_user ()->is_registered ())
-	{
-		send_message (request, EXIT_ERR_NOTREGISTERED, "");
-		return ;
-	}
-		
-	if (cmd == "CAP")
-		cap_command(request);
-	else if (cmd == "PING")
-		ping_command(request);
-	else if (cmd == "PASS")
-		pass_command(request);
-	else if (cmd == "NICK")
-		nick_command(request);
-	else if (cmd == "USER")
-		user_command(request);
-	else if (cmd == "PRIVMSG")
-		privmsg_command(request);
-	else if (cmd == "QUIT")
-		quit_command(request);
-	else if (cmd == "JOIN" || cmd == "NAMES")
-		join_names_command (request);
-	else if (cmd == "LIST")
-		list_command (request);
-	else if (cmd == "TOPIC")
-		topic_command (request);
-	else if (cmd == "PART")
-		part_command (request);
-	else if (cmd == "WHO")
-		who_command (request);
-	// else if (cmd == "MODE")
-	else
-		send_message(SERVER_NAME " 421 " + request.get_user()->get_nickname() + " " + cmd + " :Unknown command", request.get_user()->get_fd());
-}
-
-void Server::send_message(std::string message, int fd)
-{
-	std::cout << "RESPONSE IS <" << message << ">" << std::endl;
-	send(fd, message.append(END_SEQUENCE).c_str(), message.size(), 0);
-}
-
 /*
 	searches for User in the map, returns a iterator to the User, if not found _user_map.end()
 */
@@ -250,79 +291,115 @@ std::map<int,User>::iterator Server::check_for_user(std::string nickname)
 	return _user_map.end();
 }
 
-const Server::channelmap &Server::getChannels( void ) 
-	const { return (_channels); }
-
-void Server::send_message(Request req, t_exit err, std::string info)
+void Server::send_message(std::string message, int fd)
 {
-	std::string mes;
-    std::ostringstream stream;
+	std::cout << "RESPONSE IS <" << message << ">" << std::endl;
+	send(fd, message.append(END_SEQUENCE).c_str(), message.size(), 0);
+}
 
-	stream << static_cast<int>(err);
-	mes.append (SERVER_NAME).append (" " + stream.str ()
-		+ " " + req.get_user ()->get_nickname () + " :");
-
-	switch (err)
+Channel * Server::find_channel(std::string channel_name)
+{
+	for (std::map<std::string,Channel>::iterator it = _channels.begin(); it != _channels.end(); ++it)
 	{
-		case EXIT_CHANNEL_JOINED:
-			send_message (":" + req.get_user ()->get_nickname () + "!" 
-				+ req.get_user ()->get_name () + "@" + SERVER_NAME + " JOIN "
-				+ info, req.get_user ()->get_fd ());
-			return ;
-		case EXIT_ERR_NEEDMOREPARAMS:
-			mes.append ("need more parameters");
-			break;
-		case EXIT_ERR_TOOMANYCHANNELS:
-			mes.append ("Too many channels");
-			break;
-		case EXIT_ERR_ALREADY_JOINED:
-			mes.append ("already joined: " + info);
-			break;
-		case EXIT_ERR_INVALID_CHANNEL_NAME:
-			mes.append ("invalid channel name");
-			break;
-		case EXIT_ERR_NOSUCHCHANNEL:
-			mes.append ("no such channel: " + info);
-			break;
-		case EXIT_RPL_ENDOFWHO:
-			mes.append ("end of /WHO");
-			break ;
-		case EXIT_RPL_ENDOFNAMES:
-			mes.append ("end of /NAMES");
-			break ;
-		case EXIT_RPL_LISTSTART:
-			mes.append ("start of /LIST");
-			break ;
-		case EXIT_RPL_LISTEND:
-			mes.append ("end of /LIST");
-			break ;
-		case EXIT_INFO_ONLY:
-		case EXIT_RPL_WHOREPLY:
-		case EXIT_RPL_LIST:
-		case EXIT_RPL_NAMREPLY:
-			mes.append (info);
-			break;
-		case EXIT_LEFT_CHANNEL:
-			send_message (":" + req.get_user ()->get_nickname () + "!" 
-				+ req.get_user ()->get_name () + "@" + SERVER_NAME + " PART "
-				+ info, req.get_user ()->get_fd ());
-			return ;
-		case EXIT_ERR_NOTREGISTERED:
-			mes.append ("You are not yet registered");
-			break ;
-		case EXIT_ERR_ALREADYREGISTERED:
-			mes.append ("You are already registered");
-			break ;
-		case EXIT_ERR_NOSUCHNICK:
-			mes.append ("no such nickname");
-			break ;
-		case EXIT_ERR_NOTONCHANNEL:
-			mes.append ("not on channel");
-			break ;
-		default:
-		    std::ostringstream stream2;
-			stream2 << static_cast<int>(err);
-			mes.append ("error code not found: " + stream2.str ());
+		if (it->second.getName() == channel_name)
+		{
+			return &it->second;
+		}
 	}
-	send_message (mes, req.get_user ()->get_fd ());
+	return NULL;
+}
+
+
+// moved declaration to Server.cpp cause need Server class
+bool Channel::execMode(char mode, char sign, std::string param, const Server & server, Request request)
+{
+	// also need to reverse settings in case of '-'
+	// need to find a way to handle flags with params (k and l are called at the same time
+	User	*user;
+
+	// invite only channel or only ops can change topic (don't need to be exec'ed, only edit'ed)
+	if (mode == 'i' || mode == 't')
+		return (true);
+	// operator
+	else if (mode == 'o')
+	{
+		if (param.empty())
+		{
+			server.send_message(request, RES_ERR_NEEDMOREPARAMS);
+			return (false);
+		}
+		user = getMember (param);
+		if (request.get_user() == user && sign == '-')
+			return (false);
+		request.set_info (param); 
+		if (user == NULL)
+		{
+			server.send_message (request, RES_ERR_USERNOTINCHANNEL);
+			return (false);
+		}
+		if (sign == '+' && isOp (user))
+		{
+			server.send_message (request, RES_ERR_ALREADYANOPERATOR);
+			return (false);	
+		}
+		else if (sign == '+')
+			insertOp (user);
+		else if (!isOp (user))
+		{
+			server.send_message (request, RES_ERR_NOTANOPERATOR);
+			return (false);
+		}
+		else
+			removeOp (user);
+		return (true);
+	}
+	// key
+	else if (mode == 'k')
+	{
+		if (sign == '-')
+		{
+			setPassword("*");
+			return true;
+		}
+		else
+		{
+			setPassword(param);
+			return true;
+		}
+	}
+	// limit
+	else if (mode == 'l')
+	{
+		if (sign == '-')
+		{
+			setLimit(-1);
+			return true;
+		}
+		else
+		{
+			int update_limit = strtol(param.c_str(), NULL, 10);
+			if (update_limit >= static_cast<int>(_members.size()))
+			{
+				_limit = update_limit;
+				std::cout << "set limit to " << _limit << std::endl;
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+void Channel::removeOp( User * op )
+{
+	_ops.remove(op);
+	if (_ops.size () == 0 && !_members.empty())
+	{
+		insertOp(*_members.begin());
+		// ... and broadcast
+		Server::broadcast (":" + std::string (SERVER_NAME)
+					+ " MODE"
+					+ " " + _name
+					+ " +o " + (*_members.begin())->get_nickname ()
+					, NULL, *this);
+	}
 }

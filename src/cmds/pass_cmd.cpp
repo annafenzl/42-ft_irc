@@ -6,12 +6,11 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:49:01 by afenzl            #+#    #+#             */
-
-/*   Updated: 2023/04/06 10:55:40 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/18 23:27:15 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/Server.hpp"
+#include "Server.hpp"
 
 /*
 	Command: PASS
@@ -40,7 +39,6 @@ void Server::pass_command(Request request)
 		response.append(SERVER_NAME " 464 " + user->get_nickname() + " :Password incorrect");
 		user->set_pass_provided(false);
 	}
-
 	else
 	{
 		user->set_pass_provided(true);

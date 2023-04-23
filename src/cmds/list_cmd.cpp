@@ -3,38 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   list_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:22:55 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/12 18:15:23 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/23 13:28:45 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../inc/Server.hpp"
+# include "Server.hpp"
 
 void Server::list_command( Request request )
 {
-	std::string							info;
+	std::set<std::string>				reqChannels;
 	Server::channelmap::const_iterator	channelIt;
+	User *user = request.get_user ();
+	std::string							dup;
 
-	send_message (request, EXIT_RPL_LISTSTART, "");
+	if (!user->is_registered())
+		return(send_message( request, RES_ERR_NOTREGISTERED));
+
+	if (request.get_params ().size () )
+		send_message (request, RES_RPL_LISTSTART);
 	channelIt = _channels.begin ();
+
+	if (request.get_params ().size () > 0)
+		reqChannels = split_targets (request.get_params ()[0], dup);
+		
 	while (channelIt != _channels.end ())
 	{
-		std::ostringstream					stream;
-
-		if (request.get_params ().size () < 1 
-			|| std::find (request.get_params ().begin (),
-				request.get_params ().end (), channelIt->first)
-				!= request.get_params ().end ())
+		if (request.get_params ().size () == 0
+			|| reqChannels.find (channelIt->first) != reqChannels.end ())
 		{
+			std::ostringstream	stream;
 			stream << channelIt->second.getMembers ().size ();
-			info = channelIt->first + " : " + stream.str () + " member";
-			if (channelIt->second.getMembers ().size () != 1)
-				info += "s";
-			info += " " + channelIt->second.getTopic () ;
-			channelIt++;
-			send_message (request, EXIT_RPL_LIST, info);
+			request.set_info (channelIt->first + " " + stream.str () 
+				+ " :" + channelIt->second.getTopic ());
+			send_message (request, RES_RPL_LIST);
 		}
+		channelIt++;
 	}
+	send_message (request, RES_RPL_LISTEND);
 }

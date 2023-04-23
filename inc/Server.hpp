@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/12 17:24:37 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/23 13:50:20 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef SERVER_HPP
 # define SERVER_HPP
@@ -28,39 +29,45 @@
 # include <string>
 # include <iostream>
 # include <fcntl.h>
-# include <chrono>
-# include <ctime>
 # include <map>
+# include <algorithm>
 # include <sstream>
 # include <utility>
-# include "exit.hpp"
+# include <ctime>
+# include <numeric>
+# include <set>
+# include "response.hpp"
 # include "User.hpp"
 # include "Request.hpp"
 # include "Channel.hpp"
+
+# include "Bot.hpp"
 # define MAXLINE 4096
 # define END_SEQUENCE "\r\n"
-# define SERVER_NAME ":ircserv.com"
-# define VERSION "1.0"
+# define SERVER_NAME ":ircfornow.com"
 # define FORBIDDEN_CHARS "!@#$%^&*()+={}[];,:\"\t'<>."
+# define VERSION "1.0"
+
+//OPER Credentials
+# define OPER_PASS "42"
+# define OPER_LOG "admin"
 
 class Server
 {
-	typedef std::map<int, User>		usermap;
+	typedef std::map<int, User>				usermap;
 	typedef std::map<std::string, Channel>	channelmap;
 
 	private:
 		int					_port;
 		std::string			_password;
+		std::string			_time_of_creation;
 		
 		int					_listening_socket;
 		pollfd				_user_poll[SOMAXCONN];
 		nfds_t				_fd_count;
 		usermap				_user_map;
-		channelmap				_channels;
+		channelmap			_channels;
 
-
-	std::string			_time_of_creation;
-	
 	public:
 	// -------------- Constructor ------------------
 	Server(char **argv);
@@ -68,6 +75,8 @@ class Server
 	// -------------- Getters ----------------------
 	int get_port();
 	const channelmap &getChannels( void ) const;
+
+	Channel *find_channel(std::string channel_name);
 	
 	std::string get_password();
 
@@ -75,7 +84,7 @@ class Server
 	void run();
 	void setup_socket();
 
-	void add_client();
+	void new_client();
 	void client_request(int index);
 
 	void add_to_poll(int user_fd);
@@ -83,9 +92,11 @@ class Server
 
 	void handle_command(char* cmd, int user_fd);
 	void execute_command(Request request);
+	void remove_user(User *user, std::string string);
 	
 	void				check_login_complete(User *user);
 	usermap::iterator	check_for_user(std::string nickname);
+	std::set<std::string>	split_targets(std::string targets, std::string &duplicate);
 
 	// --- commands
 	void cap_command(Request request);
@@ -94,16 +105,25 @@ class Server
 	void user_command(Request request);
 	void pass_command(Request request);
 	void privmsg_command(Request request);
-	void notice_command(Request request);
 	void quit_command(Request request);
 	void join_names_command (Request request);
 	void list_command (Request request);
 	void topic_command (Request request);
 	void part_command (Request request);
 	void who_command (Request request);
+	void mode_command (Request request);
+	void oper_command(Request request);
+	void kill_command(Request request);
+	void notice_command(Request request);
+	void globops_command(Request request);
+	static void send_message(std::string, int fd);
+	static void send_message(Request req, t_res err);
+	void showtime_bot_command(Request request);
+	void kick_command(Request request);
+	void invite_command(Request request);
 	
-	void send_message(std::string, int fd);
-	void send_message(Request req, t_exit err, std::string info);
+	void send_names_list(Request &request, Channel &channel);
+	static void broadcast (std::string message, User* user, Channel& channel);
 
 	// -------------- Exceptions -------------------
 	class IncorrectPortNumber: public std::exception {

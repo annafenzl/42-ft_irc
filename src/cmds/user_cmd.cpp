@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   user_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 13:57:59 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/06 11:08:47 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/18 23:27:33 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../inc/Server.hpp"
+# include "Server.hpp"
 
 //  do i need to check for forbiddden chars
 
@@ -25,7 +25,6 @@ void Server::user_command(Request request)
 {
 	std::string response;
 	User		*user = request.get_user();
-
 
 	if (user->is_pass_provided() == false)
 		response.append(SERVER_NAME " 462 " + user->get_nickname() + " :Please provide the server password with PASS first");
