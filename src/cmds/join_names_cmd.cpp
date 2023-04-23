@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:21:43 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/23 12:31:50 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/23 13:05:12 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,9 +160,21 @@ void Server::join_names_command( Request request )
 					":" + std::string (SERVER_NAME)
 					+ " MODE"
 					+ " " + it->second.getName ()
-					+ " +o " + (*opIt)->get_nickname () + " " + it->second.getModeAsString ()
+					+ " +o " + (*opIt)->get_nickname ()
 					, request.get_user ()->get_fd ());
 				opIt++;
+			}
+			if (it->second.getTopic () != "*")
+			{
+				std::ostringstream stream;
+				stream << static_cast<int>(RES_RPL_TOPIC);
+				send_message (
+					":" + std::string (SERVER_NAME)
+					+ " " + stream.str ()
+					+ " " + request.get_user ()->get_nickname ()
+					+ " " + it->second.getName ()
+					+ " :" + it->second.getTopic ()
+				, request.get_user ()->get_fd ());
 			}
 		}
 		else if (request.get_cmd () == "NAMES")

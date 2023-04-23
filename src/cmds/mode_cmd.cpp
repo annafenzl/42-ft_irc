@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 00:45:11 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/23 12:42:22 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/23 13:11:16 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,12 +92,12 @@ void Server::mode_command( Request request)
 						if (Channel::isValidParamCase (*it, sign))
 							updates += " " + params[i + 1];
 						request.set_info (updates);
-						send_message (request, RES_MODE);
+						// send_message (request, RES_MODE);
 						broadcast (":" + std::string (SERVER_NAME)
 							+ " MODE"
 							+ " " + channelIt->second.getName ()
 							+ " " + updates
-							, request.get_user (), channelIt->second);
+							, NULL, channelIt->second);
 					}
 					if (Channel::isValidParamCase (*it, sign))
 					{
