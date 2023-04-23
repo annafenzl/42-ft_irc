@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: annafenzl <annafenzl@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 14:14:39 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/22 02:03:51 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/24 00:29:59 by annafenzl        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,17 @@ std::vector<std::string>	Request::get_params() const		{ return _params; }
 
 User						*Request::get_user() const		{ return _user; }
 
+const 						std::string &Request::get_channel_name( void ) const { return _channel_name; }
+
+const 						std::string &Request::get_info( void ) const { return _info; }
+
+// ------------- setters ----------------
+
 void						Request::set_user(User *user)	{ _user = user; }
 
 void						Request::set_channel_name( const std::string & channelName ) { _channel_name = channelName; }
 
-const 						std::string &Request::get_channel_name( void ) const { return _channel_name; }
-
 void						Request::set_info( const std::string & info ) { _info = info; }
-
-const 						std::string &Request::get_info( void ) const { return _info; }
 
 // ------------- methods ----------------
 
@@ -52,8 +54,6 @@ void Request::parse(std::string input)
 	// find command
 	size_t space_pos = input.find_first_of(" ");
 
-	
-	
 	_cmd = input.substr(0, space_pos);
 	
 	////////////////////////////////////////////////////////////

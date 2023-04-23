@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*   By: annafenzl <annafenzl@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/23 13:50:20 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/24 00:22:46 by annafenzl        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef SERVER_HPP
 # define SERVER_HPP
@@ -54,8 +53,9 @@
 
 class Server
 {
-	typedef std::map<int, User>				usermap;
+	public:
 	typedef std::map<std::string, Channel>	channelmap;
+	typedef std::map<int, User>				usermap;
 
 	private:
 		int					_port;
@@ -70,15 +70,15 @@ class Server
 
 	public:
 	// -------------- Constructor ------------------
-	Server(char **argv);
+	Server(char *port, char *password);
 
 	// -------------- Getters ----------------------
-	int get_port();
-	const channelmap &getChannels( void ) const;
+	int					get_port();
+	std::string			get_password();
+	const channelmap	&getChannels( void ) const;
 
 	Channel *find_channel(std::string channel_name);
 	
-	std::string get_password();
 
 	// -------------- Methods ----------------------
 	void run();
@@ -94,8 +94,8 @@ class Server
 	void execute_command(Request request);
 	void remove_user(User *user, std::string string);
 	
-	void				check_login_complete(User *user);
-	usermap::iterator	check_for_user(std::string nickname);
+	void					check_login_complete(User *user);
+	usermap::iterator		check_for_user(std::string nickname);
 	std::set<std::string>	split_targets(std::string targets, std::string &duplicate);
 
 	// --- commands
@@ -116,12 +116,13 @@ class Server
 	void kill_command(Request request);
 	void notice_command(Request request);
 	void globops_command(Request request);
-	static void send_message(std::string, int fd);
-	static void send_message(Request req, t_res err);
 	void showtime_bot_command(Request request);
 	void kick_command(Request request);
 	void invite_command(Request request);
 	
+	static void send_message(std::string, int fd);
+	static void send_message(Request req, t_res err);
+
 	void send_names_list(Request &request, Channel &channel);
 	static void broadcast (std::string message, User* user, Channel& channel);
 
@@ -186,4 +187,8 @@ class Server
 		}
 	};
 };
+
+typedef Server::usermap		usermap;
+typedef Server::channelmap	channelmap;
+
 #endif

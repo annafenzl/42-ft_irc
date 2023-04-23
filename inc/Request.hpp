@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: annafenzl <annafenzl@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 16:08:06 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/19 01:32:49 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/23 23:46:54 by annafenzl        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,13 @@ class Request
 	std::string					get_cmd() const;
 	std::vector<std::string>	get_params() const;
 	User						*get_user() const;
-	void						set_user(User *user);
-	void						set_channel_name( const std::string & channelName );
 	const 						std::string &get_channel_name( void ) const;
-	void						set_info( const std::string & info );
 	const 						std::string &get_info( void ) const;
+	
+	// ---------- setters -----------
+	void						set_user(User *user);
+	void						set_info( const std::string & info );
+	void						set_channel_name( const std::string & channelName );
 	
 	// ---------- debug ------------
 	void print();

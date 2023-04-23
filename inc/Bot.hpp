@@ -3,9 +3,7 @@
 
 # include <iostream>
 # include <string>
-
-#include "User.hpp"
-#include "Server.hpp"
+# include "User.hpp"
 
 class Bot : public User 
 {

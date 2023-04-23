@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   User.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: annafenzl <annafenzl@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 13:39:50 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/18 10:50:36 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/24 00:19:15 by annafenzl        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../inc/User.hpp"
+
+typedef User::channelptrmap channelptrmap;
 
 // --------------- constructors ---------------
 User::User():_name("*"), _nickname("*"), _fullname("*"), _registered(false), _pass_provided(false) {}
@@ -24,15 +26,7 @@ User::User( const User & user ):
 	_fd (user.get_fd ()), _registered(user.is_registered ()),
 	_pass_provided (user.is_pass_provided ())
 {
-	std::map<std::string, Channel *>::const_iterator it;
-	
-	_channels = std::map<std::string, Channel *>();
-	it = _channels.begin ();
-	while (it != _channels.end ())
-	{
-		_channels.insert (*it);
-		it++;
-	}
+	_channels = user.getChannels();
 }
 
 // --------------- getters --------------------
@@ -49,12 +43,12 @@ std::string User::get_prefix() const	{ return ":" + _nickname + "!" + _name + "@
 
 int User::get_fd() const				{ return _fd;}
 
-const std::map<std::string, Channel *> &User::getChannels ( void ) const
+const channelptrmap &User::getChannels ( void ) const
 {
 	return (_channels);
 }
 
-std::map<std::string, Channel *> &User::getChannels( int )
+channelptrmap &User::getChannels( int )
 {
 	return (_channels);
 }

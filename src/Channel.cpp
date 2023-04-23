@@ -13,13 +13,15 @@
 
 # include "../inc/Channel.hpp"
 
+typedef Channel::userlist userlist;
+
 /// ! constructors and destructor !
 Channel::Channel( void )
-	: _name("*"), _topic("*"), _modes(t_mode), _password("*"), _limit(-1)
+	: _name("*"), _topic("*"), _password("*"), _modes(t_mode), _limit(-1)
 {}
 
 Channel::Channel( const std::string & name, const std::string & password )
-	: _name(name), _topic("*"), _modes(t_mode), _password(password), _limit(-1)
+	: _name(name), _topic("*"), _password(password), _modes(t_mode), _limit(-1)
 
 {
 	std::cout << "\033[0;32m[INFO] new channel: " + _name 
@@ -28,7 +30,7 @@ Channel::Channel( const std::string & name, const std::string & password )
 
 Channel &Channel::operator=( const Channel & channel )
 {
-	std::list<User *>::const_iterator it;
+	userlist::const_iterator it;
 
 	if (this == & channel)
 		return (*this);
@@ -36,7 +38,7 @@ Channel &Channel::operator=( const Channel & channel )
 	_password = channel.getPassword ();
 	_topic = channel.getTopic ();
 	_modes = channel.getModes ();
-	_members = std::list<User *>();
+	_members = userlist();
 	it = channel.getMembers ().begin ();
 	while (it != channel.getMembers ().end ())
 	{
@@ -54,9 +56,9 @@ Channel &Channel::operator=( const Channel & channel )
 
 Channel::Channel( const Channel & channel ):
 	_name(channel.getName ()), _topic(channel.getTopic ()),
-	_modes(channel.getModes ()), _password(channel.getPassword ()), _limit(channel.getLimit())
+	_password(channel.getPassword ()), _modes(channel.getModes ()), _limit(channel.getLimit())
 {
-	std::list<User *>::const_iterator it;
+	userlist::const_iterator it;
 	
 	it = channel.getMembers ().begin ();
 	while (it != channel.getMembers ().end ())
@@ -77,13 +79,15 @@ Channel::~Channel( void ) {}
 /// ! getters !
 int		Channel::getLimit( void ) const { return (_limit); }
 short	Channel::getModes( void ) const { return (_modes); }
+
 const std::string &Channel::getName( void ) const { return (_name ); }
 const std::string &Channel::getTopic( void ) const { return (_topic ); }
 const std::string &Channel::getPassword( void ) const { return (_password ); }
-const std::list<User *> &Channel::getMembers( void ) const { return (_members); }
-std::list<User *> &Channel::getMembers( int ) { return (_members); }
-const std::list<User *> &Channel::getOps( void ) const { return (_ops); }
-std::list<User *> &Channel::getOps( int ) { return (_ops); }
+
+const userlist &Channel::getMembers( void ) const { return (_members); }
+userlist &Channel::getMembers( int ) { return (_members); }
+const userlist &Channel::getOps( void ) const { return (_ops); }
+userlist &Channel::getOps( int ) { return (_ops); }
 
 /// ! setters !
 void Channel::setLimit( int limit ) { _limit = limit; }
@@ -190,7 +194,7 @@ bool Channel::hasMode( char mode ) const
 
 User *Channel::getMember( const std::string & nickname )
 {
-	std::list<User *>::iterator it;
+	userlist::iterator it;
 
 	it = _members.begin ();
 	while (it != _members.end ())
@@ -213,8 +217,8 @@ std::string Channel::getModeAsString( void ) const
 		mode_string.append("t");
 	if (_modes & k_mode)
 		mode_string.append("k");
-	// if (_modes & o_mode)
-	// 	mode_string.append("o");
+	if (_modes & o_mode)
+		mode_string.append("o");
 	if (_modes & l_mode)
 		mode_string.append("l");
 	return mode_string;

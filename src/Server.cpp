@@ -3,29 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: annafenzl <annafenzl@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/23 15:20:54 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/24 00:28:04 by annafenzl        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../inc/Server.hpp"
 
 // -------------- Constructor ------------------
-Server::Server(char **argv)
+Server::Server(char *port, char *password)
 {
 	// parse port
 	char	*end;
-	long	port = strtol(argv[1], &end, 0);
-	if (port < 1 || port > 65535 || end[0] != '\0')
+	long	port_num = strtol(port, &end, 0);
+	if (port_num < 1 || port_num > 65535 || end[0] != '\0')
 		throw IncorrectPortNumber();
-	_port = (int) port;
+	_port = (int) port_num;
 	
 	// parse password
-	_password = argv[2]; 
 	if (_password.empty())
 		throw InvalidPassword();
+	_password = password; 
 
 	// set time of creation
 	time_t now = time(0);
@@ -44,19 +44,19 @@ std::string	Server::get_password()
 	return _password;
 }
 
-const Server::channelmap &Server::getChannels( void ) 
-	const { return (_channels); }
+const Server::channelmap &Server::getChannels( void ) const
+{
+	return (_channels);
+}
 
 // -------------- Methods ----------------------
-
+// should i set .events to POLOUT too to check if sending is possible
 void Server::setup_socket()
 {
 	struct sockaddr_in	_servaddr;
 
 	if ( (_listening_socket = socket(PF_INET, SOCK_STREAM, 0)) == -1)
 		throw CreateSocketError();
-
-	std::cout << "binding on port: " << _listening_socket << std::endl;
 
 	memset(&_servaddr, 0, sizeof(_servaddr));
 	_servaddr.sin_family = AF_INET; //Address Family Internet
@@ -79,19 +79,22 @@ void Server::setup_socket()
 
 	memset(_user_poll, 0, sizeof(_user_poll));
 	_user_poll[0].fd = _listening_socket;
-	_user_poll[0].events = POLLIN | POLLHUP | POLLOUT;
+	_user_poll[0].events = POLLIN;
 	_fd_count = 1;
 }
 
 void Server::run()
 {
+	unsigned int current_size = _fd_count;
+	
 	setup_socket();
 
 	while (true)
 	{
-		if (poll(_user_poll, _fd_count, -1) == -1) // -1 is waiting for ever but i can specify the timeout
+		if (poll(_user_poll, _fd_count, -1) == -1)
 			throw PollFailedError();
-		unsigned int		current_size = _fd_count;
+
+		current_size = _fd_count;
 		for (unsigned int i = 0; i < current_size; i++)
 		{
 			try{
@@ -102,8 +105,6 @@ void Server::run()
 					else
 						client_request(i);
 				}
-				else if ((_user_poll[i].revents & POLLHUP) | (_user_poll[i].revents & POLLOUT) )
-					remove_user(&(_user_map.find(_user_poll[i].fd)->second), "disconnected");
 			} catch (std::exception& e) {
 				std::cerr << "\033[0;31m" << e.what() << "\033[0m" << '\n';
 			}
@@ -126,6 +127,7 @@ void Server::new_client()
 	_user_map.insert(std::make_pair(user_fd, User(user_fd, host)));
 		
 	add_to_poll(user_fd);
+
 	std::cout << "new client on fd " << user_fd << "!" << std::endl;
 }
 
@@ -141,7 +143,7 @@ void Server::client_request(int index)
 	if (read_bytes <= 0)
 	{
 		if (read_bytes == 0)
-			std::cout << "user(fd) " << sender_fd << " hung up" << std::endl;
+			std::cout << "user(fd) " << sender_fd << " hung up!" << std::endl;
 		else
 			throw RecieveMessageFailed();
 		remove_user(&_user_map.find(sender_fd)->second, "disconnected");
@@ -155,7 +157,7 @@ void Server::remove_user(User *user, std::string reason)
 	std::list<std::string>	empty_channels;
 	int						user_fd = user->get_fd();
 
-	// remove from all channels
+	// remove from all channels && inform their members
 	for (channelmap::iterator it = _channels.begin(); it != _channels.end(); ++it)
 	{
 		if (it->second.isMember(user))
@@ -185,9 +187,9 @@ void Server::remove_user(User *user, std::string reason)
 			break ;
 		}
 	}
-	// remove from map to consider emoving teh channels in the User class??
+
+	// remove from user map
 	_user_map.erase(user->get_fd());
-	
 }
 
 void Server::handle_command(char* cmd, int user_fd)
@@ -279,9 +281,9 @@ void Server::remove_from_poll(int index)
 /*
 	searches for User in the map, returns a iterator to the User, if not found _user_map.end()
 */
-std::map<int,User>::iterator Server::check_for_user(std::string nickname)
+usermap::iterator Server::check_for_user(std::string nickname)
 {
-	for (std::map<int,User>::iterator it = _user_map.begin(); it != _user_map.end(); ++it)
+	for (usermap::iterator it = _user_map.begin(); it != _user_map.end(); ++it)
 		{
 			if (it->second.get_nickname() == nickname)
 			{
@@ -299,7 +301,7 @@ void Server::send_message(std::string message, int fd)
 
 Channel * Server::find_channel(std::string channel_name)
 {
-	for (std::map<std::string,Channel>::iterator it = _channels.begin(); it != _channels.end(); ++it)
+	for (channelmap::iterator it = _channels.begin(); it != _channels.end(); ++it)
 	{
 		if (it->second.getName() == channel_name)
 		{
@@ -309,17 +311,15 @@ Channel * Server::find_channel(std::string channel_name)
 	return NULL;
 }
 
-
-// moved declaration to Server.cpp cause need Server class
+// move this back to CHannel.cpp
 bool Channel::execMode(char mode, char sign, std::string param, const Server & server, Request request)
 {
-	// also need to reverse settings in case of '-'
-	// need to find a way to handle flags with params (k and l are called at the same time
 	User	*user;
 
 	// invite only channel or only ops can change topic (don't need to be exec'ed, only edit'ed)
 	if (mode == 'i' || mode == 't')
 		return (true);
+
 	// operator
 	else if (mode == 'o')
 	{

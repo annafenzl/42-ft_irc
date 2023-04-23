@@ -20,9 +20,9 @@ CDEPS = $(patsubst %, inc/%.hpp, Bot Channel response Request Server User);
 
 SRC = main.cpp	$(addprefix src/, Server.cpp User.cpp Request.cpp Channel.cpp Bot.cpp send_message.cpp) \
 				$(addprefix src/cmds/, cap_cmd.cpp nick_cmd.cpp ping_cmd.cpp pass_cmd.cpp \
-				user_cmd.cpp quit_cmd.cpp privmsg_cmd.cpp notice_cmd.cpp \
-				oper_cmd.cpp kill_cmd.cpp globops_cmd.cpp \
-				join_names_cmd.cpp list_cmd.cpp part_cmd.cpp topic_cmd.cpp who_cmd.cpp mode_cmd.cpp showtime_bot_cmd.cpp kick_cmd.cpp invite_cmd.cpp)
+				user_cmd.cpp quit_cmd.cpp privmsg_cmd.cpp notice_cmd.cpp oper_cmd.cpp \
+				kill_cmd.cpp globops_cmd.cpp join_names_cmd.cpp list_cmd.cpp part_cmd.cpp \
+				topic_cmd.cpp who_cmd.cpp mode_cmd.cpp showtime_bot_cmd.cpp kick_cmd.cpp invite_cmd.cpp)
 
 OBJ = $(SRC:.cpp=.o)
 

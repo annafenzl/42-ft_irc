@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: annafenzl <annafenzl@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:06:05 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/19 18:12:26 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/23 23:49:36 by annafenzl        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	main(int argc, char **argv)
 	{
 		if (argc != 3)
 			throw std::invalid_argument("please provide <port> <password>");
-		Server server(argv);
+		Server server(argv[1], argv[2]);
 		std::cout << "port: " << server.get_port() << "\npassword: " << server.get_password() << std::endl;
 		server.run();
 	}

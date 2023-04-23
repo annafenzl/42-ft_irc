@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: annafenzl <annafenzl@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 12:18:05 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/21 10:25:20 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/24 00:18:52 by annafenzl        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ class Channel;
 class User
 {
 	public:
+		typedef std::map<std::string, Channel *> channelptrmap;
+	
 		std::string		buff;
 
 	private:	
@@ -36,7 +38,7 @@ class User
 
 		bool			_operator_status;
 
-		std::map<std::string, Channel *> _channels;
+		channelptrmap _channels;
 		
 	public:
 		// ------------- constructor -------------
@@ -50,8 +52,9 @@ class User
 		std::string get_fullname() const;
 		std::string get_hostmask() const;
 		std::string get_prefix() const;
-		const std::map<std::string, Channel *> &getChannels ( void ) const;
-		std::map<std::string, Channel *> &getChannels( int );
+
+		const channelptrmap &getChannels ( void ) const;
+		channelptrmap &getChannels( int );
 		
 		int get_fd() const;
 
@@ -59,7 +62,6 @@ class User
 		bool is_pass_provided() const;
 		bool is_operator() const;
 		
-
 		// ------------- setters -----------------
 		
 		void set_name(std::string name);
@@ -75,4 +77,5 @@ class User
 };
 
 bool operator==( const User & user, const User & user2 );
+
 #endif

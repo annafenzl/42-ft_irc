@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: annafenzl <annafenzl@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 18:15:17 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/22 15:14:37 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/24 00:21:16 by annafenzl        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,19 @@ class Server ;
 
 class Channel
 {
+	public:
+	typedef std::list<User *> userlist;
+
 	private:
-		std::string			_name;
-		std::string			_topic;
-		short				_modes;
-		std::string			_password;
-		std::list<User *>	_members;
-		std::list<User *>	_ops;
-		int					_limit;
+		std::string		_name;
+		std::string		_topic;
+		std::string		_password;
+
+		userlist		_members;
+		userlist		_ops;
+
+		short			_modes;
+		int				_limit;
 		
 		/// ! constructors, copy assignment operator, destructor !
 	public:
@@ -62,13 +67,16 @@ class Channel
 		/// ! getters !
 		short getModes( void ) const;
 		int   getLimit( void ) const;
+
 		const std::string &getName( void ) const;
 		const std::string &getTopic( void ) const;
 		const std::string &getPassword( void ) const;
-		const std::list<User *> &getMembers( void ) const;
-		std::list<User *> &getMembers( int );
-		const std::list<User *> &getOps( void ) const;
-		std::list<User *> &getOps( int );
+
+		const userlist &getMembers( void ) const;
+		userlist &getMembers( int );
+
+		const userlist &getOps( void ) const;
+		userlist &getOps( int );
 
 		/// ! setters !
 		void setTopic( const std::string & topic );
