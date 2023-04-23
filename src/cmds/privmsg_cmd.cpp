@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 16:12:24 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/23 13:57:15 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/23 15:24:38 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,20 +47,6 @@ std::set<std::string>	Server::split_targets(std::string targets, std::string &du
 	PRIVMSG is used to send private messages between users, as well as to
 	send messages to channels. <msgtarget> is usually the nickname of
 	the recipient of the message, or a channel name.
-
-	not sending to multiple targets:
-		if one target is invalid
-		if targets a duplicate
-
-	   Numeric Replies:
-		 ERR_NORECIPIENT - 1
-		 ERR_NOTEXTTOSEND - 1
-		ERR_CANNOTSENDTOCHAN - 0 -- too much
-		ERR_NOTOPLEVEL - NA
-		ERR_WILDTOPLEVEL - NA
-		ERR_TOOMANYTARGETS - 1
-		ERR_NOSUCHNICK - 1
-		RPL_AWAY - 0
 */
 void	Server::privmsg_command(Request request)
 {

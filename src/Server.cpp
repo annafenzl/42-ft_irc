@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/23 14:09:54 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/23 15:20:54 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -356,7 +356,6 @@ bool Channel::execMode(char mode, char sign, std::string param, const Server & s
 	// key
 	else if (mode == 'k')
 	{
-		std::cout << "got k" << std::endl;
 		if (sign == '-')
 		{
 			setPassword("*");
@@ -371,11 +370,9 @@ bool Channel::execMode(char mode, char sign, std::string param, const Server & s
 	// limit
 	else if (mode == 'l')
 	{
-		std::cout << "got l" << std::endl;
 		if (sign == '-')
 		{
 			setLimit(-1);
-			std::cout << "set limit to -1" << std::endl;
 			return true;
 		}
 		else

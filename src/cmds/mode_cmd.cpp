@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 00:45:11 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/23 14:02:15 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/23 15:24:05 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void Server::mode_command( Request request)
 				{
 					std::cout << params[i] << std::endl;
 					std::cout << "The value is: |" << *it << "|" <<std::endl;
-					// std::cout << *it << " is not a valid mode " << std::endl;
+		
 					continue ;
 				}
 				else if (std::find (params[i].begin(), it, *it) != it)
@@ -88,7 +88,6 @@ void Server::mode_command( Request request)
 						if (Channel::isValidParamCase (*it, sign))
 							updates += " " + params[i + 1];
 						request.set_info (updates);
-						// send_message (request, RES_MODE);
 						broadcast (":" + std::string (SERVER_NAME)
 							+ " MODE"
 							+ " " + channelIt->second.getName ()

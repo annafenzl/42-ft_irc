@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 22:28:21 by pguranda          #+#    #+#             */
-/*   Updated: 2023/04/23 13:56:49 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/23 15:23:48 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,6 @@ void Server::invite_command(Request request)
 	{
 		return send_message(request, RES_ERR_NEEDMOREPARAMS);
 	}
-	// if (request.get_params().size() > 2)
-	// {
-	// 	return;
-	// }
 
 	nickname = request.get_params()[0];
 	channelName = request.get_params()[1];
@@ -54,7 +50,6 @@ void Server::invite_command(Request request)
 	it = _channels.find(channelName);
 	if (it == _channels.end())
 	{
-		// send_message(request, RES_ERR_NOSUCHCHANNEL);
 		return;
 	}
 
@@ -84,7 +79,8 @@ void Server::invite_command(Request request)
 	}
 	if (it->second.hasMode('i') && !it->second.isOp(request.get_user()))
 	{
-		request.set_info(it->second.getName());
+		request.set_channel_name (it->second.getName());
+		request.set_info(request.get_user()->get_nickname());
 		send_message (request, RES_ERR_CHANNOPRIVSNEEDED);
 		return;
 	}

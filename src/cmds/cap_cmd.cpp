@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cap_cmd.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:35:55 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/18 22:29:52 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/23 15:23:37 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,11 @@
 void Server::cap_command(Request request)
 {
 	std::string response;
-
+	
 	// CAP LS [version] to discover the available capabilities on the server.
 	if (request.get_params()[0] == "LS")
 	{
 		response = (SERVER_NAME " CAP * LS :End of CAP LS negotiation");
 		send_message(response, request.get_user()->get_fd());
 	}
-	// CAP REQ to blindly request a particular set of capabilities.
 }

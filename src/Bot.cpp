@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bot.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 15:48:33 by pguranda          #+#    #+#             */
-/*   Updated: 2023/04/16 14:24:09 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/23 15:28:42 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,3 @@ Bot::Bot(int fd, const std::string& hostmask) : User(fd, const_cast<char*>(hostm
 Bot::~Bot()
 {
 }
-
-//The main implementaiton of the bot commands is in privmsg - as it relates to privmsg handling

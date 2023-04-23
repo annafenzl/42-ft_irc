@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 02:37:04 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/23 14:10:12 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/23 15:14:12 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,15 @@ void Server::send_message(Request req, t_res err)
 				+ " " + req.get_user ()->get_nickname ()
 				+ " " + req.get_cmd ()
 				+ " :not enough parameters"
+				, req.get_user ()->get_fd ());
+			break ;
+		case RES_ERR_CHANNELISFULL :
+			send_message (
+				":" + std::string (SERVER_NAME)
+				+ " " + stream.str ()
+				+ " " + req.get_user ()->get_nickname ()
+				+ " " + req.get_channel_name()
+				+ " :Cannot join channel (+l)"
 				, req.get_user ()->get_fd ());
 			break ;
 		case RES_ERR_NOTREGISTERED:

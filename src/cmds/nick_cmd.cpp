@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   nick_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:35:58 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/23 10:39:55 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/23 15:24:15 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ bool	checkforbiddenchars(std::string nickname)
 	{
 		if (nickname.find(FORBIDDEN_CHARS[i]) != std::string::npos)
 		{
-			std::cout << "nicknam is |" << nickname << std::endl;
+			std::cout << "nickname is |" << nickname << std::endl;
 			std::cout << "forbidden char is " << FORBIDDEN_CHARS[i] << std::endl;
 			return true;
 		}
@@ -46,10 +46,6 @@ void	Server::check_login_complete(User *user)
 		send_message(SERVER_NAME " 002 " + nickname + " :Your host is " SERVER_NAME " running version " VERSION, fd);
 		// RPL_CREATED
 		send_message(SERVER_NAME " 003 " + nickname + " :This server was created " + _time_of_creation, fd);
-		// RPL_MYINFO
-		// send_message(SERVER_NAME " 004 " + nickname + " irc.example.com " VERSION " o itokl", fd );
-		// RPL_ISUPPORT
-		// send_message(SERVER_NAME " 005 " + nickname + " RFC2812 PREFIX=(ov)@+ CHANTYPES=# CHANMODES=i,t,k,o,l CHANNELLEN=50 MAXLIST=beI:100 MODES=4 NETWORK=MyIRCNet CHARSET=ascii NICKLEN=30 TOPICLEN=307 KICKLEN=307 AWAYLEN=307 USERMODES=4", fd );
 		user->set_registered(true);
 	}
 }
@@ -84,10 +80,13 @@ void	Server::nick_command(Request request)
 	else
 	{
 		response = (user->get_prefix() + " NICK " + request.get_params()[0]);
-		user->set_nickname(request.get_params()[0]);	
-	}
 
+		user->set_nickname(request.get_params()[0]);
+		for ( std::map < std::string , Channel * > ::iterator it = user->getChannels(0).begin(); it != user->getChannels(0).end(); it++)
+		{
+			broadcast(response, NULL, *(it->second));
+		}
+	}
 	check_login_complete(user);
-	
 	send_message(response, user->get_fd());
 }
