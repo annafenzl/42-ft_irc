@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:21:43 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/23 13:57:01 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/23 14:10:34 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,9 @@ void Server::join_names_command( Request request )
 
 	if (request.get_params ().size () < 1)
 		return (send_message (request, RES_ERR_NEEDMOREPARAMS));
-
+	else if (!request.get_user ()->is_registered () && request.get_cmd () == "JOIN")
+		return (send_message (request, RES_ERR_NOTREGISTERED));
+		
 	channelNames = request.get_params ()[0];
 	
 	if (request.get_params ().size () > 1)
@@ -105,6 +107,8 @@ void Server::join_names_command( Request request )
 
 		if (it == _channels.end () && request.get_cmd () == "JOIN")
 		{
+			if (password.empty ())
+				password = "*";
 			_channels.insert (std::make_pair (channelName,
 				Channel (channelName, password)));
 			it = _channels.find (channelName);
@@ -152,10 +156,11 @@ void Server::join_names_command( Request request )
 				
 			request.get_user ()->getChannels (0).insert (std::make_pair (it->first, &it->second));
 			send_names_list(request, it->second );
-			// notify new member on all ops
+			// notify new member on all ops and only ops can change topic
 			opIt = it->second.getOps ().begin ();
 			while (opIt != it->second.getOps ().end ())
 			{
+				std::cout << "\033[0;31m[ERROR]loop\033[0m" << std::endl;
 				send_message (
 					":" + std::string (SERVER_NAME)
 					+ " MODE"
@@ -163,6 +168,18 @@ void Server::join_names_command( Request request )
 					+ " +o " + (*opIt)->get_nickname ()
 					, request.get_user ()->get_fd ());
 				opIt++;
+			}
+			if (it->second.getTopic () != "*")
+			{
+				std::ostringstream stream;
+				stream << static_cast<int>(RES_RPL_TOPIC);
+				send_message (
+					":" + std::string (SERVER_NAME)
+					+ " " + stream.str ()
+					+ " " + request.get_user ()->get_nickname ()
+					+ " " + it->second.getName ()
+					+ " :" + it->second.getTopic ()
+				, request.get_user ()->get_fd ());
 			}
 		}
 		else if (request.get_cmd () == "NAMES")

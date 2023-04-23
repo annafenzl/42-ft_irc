@@ -213,8 +213,8 @@ std::string Channel::getModeAsString( void ) const
 		mode_string.append("t");
 	if (_modes & k_mode)
 		mode_string.append("k");
-	if (_modes & o_mode)
-		mode_string.append("o");
+	// if (_modes & o_mode)
+	// 	mode_string.append("o");
 	if (_modes & l_mode)
 		mode_string.append("l");
 	return mode_string;

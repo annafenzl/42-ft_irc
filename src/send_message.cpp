@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 02:37:04 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/23 13:57:33 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/23 14:10:12 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,19 +184,8 @@ void Server::send_message(Request req, t_res err)
 				+ " " + stream.str ()
 				+ " " + req.get_user ()->get_nickname ()
 				+ " " + req.get_channel_name ()
-				// + " :" + req.get_info ()// delete + " is not an operator"
+				+ " :" + req.get_info ()
 				+ " :already on channel"
-				, req.get_user ()->get_fd ());
-			break ;
-		case RES_ERR_NOTANOPERATOR:
-			stream.str ("");
-			stream << static_cast<int>(RES_ERR_CHANNOPRIVSNEEDED);
-			send_message (
-				":" + std::string (SERVER_NAME)
-				+ " " + stream.str ()
-				+ " " + req.get_user ()->get_nickname ()
-				+ " " + req.get_channel_name ()
-				+ " :" + req.get_info () + " is not an operator"
 				, req.get_user ()->get_fd ());
 			break ;
 		case RES_ERR_NOTONCHANNEL:
@@ -218,6 +207,17 @@ void Server::send_message(Request req, t_res err)
 				+ " :They aren't on the channel"
 				, req.get_user ()->get_fd ());
 			break ;
+		case RES_ERR_NOTANOPERATOR:
+			stream.str ("");
+			stream << static_cast<int>(RES_ERR_CHANNOPRIVSNEEDED);
+			send_message (
+				":" + std::string (SERVER_NAME)
+				+ " " + stream.str ()
+				+ " " + req.get_user ()->get_nickname ()
+				+ " " + req.get_channel_name ()
+				+ " :" + req.get_info() + " is not an operator"
+				, req.get_user ()->get_fd ());
+			break ;
 		case RES_ERR_ALREADYANOPERATOR:
 			stream.str ("");
 			stream << static_cast<int>(RES_ERR_USERSDONTMATCH);
@@ -226,7 +226,7 @@ void Server::send_message(Request req, t_res err)
 				+ " " + stream.str ()
 				+ " " + req.get_user ()->get_nickname ()
 				+ " " + req.get_channel_name ()
-				+ " " + req.get_info () + " is already an operator"
+				+ " :" + req.get_info () + " is already an operator"
 				, req.get_user ()->get_fd ());
 			break ;
 		case RES_CHANNELLEFT:
