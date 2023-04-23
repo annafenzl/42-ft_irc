@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 22:28:21 by pguranda          #+#    #+#             */
-/*   Updated: 2023/04/22 13:10:29 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/23 10:04:40 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,19 +76,16 @@ void Server::invite_command(Request request)
 	// Check if invited user is already a member of the channel
 	if (it->second.isMember(invitedUser))
 	{
-		send_message(SERVER_NAME ": 443 " + request.get_user()->get_nickname() + " " + invitedUser->get_nickname() + " " + channelName + " is already on channel", request.get_user()->get_fd());
+		send_message(request, RES_ERR_CHANNELALREADYJOINED);
 		return;
 	}
-
-	std::cout << "Check mode: "<<it->second.hasMode ('i') << std::endl;
-	std::cout << "Check op: "<<it->second.isOp(request.get_user()) << std::endl;
 	if (it->second.hasMode('i') && !it->second.isOp(request.get_user()))
 	{
-		send_message( SERVER_NAME ": 482 " + it->second.getName() + " :You're not a channel operator", request.get_user()->get_fd());
+		send_message (request, RES_ERR_CHANNOPRIVSNEEDED);
 		return;
 	}
 
-	// Send invitation
+	// Send message to sender and recipient
 	send_message(":" + request.get_user()->get_nickname() + "!" + request.get_user()->get_nickname() + "@" SERVER_NAME " INVITE " + invitedUser->get_nickname() + " :" + channelName, invitedUser->get_fd());
 	send_message(SERVER_NAME ": 341 " + request.get_user()->get_nickname() + " " + invitedUser->get_nickname() + " " + channelName, request.get_user()->get_fd());
 }

@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 21:54:36 by pguranda          #+#    #+#             */
-/*   Updated: 2023/04/22 16:25:26 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/23 10:10:04 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void Server::kick_command(Request request)
 				return ;
 			if (!target_user)
 			{
-				response = SERVER_NAME " 401 " + users_to_kick[j] + " :No such nick";
+				response = ":" + std::string(SERVER_NAME) + " 401 " + users_to_kick[j] + " :No such nick";
 				send_message(response, user->get_fd());
 				continue;
 			}
