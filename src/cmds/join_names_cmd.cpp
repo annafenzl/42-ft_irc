@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join_names_cmd.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:21:43 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/21 23:22:12 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/23 12:11:59 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,9 @@ void Server::join_names_command( Request request )
 
 	if (request.get_params ().size () < 1)
 		return (send_message (request, RES_ERR_NEEDMOREPARAMS));
-
+	else if (!request.get_user ()->is_registered () && request.get_cmd () == "JOIN")
+		return (send_message (request, RES_ERR_NOTREGISTERED_CHAN));
+		
 	channelNames = request.get_params ()[0];
 	
 	if (request.get_params ().size () > 1)
@@ -95,16 +97,13 @@ void Server::join_names_command( Request request )
 			send_message (request, RES_ERR_BADCHANNAME);
 			continue ;
 		}
-		else if (!request.get_user ()->is_registered ())
-		{
-			send_message (request, RES_ERR_NOTREGISTERED_CHAN);
-			continue ;
-		}
-		
+	
 		it = _channels.find (channelName);
 
 		if (it == _channels.end () && request.get_cmd () == "JOIN")
 		{
+			if (password.empty ())
+				password = "*";
 			_channels.insert (std::make_pair (channelName,
 				Channel (channelName, password)));
 			it = _channels.find (channelName);

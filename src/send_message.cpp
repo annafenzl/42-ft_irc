@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 02:37:04 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/23 11:43:07 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/23 12:16:02 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,8 +121,6 @@ void Server::send_message(Request req, t_res err)
 				, req.get_user ()->get_fd ());
 			break ;
 		case RES_ERR_BADCHANNELKEY:
-			stream.str ("");
-			stream << static_cast<int>(RES_ERR_NOSUCHCHANNEL);
 			send_message (
 				":" + std::string (SERVER_NAME)
 				+ " " + stream.str ()
