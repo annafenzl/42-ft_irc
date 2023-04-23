@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   send_message.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 02:37:04 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/22 16:44:25 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/23 11:43:07 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,7 +184,7 @@ void Server::send_message(Request req, t_res err)
 				+ " " + stream.str ()
 				+ " " + req.get_user ()->get_nickname ()
 				+ " " + req.get_channel_name ()
-				+ " :" + req.get_info () + " is not an operator"
+				+ " :" + req.get_info ()
 				+ " :already on channel"
 				, req.get_user ()->get_fd ());
 			break ;
