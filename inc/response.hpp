@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 14:25:33 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/22 12:57:10 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/23 13:20:36 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ typedef enum e_res
 	RES_ERR_BADCHANNAME = 479,
 
 	/** JOIN */
-	RES_ERR_NOTREGISTERED_CHAN = 451,
+	RES_ERR_NOTREGISTERED = 451,
 	RES_ERR_BADCHANNELKEY = 475,
 	RES_ERR_BANNEDFROMCHAN = 474,
 	RES_ERR_CHANNELISFULL = 471,

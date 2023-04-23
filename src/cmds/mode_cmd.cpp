@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 00:45:11 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/22 15:59:22 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/23 13:28:35 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@ void Server::mode_command( Request request)
 	std::string	updates;
 	std::vector<std::string> params;
 	std::string param;
+
+	if (!request.get_user()->is_registered()) 
+		return(send_message(request, RES_ERR_NOTREGISTERED ));
 
 	if (request.get_params ().size () < 1)
 		return (send_message (request, RES_ERR_NEEDMOREPARAMS));
@@ -36,7 +39,10 @@ void Server::mode_command( Request request)
 	params = request.get_params ();
 
 	if (params.size() == 1)
+	{
 		request.set_info (channelIt->second.getModeAsString ());
+		send_message (request, RES_MODE);
+	}
 	else
 	{
 		for (unsigned int i = 1; i < params.size(); ++i)
@@ -47,12 +53,7 @@ void Server::mode_command( Request request)
 				char sign = *params[i].begin();
 				param = "";
 				if (it == params[i].begin() && (sign == '+' || sign == '-'))
-				{
-					// if (!updates.empty ())
-					// 	updates += " ";
-					// updates += sign;
 					continue ;
-				}
 				if (!channelIt->second.isValidMode(*it))
 				{
 					std::cout << params[i] << std::endl;

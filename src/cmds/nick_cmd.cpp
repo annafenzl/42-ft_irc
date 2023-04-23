@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   nick_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:35:58 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/18 23:26:36 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/23 10:39:55 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ void	Server::check_login_complete(User *user)
 		// RPL_CREATED
 		send_message(SERVER_NAME " 003 " + nickname + " :This server was created " + _time_of_creation, fd);
 		// RPL_MYINFO
-		send_message(SERVER_NAME " 004 " + nickname + " irc.example.com " VERSION " olws obtkmlvsn", fd );
+		// send_message(SERVER_NAME " 004 " + nickname + " irc.example.com " VERSION " o itokl", fd );
 		// RPL_ISUPPORT
-		// send_message(SERVER_NAME " 005 " + nickname + " RFC2812 PREFIX=(ov)@+ CHANTYPES=#&+ CHANMODES=b,k,l,imnpst CHANNELLEN=50 MAXLIST=beI:100 MODES=4 NETWORK=MyIRCNet CHARSET=ascii NICKLEN=30 TOPICLEN=307 KICKLEN=307 AWAYLEN=307 USERMODES=4", fd );
+		// send_message(SERVER_NAME " 005 " + nickname + " RFC2812 PREFIX=(ov)@+ CHANTYPES=# CHANMODES=i,t,k,o,l CHANNELLEN=50 MAXLIST=beI:100 MODES=4 NETWORK=MyIRCNet CHARSET=ascii NICKLEN=30 TOPICLEN=307 KICKLEN=307 AWAYLEN=307 USERMODES=4", fd );
 		user->set_registered(true);
 	}
 }

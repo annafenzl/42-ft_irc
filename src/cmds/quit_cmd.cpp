@@ -6,7 +6,7 @@
 /*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 16:05:10 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/19 14:22:20 by afenzl           ###   ########.fr       */
+/*   Updated: 2023/04/23 13:36:17 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@
 void Server::quit_command(Request request)
 {
 	User		*user = request.get_user();
-	std::string	reason = (request.get_params().size() == 0) ? "" : request.get_params()[0];	
+	std::string	reason = (request.get_params().size() == 0) ? "" : (":" + request.get_params()[0]);	
 
 	// server acknowledges that by sending ERROR message
-	// send_message(SERVER_NAME " QUIT: " + user->get_nickname() + " " + reason, user->get_fd());
+	send_message(SERVER_NAME " QUIT " + user->get_nickname() + " " + reason, user->get_fd());
 
 	remove_user(user, reason);
 }

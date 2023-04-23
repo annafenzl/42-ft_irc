@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 00:13:32 by annafenzl         #+#    #+#             */
-/*   Updated: 2023/04/22 16:50:39 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/23 13:51:08 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ Server::Server(char **argv)
 	// set time of creation
 	time_t now = time(0);
 	_time_of_creation = std::string(ctime(&now));
-	_time_of_creation.pop_back();
+	_time_of_creation = _time_of_creation.substr(0, _time_of_creation.size() - 1);
 }
 
 // -------------- Getters ----------------------
@@ -103,9 +103,7 @@ void Server::run()
 						client_request(i);
 				}
 				else if ((_user_poll[i].revents & POLLHUP) | (_user_poll[i].revents & POLLOUT) )
-				{
-					remove_user(&(_user_map.find(_user_poll[i].fd)->second));
-				}
+					remove_user(&(_user_map.find(_user_poll[i].fd)->second), "disconnected");
 			} catch (std::exception& e) {
 				std::cerr << "\033[0;31m" << e.what() << "\033[0m" << '\n';
 			}
@@ -146,53 +144,13 @@ void Server::client_request(int index)
 			std::cout << "user(fd) " << sender_fd << " hung up" << std::endl;
 		else
 			throw RecieveMessageFailed();
-		remove_user(&_user_map.find(sender_fd)->second);
+		remove_user(&_user_map.find(sender_fd)->second, "disconnected");
 	}
 	else
 		handle_command(buff, sender_fd);
 }
 
-// removes the user from poll array, user_map, and all the channels he was in
-void Server::remove_user(User *user)
-{
-	std::list<std::string> empty_channels;
-	
-	// remove from all channels
-	for (channelmap::iterator it = _channels.begin(); it != _channels.end(); ++it)
-	{
-		if (it->second.isMember(user))
-		{
-			if (it->second.remove(user))
-				empty_channels.insert(empty_channels.end(), it->second.getName());
-
-			for (std::list<User *>::const_iterator iter = it->second.getMembers(0).begin(); iter != it->second.getMembers(0).end(); iter ++)
-			{
-					send_message(user->get_prefix() + " QUIT :" + "", (*iter)->get_fd());
-			}
-		}
-	}
-
-	// remove empty channels
-	for (std::list<std::string>::const_iterator it = empty_channels.begin(); it != empty_channels.end(); ++it)
-	{
-		_channels.erase(*it);
-	}
-	
-
-	// remove from poll array
-	for (unsigned int i = 0; i < _fd_count; ++i)
-	{
-		if (_user_poll[i].fd == user->get_fd())
-		{
-			remove_from_poll(i);
-			break ;
-		}
-	}
-	// remove from map to consider emoving teh channels in the User class??
-	_user_map.erase(user->get_fd());
-}
-
-void Server::remove_user(User *user, std::string & reason)
+void Server::remove_user(User *user, std::string reason)
 {
 	std::list<std::string>	empty_channels;
 	int						user_fd = user->get_fd();
@@ -237,7 +195,7 @@ void Server::handle_command(char* cmd, int user_fd)
 	User	*user = &_user_map.find(user_fd)->second;
 
 	user->append_buff(cmd);
-	for (size_t end_pos = user->buff.find(END_SEQUENCE);end_pos != 512 ; end_pos = user->buff.find(END_SEQUENCE))
+	for (size_t end_pos = user->buff.find(END_SEQUENCE);end_pos != 512 && end_pos != std::string::npos ; end_pos = user->buff.find(END_SEQUENCE))
 	{
 		std::string part = user->buff.substr(0, end_pos);
 		user->buff.erase(0, end_pos + 2);

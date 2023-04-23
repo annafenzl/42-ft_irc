@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 22:28:21 by pguranda          #+#    #+#             */
-/*   Updated: 2023/04/23 12:45:39 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/23 13:56:49 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,13 @@ void Server::invite_command(Request request)
 	User* invitedUser;
 	channelmap::iterator it;
 
+	// Check if user is registered
+	if (!request.get_user()->is_registered())
+	{
+		send_message(request, RES_ERR_NOTREGISTERED);
+		return;
+	}
+	
 	if (request.get_params().size() < 2)
 	{
 		return send_message(request, RES_ERR_NEEDMOREPARAMS);
@@ -39,13 +46,6 @@ void Server::invite_command(Request request)
 	{
 		request.set_channel_name(channelName);
 		send_message(request, RES_ERR_BADCHANNAME);
-		return;
-	}
-
-	// Check if user is registered
-	if (!request.get_user()->is_registered())
-	{
-		send_message(request, RES_ERR_NOTREGISTERED_CHAN);
 		return;
 	}
 

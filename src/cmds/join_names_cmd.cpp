@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:21:43 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/23 12:28:15 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/23 13:57:01 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void Server::join_names_command( Request request )
 		}
 		else if (!request.get_user ()->is_registered ())
 		{
-			send_message (request, RES_ERR_NOTREGISTERED_CHAN);
+			send_message (request, RES_ERR_NOTREGISTERED);
 			continue ;
 		}
 		
@@ -167,6 +167,7 @@ void Server::join_names_command( Request request )
 		}
 		else if (request.get_cmd () == "NAMES")
 		{
+			info = "";
 			userIt = it->second.getMembers ().begin ();
 			while (userIt != it->second.getMembers ().end ())
 			{

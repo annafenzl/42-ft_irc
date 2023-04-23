@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:55:23 by afenzl            #+#    #+#             */
-/*   Updated: 2023/04/22 16:43:38 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/23 13:50:20 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,7 @@ class Server
 
 	void handle_command(char* cmd, int user_fd);
 	void execute_command(Request request);
-	void remove_user(User *user);
-	void remove_user(User *user, std::string &string);
+	void remove_user(User *user, std::string string);
 	
 	void				check_login_complete(User *user);
 	usermap::iterator	check_for_user(std::string nickname);

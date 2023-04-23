@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: afenzl <afenzl@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:22:55 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/19 14:30:37 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/23 13:28:45 by afenzl           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ void Server::list_command( Request request )
 	std::string							dup;
 
 	if (!user->is_registered())
-		send_message( SERVER_NAME " 462 " + user->get_nickname() + " :Unauthorized command (not yet registered)", user->get_fd());
+		return(send_message( request, RES_ERR_NOTREGISTERED));
+
 	if (request.get_params ().size () )
 		send_message (request, RES_RPL_LISTSTART);
 	channelIt = _channels.begin ();
