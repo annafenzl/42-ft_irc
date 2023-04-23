@@ -6,7 +6,7 @@
 /*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:21:43 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/23 12:11:59 by katchogl         ###   ########.fr       */
+/*   Updated: 2023/04/23 12:31:50 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,15 +151,16 @@ void Server::join_names_command( Request request )
 				
 			request.get_user ()->getChannels (0).insert (std::make_pair (it->first, &it->second));
 			send_names_list(request, it->second );
-			// notify new member on all ops
+			// notify new member on all ops and only ops can change topic
 			opIt = it->second.getOps ().begin ();
 			while (opIt != it->second.getOps ().end ())
 			{
+				std::cout << "\033[0;31m[ERROR]loop\033[0m" << std::endl;
 				send_message (
 					":" + std::string (SERVER_NAME)
 					+ " MODE"
 					+ " " + it->second.getName ()
-					+ " +o " + (*opIt)->get_nickname ()
+					+ " +o " + (*opIt)->get_nickname () + " " + it->second.getModeAsString ()
 					, request.get_user ()->get_fd ());
 				opIt++;
 			}
