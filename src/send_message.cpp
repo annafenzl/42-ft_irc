@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 02:37:04 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/23 10:32:35 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/23 12:52:15 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ void Server::send_message(Request req, t_res err)
 			break ;
 		case RES_ERR_BADCHANNELKEY:
 			stream.str ("");
-			stream << static_cast<int>(RES_ERR_NOSUCHCHANNEL);
+			stream << static_cast<int>(RES_ERR_BADCHANNELKEY);
 			send_message (
 				":" + std::string (SERVER_NAME)
 				+ " " + stream.str ()
@@ -205,7 +205,7 @@ void Server::send_message(Request req, t_res err)
 				+ " " + stream.str ()
 				+ " " + req.get_user ()->get_nickname ()
 				+ " " + req.get_channel_name ()
-				+ " :not on channel"
+				+ " :You're not on that channel"
 				, req.get_user ()->get_fd ());
 			break ;
 		case RES_ERR_USERNOTINCHANNEL:
@@ -215,7 +215,7 @@ void Server::send_message(Request req, t_res err)
 				+ " " + req.get_user ()->get_nickname ()
 				+ " " + req.get_info ()
 				+ " " + req.get_channel_name ()
-				+ " :they are not on channel"
+				+ " :They aren't on the channel"
 				, req.get_user ()->get_fd ());
 			break ;
 		case RES_ERR_ALREADYANOPERATOR:

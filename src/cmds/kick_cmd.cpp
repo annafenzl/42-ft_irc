@@ -6,7 +6,7 @@
 /*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 21:54:36 by pguranda          #+#    #+#             */
-/*   Updated: 2023/04/23 10:10:04 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/23 12:52:56 by pguranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,33 +74,26 @@ void Server::kick_command(Request request)
 			User* target_user = &check_for_user(users_to_kick[j])->second;
 			if (user == target_user)
 				return ;
-			if (!target_user)
+				
+			usermap::iterator userIt = check_for_user(users_to_kick[j]);
+			if (userIt == _user_map.end())
 			{
-				response = ":" + std::string(SERVER_NAME) + " 401 " + users_to_kick[j] + " :No such nick";
-				send_message(response, user->get_fd());
+				request.set_info(users_to_kick[j]);
+				send_message(request, RES_ERR_NOSUCHNICK);
 				continue;
 			}
 
 			if (!channel->getMember(target_user->get_nickname()))
 			{
-				response = SERVER_NAME " 441 " + users_to_kick[j] + " " + channels[i] + " :They aren't on that channel";
-				send_message(response, user->get_fd());
+				request.set_info(target_user->get_nickname());
+				request.set_channel_name(channel->getName());
+				send_message(request,  RES_ERR_USERNOTINCHANNEL);
 				continue;
 			}
 			std::string kick_message = "KICK " + channels[i] + " " + users_to_kick[j] + " :" + comment;
 			channel->remove(&check_for_user(users_to_kick[j])->second);
 			send_message(kick_message, target_user->get_fd());
-			// 	std::cout << "\033[0;36mThere are now " << channel->getOps ().size () << " ops\033[0m" << std::endl;
-			// if (channel->getOps ().size () == 0)
-			// {
-			// 	channel->insertOp (*channel->getMembers ().begin ());
-			// 	// ... and broadcast
-			// 	broadcast (":" + std::string (SERVER_NAME)
-			// 				+ " MODE"
-			// 				+ " " + channel->getName ()
-			// 				+ " +o " + (*channel->getMembers ().begin ())->get_nickname ()
-			// 				, NULL, *channel);
-			// }
+
 			for (std::list<User*>::const_iterator userIt = channel->getMembers().begin(); userIt != channel->getMembers().end(); ++userIt)
 			{
 				send_message(kick_message, (*userIt)->get_fd());
