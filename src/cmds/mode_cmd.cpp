@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode_cmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguranda <pguranda@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: katchogl <katchogl@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 00:45:11 by katchogl          #+#    #+#             */
-/*   Updated: 2023/04/22 15:59:22 by pguranda         ###   ########.fr       */
+/*   Updated: 2023/04/23 12:42:22 by katchogl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,13 @@ void Server::mode_command( Request request)
 
 	params = request.get_params ();
 
-	if (params.size() == 1)
+	std::cout << "\033[0;31m params size:" << params.size () <<  "\033[0m" << std::endl;
+
+	if (params.size () == 1)
+	{
 		request.set_info (channelIt->second.getModeAsString ());
+		send_message (request, RES_MODE);
+	}
 	else
 	{
 		for (unsigned int i = 1; i < params.size(); ++i)
@@ -93,7 +98,6 @@ void Server::mode_command( Request request)
 							+ " " + channelIt->second.getName ()
 							+ " " + updates
 							, request.get_user (), channelIt->second);
-						// updates.clear();
 					}
 					if (Channel::isValidParamCase (*it, sign))
 					{
@@ -102,7 +106,6 @@ void Server::mode_command( Request request)
 					}
 				}
 			}
-			// updates += " ";
 		}
 	}
 }
