@@ -7,7 +7,7 @@ following the [Internet Relay Chat Protocol](https://datatracker.ietf.org/doc/ht
 ## Requirements
 
 * C++ 98 compiler
-* An IRC client ([KvIRC](http://www.kvirc.net/) recommended)
+* An IRC client ([KvIRC](http://www.kvirc.net/?id=download&lang=en) recommended)
 
 ## Usage
 
